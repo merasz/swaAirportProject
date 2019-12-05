@@ -9,11 +9,16 @@
                 template="/WEB-INF/templates/main.xhtml">
     <ui:define name ="content">
         <h:form>
-            <p:panel header="What do you see here?" >
-                <div style="height:50px">
-                    This is a simple PrimeFaces 6.2 project running on Spring Boot 1.5.8.
-                </div>
-            </p:panel>
+
+            <ui:fragment rendered="#{sessionInfoBean.loggedIn}">
+                <p:panel header="Hello #{sessionInfoBean.currentUserName}" >
+
+
+
+                </p:panel>
+            </ui:fragment>
+
+
             <p:panel header="JSF 2.2 Bean Access">
                 #{helloWorldBean.hello}
             </p:panel>

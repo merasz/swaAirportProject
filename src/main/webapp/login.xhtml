@@ -4,20 +4,27 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:ng="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/templates/main.xhtml">
+                template="/WEB-INF/templates/login_temp.xhtml">
     <ui:define name ="content">
-        <form id="login_form" action="#{request.contextPath}/login" method="post">
-            <h:panelGrid columns="2">
-                <p:outputLabel for="username" value="Username:"/>
-                <p:inputText id="username" type="text" required="true"/>
+        <div class = "login_box" style ="width: 80%; margin-left: 10%;">
+            <form id="login_form" action="#{request.contextPath}/login" method="post">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="username" value=""/>
+                    <p:inputText id="username" type="text" required="true"/>
 
-                <p:outputLabel for="password" value="Password:"/>
-                <p:inputText id="password" type="password" required="true"/>
+                    <p:outputLabel for="password" value=""/>
+                    <p:inputText id="password" type="password" required="true"/>
+                    <div class ="subBox" style ="margin-left: 100%">
+                        <button type="submit"  style ="font-family: AvenirNext-Bold;  background-color: black; color: #4A4A4A;border: none; box-shadow: 0;text-shadow: 0px 0px 0px #FF0000; ">
+                            <span class="ui-button-text">Login</span>
+                        </button>
 
-                <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-                    <span class="ui-button-text">Login</span>
-                </button>
-            </h:panelGrid>
-        </form>
+                    </div>
+
+                </h:panelGrid>
+            </form>
+
+        </div>
+
     </ui:define>
 </ui:composition>

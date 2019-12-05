@@ -7,25 +7,50 @@
       >
 
     <h:head>
-        <title>SEPM Skeleton</title>
+        <title>Airport Innsbruck</title>
+        <style>
+            html{
+                height: 100%;
+            }
+        </style>
+
+
     </h:head>
 
-    <h:body style="margin:10px;">
-        <div id="page">
+    <h:body style ="background-color:white; height = 100%;">
 
-            <div id="header" style="margin-bottom: 10px;">
-                <ui:include src="/WEB-INF/includes/header.xhtml" />
+
+        <div class = "wholePage">
+            <div class = "page" style = "height:100%;">
+                <div id ="sidebar" style="position: fixed; background-color:black; background-image: linear-gradient(180deg, #000000 0%, #271C1C 99%);width:250px;height:100%; top: 0; left: 0;padding-top: 5%;">
+                    <div id ="logoBox" style="padding-left: 5%">
+
+                        <h:graphicImage library ="images" name = "ia_logo.png"/>
+                    </div>
+
+
+
+                    <div id = "header" style="padding-left: 5% top:0; left: 0; margin-bottom: 10px; width: 100%;  background-color: white;color:blue;">
+                        <ui:include src="/WEB-INF/includes/sidebar.xhtml" />
+
+                    </div>
+
+                    <div id = "footer" style="font-size: 10px; margin-top: 150%; height: 100px;bottom: 0; left: 0;color: white; position: fixed;">
+                        <ui:include src="/WEB-INF/includes/footer.xhtml" />
+
+                    </div>
+
+                </div>
+
+            </div>
+                <div class = "main" style ="margin-left:30%; width: 60%;">
+                    <div id="content" style="alignment: center;">
+                        <ui:insert name="content">Content</ui:insert>
+                    </div>
+                </div>
             </div>
 
-            <div id="content">
-                <ui:insert name="content">Content</ui:insert>
-            </div>
 
-            <div id="footer" style="margin-top: 10px;">
-                <ui:include src="/WEB-INF/includes/footer.xhtml" />
-            </div>
-
-        </div>
 
     </h:body>
 </html>
