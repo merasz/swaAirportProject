@@ -37,7 +37,6 @@
                 </p:submenu>
                 <p:submenu label="Users" rendered="#{sessionInfoBean.hasRole('ADMIN')}">
                     <p:menuitem value="Manage Users" url="/admin/users.xhtml"/>
-                    <p:menuitem value="Create Users" url="/admin/userCreation.xhtml"/>
                 </p:submenu>
                 <p:submenu label="Security Tests" rendered="#{sessionInfoBean.loggedIn}">
                     <p:menuitem value="Security Test" url="/secured/test.xhtml"/>
