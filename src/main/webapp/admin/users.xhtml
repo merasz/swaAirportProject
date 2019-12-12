@@ -8,7 +8,7 @@
                 template="/WEB-INF/templates/main.xhtml">
     <ui:define name ="content">
         <h:form id="userForm">
-            <p:dataTable id="usersTable" var="user" value="#{userListController.users}">
+            <p:dataTable id="usersTable" var="user" value="#{userListController.users}" style ="margin-top:10%;">
                 <p:column headerText="Username">
                     <h:outputText value="#{user.username}"/>
                 </p:column>
@@ -44,9 +44,9 @@
 
 
             <p:dialog header="Create User" id="userCreationDialog" widgetVar="userCreationDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                <p:outputPanel id="userCreateData" rendered="#{userCreationController.setNewUser()}">
+                <p:outputPanel id="userCreateData" >
                     <h:panelGrid columns ="2">
-                        <p:outputLabel for="username" value="Username: " />
+                        <p:outputLabel for="username" value="Username: "/>
                         <p:inputText id="newUserName" value="#{userCreationController.user.username}" style ="color:white;"/>
                         <p:outputLabel for="password" value="Password: " />
                         <p:inputText id="newUserPassword" value="#{userCreationController.user.password}" style ="color:white;"/>
@@ -75,7 +75,8 @@
 
                     <p:separator />
                     <h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{userCreationController.doSaveUser()}" oncomplete="PF('userCreationDialog').hide()" update=":userForm:usersTable"/>
+                        <p:commandButton value="Save" action="#{userCreationController.doSaveUser()}" oncomplete="PF('userCreationDialog').hide()" update=":userForm:usersTable" />
+                        <p:commandButton value="Reload" action="#{userCreationController.doReloadForm()}" update=":userForm:userData"/>
                         <p:commandButton value="Abort" onclick="PF('userCreationDialog').hide()"/>
                     </h:panelGrid>
 
@@ -87,12 +88,9 @@
                 <p:outputPanel id="userData" rendered="#{not empty userDetailController.user}">
                     <h:panelGrid columns="2">
                         <p:outputLabel for="username" value="Username: " />
-                        <p:inputText id="username" value="#{userDetailController.user.username}" />
+                        <p:inputText id="username" value="#{userDetailController.user.username}" disabled="true"/>
                         <p:outputLabel for="password" value="Password: " />
-                        <p:password id="password" value="#{userDetailController.user.password}"/>
-                        <p:outputLabel for="roles" value="Role(s): " />
-                        <p:inputText id ="roles" value ="#{userDetailController.user.roles}" />
-
+                        <p:password id="password" value="#{userDetailController.user.password}" disabled="true"/>
                     </h:panelGrid>
                     <p:separator />
                     <h:panelGrid columns="2">
@@ -112,7 +110,8 @@
                     </h:panelGrid>
                     <p:separator />
                     <h:panelGrid columns="3">
-                        <p:commandButton value="Save" action="#{userDetailController.doSaveUser()}" oncomplete="PF('userEditDialog').hide()" update=":userForm:usersTable"/>
+
+                        <p:commandButton value="Save" action="#{userDetailController.doSaveUser()}" oncomplete="PF('userEditDialog').hide()"  update=":userForm:usersTable"/>
                         <p:commandButton value="Reload" action="#{userDetailController.doReloadUser()}" update=":userForm:userData"/>
                         <p:commandButton value="Abort" onclick="PF('userEditDialog').hide()"/>
                     </h:panelGrid>
@@ -123,6 +122,7 @@
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
+
 
         </h:form>
     </ui:define>

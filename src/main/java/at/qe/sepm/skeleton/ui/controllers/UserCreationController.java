@@ -40,10 +40,13 @@ public class UserCreationController {
      *
      * @return
      */
-    public User getUser() {
-        return user;
+    public User getUser() { return user;
     }
 
+    public void setUser(){
+        this.user = user;
+        setNewUser();
+    }
 
     /**
      * Action to save the currently displayed user.
