@@ -15,6 +15,6 @@ public interface AircraftRepository extends AbstractRepository<Aircraft, String>
 
     List<Aircraft> findByAircraftIdContaining(String aircraftId);
 
-    @Query("SELECT u FROM Aircraft u WHERE u.aircraftId = :aircraftId")
+    //braucht keine query einfach über verfügbare liste iterieren und mittels id suchen
     List<Aircraft> findByAircraftId(@Param("aircraftId") String aircraftId);
 }

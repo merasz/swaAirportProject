@@ -1,9 +1,26 @@
 package at.qe.sepm.skeleton.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
-public class Flight {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import org.springframework.data.domain.Persistable;
+
+
+@Entity
+public class Flight implements Persistable<String>, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+    @Id
+    @Column(length = 50)
 	private String flightId;
 	private String iataFrom;
 	private String iataTo;
@@ -107,6 +124,18 @@ public class Flight {
 
 	public void setUsedAircraftFlight(Aircraft usedAircraftFlight) {
 		this.usedAircraftFlight = usedAircraftFlight;
+	}
+
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isNew() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }
