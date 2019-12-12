@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3c.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/main.xhtml">
+    <ui:define name ="content">
+
+        <h:form id = "aircraftForm">
+
+            <p:dataTable id ="aircraftTable" var ="aircraft" value ="#{aircraftListController.aircrafts}">
+                <p:column headerText ="Aircraft ID">
+                    <h:outputText value ="#{aircraft.aircraftId}" />
+                </p:column>
+
+                <p:column headerText ="Aircraft Type">
+                    <h:outputText value ="#{aircraft.aircraftType}" />
+                </p:column>
+
+                <p:column headerText ="Required Pilots">
+                    <h:outputText value ="#{aircraft.requiredPilotsAircraft}" />
+                </p:column>
+
+                <p:column headerText ="Required Board Personal">
+                    <h:outputText value ="#{aircraft.requiredBoardpersonalAircraft}" />
+                </p:column>
+
+                <p:column headerText ="Capacity">
+                    <h:outputText value ="#{aircraft.capacityAircraft}" />
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton  oncomplete="PF('aircraftCreationDialog').show()" icon="ui-icon-add-box" value ="New Aircraft">
+                <f:setPropertyActionListener value="#{aircraft}" target="#{aircraftCreationController.aircraft}" />
+            </p:commandButton>
+
+            <p:dialog header ="Create Aircraft" id ="aircraftCreationDialog" widgetVar ="aircraftCreationDialog" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
+                <p:outputPanel id ="aircraftCreateData" rendered ="#{aircraftCreationController.setNewAircraft()}">
+                    <h:panelGrid columns ="2">
+                        <p:outputLabel for="aircraftId" value ="Aircraft ID: "/>
+                        <p:inputText id ="aircraftId" value ="#{aircraftCreationController.aircraft.aircraftId}" />
+                        <p:outputLabel for="aircraftType" value ="Aircraft Type: "/>
+                        <p:inputText id ="aircraftType" value ="#{aircraftCreationController.aircraft.aircraftType}" />
+
+                    </h:panelGrid>
+
+                    <p:separator />
+
+                    <h:panelGrid columns ="2">
+                        <p:outputLabel for="requiredPilots" value ="Required Pilots: "/>
+                        <p:inputText id ="requiredPilots" value ="#{aircraftCreationController.aircraft.requiredPilotsAircraft}" />
+                        <p:outputLabel for="requiredBP" value ="Required Board Personal: "/>
+                        <p:inputText id ="requiredBP" value ="#{aircraftCreationController.aircraft.requiredBoardpersonalAircraft}" />
+                        <p:outputLabel for="capacity" value ="Capacity: "/>
+                        <p:inputText id ="capacity" value ="#{aircraftCreationController.aircraft.capacityAircraft}" />
+                    </h:panelGrid>
+
+                    <p:separator />
+
+
+                    <h:panelGrid columns ="2">
+                        <p:commandButton value="Save" action="#{aircraftCreationController.doSaveAircraft()}" oncomplete="PF('aircraftCreationDialog').hide()" update=":aircraftForm:aircraftTable"/>
+                        <p:commandButton value="Abort" onclick="PF('aircraftCreationDialog').hide()"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+
+
+
+
+
+        </h:form>
+
+
+
+
+
+
+    </ui:define>
+</ui:composition>

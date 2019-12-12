@@ -56,7 +56,7 @@ public class AircraftService {
 
         if (aircraft.isNew()) {
             aircraft.setCreateDate(new Date());
-            aircraft.setCreateAircraft(getAuthenticatedUser());
+
         } else {
             aircraft.setUpdateDate(new Date());
             aircraft.setUpdateAircraft(getAuthenticatedUser());

@@ -32,6 +32,7 @@ public class AircraftCreationController{
         this.aircraft.setRequiredBoardpersonalAircraft(0);
         this.aircraft.setCapacityAircraft(0);
 
+
         return true;
 
     }

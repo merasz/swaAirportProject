@@ -29,6 +29,9 @@
                     <p:menuitem value="Bearbeiten"/>
                 </p:submenu>
 
+                <p:submenu label = "Flugzeuge" rendered="#{sessionInfoBean.hasRole('ADMIN')}" >
+                    <p:menuitem value="Bearbeiten" url="/admin/aircrafts.xhtml"/>
+                </p:submenu>
 
 
                 <p:submenu label="Manager Submenu" rendered="#{sessionInfoBean.hasRole('MANAGER')}">

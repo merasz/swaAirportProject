@@ -32,8 +32,8 @@ public class Aircraft implements Persistable<String>, Serializable{
 	@Column(length =100)
 	private String aircraftId;
 
-	@ManyToOne(optional = false)
-	private Aircraft createAircraft;
+
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 	@ManyToOne(optional = true)
@@ -112,13 +112,7 @@ public class Aircraft implements Persistable<String>, Serializable{
 		this.updateDate = updateDate;
 	}
 
-	public Aircraft getCreateAircraft() {
-		return createAircraft;
-	}
 
-	public void setCreateAircraft(Aircraft createAircraft) {
-		this.createAircraft = createAircraft;
-	}
 
 	@Override
 	public String toString() {
