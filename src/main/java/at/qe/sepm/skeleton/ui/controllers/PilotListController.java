@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("view")
-public class UserListController {
+public class PilotListController {
 
     @Autowired
     private UserService userService;
@@ -26,11 +26,7 @@ public class UserListController {
      *
      * @return
      */
-    public Collection<User> getUsers() {
-        return userService.getAllUsers();
-    }
 
-
-
+    public Collection<User> getPilots() { return userService.getAllPilots(); }
 
 }

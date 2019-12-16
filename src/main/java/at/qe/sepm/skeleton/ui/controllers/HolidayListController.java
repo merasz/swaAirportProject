@@ -1,7 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.model.Holiday;
+import at.qe.sepm.skeleton.services.HolidayService;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,20 +16,30 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("view")
-public class UserListController {
+public class HolidayListController {
 
     @Autowired
-    private UserService userService;
+    private HolidayService holidayService;
 
     /**
      * Returns a list of all users.
      *
      * @return
      */
-    public Collection<User> getUsers() {
-        return userService.getAllUsers();
+    public Collection<Holiday> getHolidays() {
+
+        return holidayService.getAllHolidays();
+
     }
 
+    public Collection<Holiday> test(){return holidayService.testGet();}
+
+
+
+    public Collection<Holiday> getHolidayByUser(String username){
+
+        return holidayService.getHolidayByUser(username);
+    }
 
 
 

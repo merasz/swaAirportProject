@@ -1,11 +1,17 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
+import java.util.List;
+import java.util.Date;
+import java.util.Set;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 /**
  * Controller for the user creation view.
  *
@@ -17,12 +23,15 @@ public class UserCreationController {
     @Autowired
     private UserService userService;
 
+
+
     /**
      * Attribute to cache the currently displayed user
      */
     private User user = new User();
 
     public boolean setNewUser(){
+
 
         this.user.setUsername("");
         this.user.setPassword("");
@@ -31,6 +40,10 @@ public class UserCreationController {
         this.user.setLastName("");
         this.user.setFirstName("");
         this.user.setEnabled(true);
+        this.user.setJobTitle("");
+
+
+
         return true;
 
     }
@@ -53,6 +66,7 @@ public class UserCreationController {
      */
     public void doSaveUser() {
 
+        this.user.addToRoles(user.getJobTitle());
         user = this.userService.saveUser(user);
     }
 

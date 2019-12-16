@@ -1,7 +1,10 @@
 package at.qe.sepm.skeleton.model;
 
 import java.io.Serializable;
+import at.qe.sepm.skeleton.model.Holiday;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CollectionTable;
@@ -13,9 +16,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.data.domain.Persistable;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Entity representing users.
@@ -30,7 +35,7 @@ public class User implements Persistable<String>, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(length = 100)
+    @Column(length = 200)
     private String username;
 
     @ManyToOne(optional = false)
@@ -42,20 +47,87 @@ public class User implements Persistable<String>, Serializable {
     private User updateUser;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
-
     private String password;
-
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
-
     boolean enabled;
+    private String jobTitle;
+    private Date lastFlight;
+    private Double hoursWorkedWeek;
+    private Boolean hasHoliday;
+    private Boolean available;
+    private int remainingHoliday;
+
+
 
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "User_UserRole")
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
+
+
+
+    public void addToRoles(String jobTitle){
+
+        Set <UserRole> temp = null;
+        if(jobTitle == "Pilot" ||jobTitle == "Boardpersonal"){
+            temp.add(UserRole.EMPLOYEE);
+        }
+
+        this.roles = temp;
+
+    }
+
+
+
+
+
+    public Boolean getAvailable(Boolean breakTime, Boolean calculateHoursWwithNewFlight, Boolean hasHoliday) {
+
+        if((breakTime == true) && (calculateHoursWwithNewFlight == false) && (hasHoliday == false)){return true;}
+        return false;
+    }
+
+    public Boolean calculateBreak(Date lastFlight, Date currentFlight){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(lastFlight);
+        calendar.add(Calendar.HOUR_OF_DAY, 12);
+
+        if(calendar.getTime().compareTo(currentFlight) < 0){return false;}
+
+        return true;
+
+    }
+
+    public Boolean calculateHoursWwithNewFlight(Double hoursWorkedWeek, Double flightTime){
+
+        if(hoursWorkedWeek + flightTime >= 40){return false;}
+        return true;
+    }
+
+    public Double getHoursWorkedWeek() { return hoursWorkedWeek; }
+
+    public void setHoursWorkedWeek(Double hoursWorkedWeek) { this.hoursWorkedWeek = hoursWorkedWeek; }
+
+    public Boolean getHasHoliday() { return hasHoliday; }
+
+
+    /**
+     * TODO: correct this setter!
+     * @param hasHoliday
+     */
+    public void setHasHoliday(Boolean hasHoliday) { this.hasHoliday = hasHoliday; }
+
+    public void setLastFlight(Date date){this.lastFlight = date;}
+
+    public Date getLastFlight(){return lastFlight;}
+
+    public String getJobTitle(){return jobTitle;}
+
+    public void setJobTitle(String jobTitle){this.jobTitle = jobTitle;}
 
     public String getUsername() {
         return username;
@@ -118,6 +190,8 @@ public class User implements Persistable<String>, Serializable {
     }
 
     public void setRoles(Set<UserRole> roles) {
+
+
         this.roles = roles;
     }
 
@@ -175,9 +249,11 @@ public class User implements Persistable<String>, Serializable {
         return true;
     }
 
+
+
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.User[ id=" + username + " ]";
+        return username;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.Holiday;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import java.util.Collection;
 import java.util.Date;
@@ -35,6 +36,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Collection<User> getAllPilots(){return userRepository.findPilots();}
+
+
+
+
+
     /**
      * Loads a single user identified by its username.
      *
@@ -45,6 +54,9 @@ public class UserService {
     public User loadUser(String username) {
         return userRepository.findFirstByUsername(username);
     }
+
+
+
 
     /**
      * Saves the user. This method will also set {@link User#createDate} for new
@@ -66,6 +78,7 @@ public class UserService {
         }
         return userRepository.save(user);
     }
+
 
     /**
      * Deletes the user.

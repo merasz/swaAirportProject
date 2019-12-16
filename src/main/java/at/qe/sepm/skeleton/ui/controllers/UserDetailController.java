@@ -47,6 +47,9 @@ public class UserDetailController {
         return user;
     }
 
+
+
+
     /**
      * Action to force a reload of the currently displayed user.
      */
@@ -58,6 +61,7 @@ public class UserDetailController {
      * Action to save the currently displayed user.
      */
     public void doSaveUser() {
+
         user = this.userService.saveUser(user);
     }
 

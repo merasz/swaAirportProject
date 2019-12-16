@@ -16,23 +16,24 @@
 
         <h:form>
             <p:panelMenu>
-                <p:submenu label = "Dienstplan" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}">
+                <p:submenu label = "Dienstplan" rendered="#{sessionInfoBean.hasRole('MANAGER')}">
                     <p:menuitem value="Erstellen" rendered="#{sessionInfoBean.hasRole('MANAGER')}" style = "background :yellow;"/>
                     <p:menuitem value="Ansehen" url="/views/schedule.xhtml"/>
-                    <p:menuitem value="Urlaube eintragen"/>
 
                 </p:submenu>
 
                 <p:submenu label = "Flüge" rendered="#{sessionInfoBean.hasRole('ADMIN')}" >
-                    <p:menuitem value="Ansehen" url="/views/schedule.xhtml"/>
-                    <p:menuitem value="Hinzufügen"/>
-                    <p:menuitem value="Bearbeiten"/>
+                    <p:menuitem value ="Bearbeiten" url ="/admin/flights.xhtml"/>
                 </p:submenu>
 
                 <p:submenu label = "Flugzeuge" rendered="#{sessionInfoBean.hasRole('ADMIN')}" >
                     <p:menuitem value="Bearbeiten" url="/admin/aircrafts.xhtml"/>
                 </p:submenu>
 
+                <p:submenu label="User Hub" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}">
+                    <p:menuitem value="Ansehen" url ="/users/userhub.xhtml"/>
+
+                </p:submenu>
 
                 <p:submenu label="Manager Submenu" rendered="#{sessionInfoBean.hasRole('MANAGER')}">
                     <p:menuitem value="Manager Action 1"/>

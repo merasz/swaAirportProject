@@ -1,7 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.model.Flight;
+import at.qe.sepm.skeleton.services.FlightService;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,18 +16,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("view")
-public class UserListController {
+public class FlightListController {
 
     @Autowired
-    private UserService userService;
+    private FlightService flightService;
 
     /**
      * Returns a list of all users.
      *
      * @return
      */
-    public Collection<User> getUsers() {
-        return userService.getAllUsers();
+    public Collection<Flight> getFlights() {
+
+        return flightService.getAllFlights();
     }
 
 
