@@ -10,8 +10,9 @@
 
         <script type ="text/javascript">
 
+               // calculates the days between the two holiday days selected
+               
              function dayCalc(){
-
                     var d1 = document.getElementById("holidayForm:newHolidayFrom");
                     var d2 = document.getElementById("holidayForm:newHolidayUntil");
 
@@ -23,35 +24,7 @@
 
                     document.getElementById("holidayForm:holidayDays").value = diff_days;
                     return diff_days;
-
-
              }
-
-             function validateHolidayLength(){
-
-                    var totalDays = document.getElementById("hDays").textContent.trim();
-                    var newDays = dayCalc();
-                    var total = parseFloat(totalDays) + parseFloat(newDays);
-
-
-                    if(total >= 35){
-
-                        document.getElementById('errorMessage').innerHTML ="You have gone over your allocated holiday.";
-                        return false;
-
-                    }
-
-                return true;
-             }
-
-
-            function getHolidayId(){
-
-                var id = document.getElementById()
-
-
-            }
-
 
         </script>
 
@@ -66,14 +39,6 @@
                     </p:column>
                     <p:column headerText="Days Used:">
                         <h:outputText value ="#{holiday.holidayDays}"/>
-                    </p:column>
-
-                    <p:column headerText="ID:">
-                        <h:outputText value ="#{holiday.id}"/>
-                    </p:column>
-
-                    <p:column headerText="un:">
-                        <h:outputText value ="#{holiday.username}"/>
                     </p:column>
 
                     <p:column style="width:100px;text-align: center">
@@ -94,12 +59,14 @@
                     <f:facet name ="footer">
 
 
-                        Total Days: #{holidayListController.getHolidayByUser(userService.loadUser(sessionInfoBean.getCurrentUserName())).stream().map(holiday->holiday.holidayDays).sum()}
+                     Total Days: #{holidayListController.getHolidayByUser(userService.loadUser(sessionInfoBean.getCurrentUserName())).stream().map(holiday->holiday.holidayDays).sum()}
 
 
                         <div id ="hDays" style="display:none;">
                             #{holidayListController.getHolidayByUser(userService.loadUser(sessionInfoBean.getCurrentUserName())).stream().map(holiday->holiday.holidayDays).sum()}
                         </div>
+
+
 
                     </f:facet>
                 </p:dataTable>
@@ -130,6 +97,7 @@
                 <f:setPropertyActionListener value="#{sessionInfoBean.currentUserName}" target="#{holidayCreationController.holiday.username}" />
             </p:commandButton>
 
+
             <h:panelGroup layout ="block" style ="height: 30px; color:#D8000C; font-family: sans-serif; background-color:#FFBABA; padding-left: 10px; padding-top: 5px;" rendered ="#{holidayListController.getHolidayByUser(userService.loadUser(sessionInfoBean.getCurrentUserName())).stream().map(holiday->holiday.holidayDays).sum() gt 35}">
                 You have reached your maximum holiday days.
             </h:panelGroup>
@@ -158,13 +126,12 @@
                     </h:panelGrid>
 
                     <p:separator />
-                    <div id = "errorMessage" style ="color: red; font-weight:bold;">
-                    </div>
+
                     <p:separator />
 
 
                     <h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{holidayCreationController.doSaveHoliday()}" onclick="return validateHolidayLength();" oncomplete="PF('holidayCreationDialog').hide()" update=":holidayForm:holidayTable" />
+                        <p:commandButton value="Save" action="#{holidayCreationController.doSaveHoliday()}"  oncomplete="location.reload()" update=":holidayForm:holidayTable" />
 
                         <p:commandButton value="Abort" onclick="PF('holidayCreationDialog').hide()"/>
 
