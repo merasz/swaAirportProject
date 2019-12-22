@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Controller for the user list view.
+ * Controller for the holiday list view.
  *
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
@@ -22,24 +22,19 @@ public class HolidayListController {
     private HolidayService holidayService;
 
     /**
-     * Returns a list of all users.
+     * Returns a list of all holidays.
      *
      * @return
      */
     public Collection<Holiday> getHolidays() {
-
         return holidayService.getAllHolidays();
-
     }
-
-
-
-
 
     public Collection<Holiday> getHolidayByUser(String username){
 
         return holidayService.getHolidayByUser(username);
     }
+
 
 
 

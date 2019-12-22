@@ -53,9 +53,10 @@ public class HolidayCreationController{
     /**
      * Action to save the currently displayed holiday
      */
-    public void doSaveHoliday(){
+    public String doSaveHoliday(){
 
         holiday = this.holidayService.saveHoliday(holiday);
+        return "viewid?faces-redirect=true";
     }
 
 

@@ -5,7 +5,7 @@ import at.qe.sepm.skeleton.services.HolidayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import java.text.ParseException;
+
 /**
  * Controller for the holiday detail view.
  *
@@ -15,9 +15,7 @@ import java.text.ParseException;
  */
 @Component
 @Scope("view")
-public class HolidayDetailController{
-
-
+public class HolidayDetailController {
 
     @Autowired
     private HolidayService holidayService;
@@ -51,11 +49,12 @@ public class HolidayDetailController{
 
 
 
+
     /**
      * Action to force a reload of the currently displayed holiday.
      */
     public void doReloadHoliday() {
-        holiday = holidayService.loadHoliday(holiday.getId().toString());
+        holiday = holidayService.loadHoliday(holiday.getId());
     }
 
     /**
@@ -70,21 +69,8 @@ public class HolidayDetailController{
      * Action to delete the currently displayed holiday.
      */
     public void doDeleteHoliday() {
-
-        this.holidayService.deleteHoliday(holiday.getId());
+        this.holidayService.deleteHoliday(holiday);
         holiday = null;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
