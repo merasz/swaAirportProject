@@ -1,6 +1,6 @@
 package at.qe.sepm.skeleton.model;
 
-import at.qe.sepm.skeleton.model.User;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +21,8 @@ import java.util.Objects;
 import javax.persistence.GenerationType;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 
 
 /**
@@ -29,14 +31,14 @@ import java.text.ParseException;
 
 
 @Entity
-public class Holiday implements Persistable<String>, Serializable{
+public class Holiday implements Persistable<Long>, Serializable{
 
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long holidayId;
+    private Long id;
 
 
     private String username;
@@ -49,32 +51,19 @@ public class Holiday implements Persistable<String>, Serializable{
     private int holidayDays;
 
 
-
-    @ManyToOne(optional = true)
-    private User updateUser;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
+
+    private Boolean approved;
+
 
 
     public int getHolidayDays(){return holidayDays;}
 
-    public int setHolidayDays(String holidayFrom, String holidayUntil)throws ParseException{
+    public void setHolidayDays(int days){
 
-        Date from = new SimpleDateFormat("dd/MM/YYYY").parse(holidayFrom);
-        Date until = new SimpleDateFormat("dd/MM/YYYY").parse(holidayUntil);
+        this.holidayDays = days;
 
-        long diff = until.getTime() - from.getTime();
-        long diffDays = diff / (24 * 60 * 60 * 1000);
-
-        this.holidayDays = (int)diffDays;
-        return getHolidayDays();
-    }
-
-
-
-
-    public String getHolidayId() {
-        return holidayId.toString();
     }
 
     public String getUsername() {
@@ -89,8 +78,16 @@ public class Holiday implements Persistable<String>, Serializable{
 
     }
 
-    public void setHolidayId(Long holidayId) {
-        this.holidayId = holidayId;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
     }
 
     public String getHolidayFrom() { return holidayFrom; }
@@ -102,12 +99,12 @@ public class Holiday implements Persistable<String>, Serializable{
     public void setHolidayUntil(String holidayUntil) { this.holidayUntil = holidayUntil; }
 
     @Override
-    public String getId() {
-        return getHolidayId().toString();
+    public Long getId() {
+        return id;
     }
 
     public void setId(String id) {
-        setHolidayId(Long.parseLong(id));
+        setId(Long.parseLong(id));
     }
 
 
@@ -132,14 +129,10 @@ public class Holiday implements Persistable<String>, Serializable{
         return (null == createDate);
     }
 
-
-
-
-
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.holidayId);
+        hash = 59 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -152,7 +145,7 @@ public class Holiday implements Persistable<String>, Serializable{
             return false;
         }
         final Holiday other = (Holiday) obj;
-        if (!Objects.equals(this.holidayId, other.holidayId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
