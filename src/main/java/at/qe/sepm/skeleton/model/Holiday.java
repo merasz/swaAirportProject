@@ -54,8 +54,6 @@ public class Holiday implements Persistable<Long>, Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    private Boolean approved;
-
 
 
     public int getHolidayDays(){return holidayDays;}
@@ -66,6 +64,9 @@ public class Holiday implements Persistable<Long>, Serializable{
 
     }
 
+    public Holiday() {
+    }
+
     public String getUsername() {
         return username;
     }
@@ -74,21 +75,12 @@ public class Holiday implements Persistable<Long>, Serializable{
         this.username = username;
     }
 
-    public Holiday() {
 
-    }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Boolean getApproved() {
-        return approved;
-    }
-
-    public void setApproved(Boolean approved) {
-        this.approved = approved;
-    }
 
     public String getHolidayFrom() { return holidayFrom; }
 
