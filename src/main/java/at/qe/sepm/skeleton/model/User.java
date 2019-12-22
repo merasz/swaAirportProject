@@ -61,7 +61,6 @@ public class User implements Persistable<String>, Serializable {
     private int remainingHoliday;
 
 
-
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "User_UserRole")
     @Enumerated(EnumType.STRING)
@@ -78,6 +77,14 @@ public class User implements Persistable<String>, Serializable {
 
         this.roles = temp;
 
+    }
+
+    public int getRemainingHoliday() {
+        return remainingHoliday;
+    }
+
+    public void setRemainingHoliday(int remainingHoliday) {
+        this.remainingHoliday = remainingHoliday;
     }
 
 
