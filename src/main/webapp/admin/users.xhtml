@@ -90,7 +90,7 @@
 
                     <p:separator />
                     <h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{userCreationController.doSaveUser()}" oncomplete="PF('userCreationDialog').hide()" update=":userForm:usersTable" />
+                        <p:commandButton value="Save" action="#{userCreationController.doSaveUser()}" oncomplete="location.reload()" update=":userForm:usersTable" />
                         <p:commandButton value="Reload" action="#{userCreationController.doReloadForm()}" update=":userForm:userData"/>
                         <p:commandButton value="Abort" onclick="PF('userCreationDialog').hide()"/>
                     </h:panelGrid>
