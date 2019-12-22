@@ -32,7 +32,7 @@ public class HolidayListController {
 
     }
 
-    public Collection<Holiday> test(){return holidayService.testGet();}
+
 
 
 
