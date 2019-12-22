@@ -50,9 +50,9 @@
                 <p:outputPanel id ="aircraftCreateData" rendered ="#{aircraftCreationController.setNewAircraft()}">
                     <h:panelGrid columns ="2">
                         <p:outputLabel for="aircraftId" value ="Aircraft ID: "/>
-                        <p:inputText id ="newAircraftId" value ="#{aircraftCreationController.aircraft.aircraftId}" />
+                        <p:inputText id ="newAircraftId" value ="#{aircraftCreationController.aircraft.aircraftId}" style ="color:white;" />
                         <p:outputLabel for="aircraftType" value ="Aircraft Type: "/>
-                        <p:inputText id ="newAircraftType" value ="#{aircraftCreationController.aircraft.aircraftType}" />
+                        <p:inputText id ="newAircraftType" value ="#{aircraftCreationController.aircraft.aircraftType}" style ="color:white;"/>
 
                     </h:panelGrid>
 
@@ -60,18 +60,18 @@
 
                     <h:panelGrid columns ="2">
                         <p:outputLabel for="requiredPilots" value ="Required Pilots: "/>
-                        <p:inputText id ="newRequiredPilots" value ="#{aircraftCreationController.aircraft.requiredPilotsAircraft}" />
+                        <p:inputText id ="newRequiredPilots" value ="#{aircraftCreationController.aircraft.requiredPilotsAircraft}" style ="color:white;" />
                         <p:outputLabel for="requiredBP" value ="Required Board Personal: "/>
-                        <p:inputText id ="newRequiredBP" value ="#{aircraftCreationController.aircraft.requiredBoardpersonalAircraft}" />
+                        <p:inputText id ="newRequiredBP" value ="#{aircraftCreationController.aircraft.requiredBoardpersonalAircraft}"  style ="color:white;"/>
                         <p:outputLabel for="capacity" value ="Capacity: "/>
-                        <p:inputText id ="newCapacity" value ="#{aircraftCreationController.aircraft.capacityAircraft}" />
+                        <p:inputText id ="newCapacity" value ="#{aircraftCreationController.aircraft.capacityAircraft}" style ="color:white;"/>
                     </h:panelGrid>
 
                     <p:separator />
 
 
                     <h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{aircraftCreationController.doSaveAircraft()}" oncomplete="PF('aircraftCreationDialog').hide()" update=":aircraftForm:aircraftTable"/>
+                        <p:commandButton value="Save" action="#{aircraftCreationController.doSaveAircraft()}" oncomplete="location.reload()" update=":aircraftForm:aircraftTable"/>
                         <p:commandButton value="Abort" onclick="PF('aircraftCreationDialog').hide()"/>
                     </h:panelGrid>
                 </p:outputPanel>
@@ -82,9 +82,9 @@
                 <p:outputPanel id ="aircraftData" rendered ="#{not empty aircraftDetailController.aircraft}">
                     <h:panelGrid columns ="2">
                         <p:outputLabel for="aircraftId" value ="Aircraft ID: "/>
-                        <p:inputText id ="aircraftId" value ="#{aircraftDetailController.aircraft.aircraftId}" disabled = "true"/>
+                        <p:inputText id ="aircraftId" value ="#{aircraftDetailController.aircraft.aircraftId}" disabled = "true" style ="color:white;"/>
                         <p:outputLabel for="aircraftType" value ="Aircraft Type: "/>
-                        <p:inputText id ="aircraftType" value ="#{aircraftDetailController.aircraft.aircraftType}" />
+                        <p:inputText id ="aircraftType" value ="#{aircraftDetailController.aircraft.aircraftType}"  disabled = "true" style ="color:white;"/>
 
                     </h:panelGrid>
 
@@ -92,11 +92,11 @@
 
                     <h:panelGrid columns ="2">
                         <p:outputLabel for="requiredPilots" value ="Required Pilots: "/>
-                        <p:inputText id ="requiredPilots" value ="#{aircraftDetailController.aircraft.requiredPilotsAircraft}" />
+                        <p:inputText id ="requiredPilots" value ="#{aircraftDetailController.aircraft.requiredPilotsAircraft} " style ="color:white;" />
                         <p:outputLabel for="requiredBP" value ="Required Board Personal: "/>
-                        <p:inputText id ="requiredBP" value ="#{aircraftDetailController.aircraft.requiredBoardpersonalAircraft}" />
+                        <p:inputText id ="requiredBP" value ="#{aircraftDetailController.aircraft.requiredBoardpersonalAircraft}" style ="color:white;"/>
                         <p:outputLabel for="capacity" value ="Capacity: "/>
-                        <p:inputText id ="capacity" value ="#{aircraftDetailController.aircraft.capacityAircraft}" />
+                        <p:inputText id ="capacity" value ="#{aircraftDetailController.aircraft.capacityAircraft}" style ="color:white;" />
                     </h:panelGrid>
 
                     <p:separator />
