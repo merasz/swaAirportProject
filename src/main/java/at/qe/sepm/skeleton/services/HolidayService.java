@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-
 /**
  * Service for accessing and manipulating holiday data.
  *
@@ -27,9 +26,6 @@ public class HolidayService {
     @Autowired
     private HolidayRepository holidayRepository;
 
-
-
-
     /**
      * Returns a collection of all holidays.
      *
@@ -43,15 +39,16 @@ public class HolidayService {
     public Collection <Holiday> getHolidayByUser(String username){return holidayRepository.findByUsername(username);}
 
 
-    /**
-     * Loads a single holiday identified by its username.
-     *
-     * @param username the username to search for
-     * @return the userwith the given username
-     */
 
-    public Holiday loadHoliday(String user) {
-        return holidayRepository.findFirstByUsername(user);
+    /**
+     * Loads a single holiday identified by its holidayname.
+     *
+     * @param holidayname the holidayname to search for
+     * @return the holiday with the given holidayname
+     */
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('EMPLOYEE') or hasAuthority('MANAGER')")
+    public Holiday loadHoliday(Long id) {
+        return holidayRepository.findFirstById(id);
     }
 
 
@@ -66,8 +63,8 @@ public class HolidayService {
      * @param holiday the holiday to save
      * @return the updated holiday
      */
-
-    public Holiday saveHoliday(Holiday holiday){
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('EMPLOYEE') or hasAuthority('MANAGER')")
+    public Holiday saveHoliday(Holiday holiday) {
         if (holiday.isNew()) {
             holiday.setCreateDate(new Date());
 
@@ -75,8 +72,6 @@ public class HolidayService {
             holiday.setUpdateDate(new Date());
 
         }
-
-
         return holidayRepository.save(holiday);
     }
 
@@ -86,9 +81,12 @@ public class HolidayService {
      *
      * @param holiday the holiday to delete
      */
-    public void deleteHoliday(Long id) {
-        holidayRepository.deleteById(id);
+
+    public void deleteHoliday(Holiday holiday) {
+        holidayRepository.delete(holiday);
         // :TODO: write some audit log stating who and when this holiday was permanently deleted.
     }
+
+
 
 }
