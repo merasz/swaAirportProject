@@ -66,7 +66,7 @@ public class UserCreationController {
      */
     public void doSaveUser() {
 
-        this.user.addToRoles(user.getJobTitle());
+        user.addToRoles();
         user = this.userService.saveUser(user);
     }
 
