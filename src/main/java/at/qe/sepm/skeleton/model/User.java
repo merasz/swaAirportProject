@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.HashSet;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -68,14 +69,25 @@ public class User implements Persistable<String>, Serializable {
 
 
 
-    public void addToRoles(String jobTitle){
+    public void addToRoles(){
 
-        Set <UserRole> temp = null;
-        if(jobTitle == "Pilot" ||jobTitle == "Boardpersonal"){
-            temp.add(UserRole.EMPLOYEE);
+        Set<UserRole> temp = new HashSet<UserRole>();
+
+        // all users are automatically employees
+        temp.add(UserRole.EMPLOYEE);
+
+        //
+
+        if(this.jobTitle.equals("Admin")){
+            temp.add(UserRole.ADMIN);
         }
 
-        this.roles = temp;
+        if(this.jobTitle.equals("Manager")){
+            temp.add(UserRole.MANAGER);
+        }
+
+
+        setRoles(temp);
 
     }
 
@@ -197,7 +209,6 @@ public class User implements Persistable<String>, Serializable {
     }
 
     public void setRoles(Set<UserRole> roles) {
-
 
         this.roles = roles;
     }
