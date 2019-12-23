@@ -41,7 +41,6 @@
 
 
             <p:commandButton  oncomplete="PF('userCreationDialog').show()" icon="ui-icon-add-box" value ="New User">
-                <f:setPropertyActionListener value="#{user}" target="#{userCreationController.user}" />
             </p:commandButton>
 
 
@@ -53,7 +52,7 @@
                         <p:outputLabel for="username" value="Username: "/>
                         <p:inputText id="newUserName" value="#{userCreationController.user.username}" style ="color:white;"/>
                         <p:outputLabel for="password" value="Password: " />
-                        <p:inputText id="newUserPassword" value="#{userCreationController.user.password}" style ="color:white;"/>
+                        <p:password id="newUserPassword" value="#{userCreationController.user.password}" style ="color:white;"/>
                     </h:panelGrid>
 
                     <p:separator />
@@ -90,7 +89,9 @@
 
                     <p:separator />
                     <h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{userCreationController.doSaveUser()}" oncomplete="location.reload()" update=":userForm:usersTable" />
+                        <p:commandButton value="Save" action="#{userCreationController.doSaveUser()}" oncomplete="location.reload()" update=":userForm:usersTable">
+
+                        </p:commandButton>
                         <p:commandButton value="Reload" action="#{userCreationController.doReloadForm()}" update=":userForm:userData"/>
                         <p:commandButton value="Abort" onclick="PF('userCreationDialog').hide()"/>
                     </h:panelGrid>
