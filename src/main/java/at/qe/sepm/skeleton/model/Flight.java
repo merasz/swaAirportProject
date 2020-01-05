@@ -17,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.data.domain.Persistable;
@@ -45,12 +46,13 @@ public class Flight implements Persistable<String>, Serializable {
     private Date arrivalTime;
     private Date dateFlight;
     private String flightTime;
-
-    @OneToMany
+    
+	@OneToMany
     private List<User> assignedPilots;
     @OneToMany
     private List<User> assignedBoardpersonal;
     private int numberOfPassengers;
+
 
 
     @Column(nullable = false)
@@ -60,6 +62,7 @@ public class Flight implements Persistable<String>, Serializable {
     private Flight updateFlight;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
+    
 
     public void setFlightTime(){
 
@@ -210,4 +213,5 @@ public class Flight implements Persistable<String>, Serializable {
     public boolean isNew() {
         return (null == createDate);
     }
+    
 }

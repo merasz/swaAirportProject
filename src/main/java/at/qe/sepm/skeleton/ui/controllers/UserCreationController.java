@@ -53,7 +53,8 @@ public class UserCreationController {
      *
      * @return
      */
-    public User getUser() { return user;
+    public User getUser() {
+    	return user;
     }
 
     public void setUser(){
