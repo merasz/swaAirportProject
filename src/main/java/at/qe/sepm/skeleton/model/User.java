@@ -1,10 +1,8 @@
 package at.qe.sepm.skeleton.model;
 
 import java.io.Serializable;
-import at.qe.sepm.skeleton.model.Holiday;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.HashSet;
@@ -17,11 +15,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.data.domain.Persistable;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Entity representing users.
@@ -34,22 +33,29 @@ import java.util.concurrent.atomic.AtomicLong;
 public class User implements Persistable<String>, Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Id
-    @Column(length = 200)
+    @Column(length = 100)
     private String username;
 
     @ManyToOne(optional = false)
     private User createUser;
+    
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
+    
     @ManyToOne(optional = true)
     private User updateUser;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
     private String password;
+    
+    @NotNull(message="Username is required!")
+    @Size(min=3, message="Username must be longer than 2 chars!")
     private String firstName;
+    
     private String lastName;
     private String email;
     private String phone;
@@ -61,34 +67,21 @@ public class User implements Persistable<String>, Serializable {
     private Boolean available;
     private int remainingHoliday;
 
-
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "User_UserRole")
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
-
-
     public void addToRoles(){
-
         Set<UserRole> temp = new HashSet<UserRole>();
-
         // all users are automatically employees
         temp.add(UserRole.EMPLOYEE);
-
         //
-
-        if(this.jobTitle.equals("Admin")){
+        if(this.jobTitle.equals("Admin"))
             temp.add(UserRole.ADMIN);
-        }
-
-        if(this.jobTitle.equals("Manager")){
+        if(this.jobTitle.equals("Manager"))
             temp.add(UserRole.MANAGER);
-        }
-
-
         setRoles(temp);
-
     }
 
     public int getRemainingHoliday() {
@@ -99,54 +92,60 @@ public class User implements Persistable<String>, Serializable {
         this.remainingHoliday = remainingHoliday;
     }
 
-
-
-
-
     public Boolean getAvailable(Boolean breakTime, Boolean calculateHoursWwithNewFlight, Boolean hasHoliday) {
-
         if((breakTime == true) && (calculateHoursWwithNewFlight == false) && (hasHoliday == false)){return true;}
         return false;
     }
 
     public Boolean calculateBreak(Date lastFlight, Date currentFlight){
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(lastFlight);
         calendar.add(Calendar.HOUR_OF_DAY, 12);
-
-        if(calendar.getTime().compareTo(currentFlight) < 0){return false;}
-
+        if(calendar.getTime().compareTo(currentFlight) < 0)
+        	return false;
         return true;
-
     }
 
     public Boolean calculateHoursWwithNewFlight(Double hoursWorkedWeek, Double flightTime){
-
-        if(hoursWorkedWeek + flightTime >= 40){return false;}
+        if(hoursWorkedWeek + flightTime >= 40)
+        	return false;
         return true;
     }
 
-    public Double getHoursWorkedWeek() { return hoursWorkedWeek; }
+    public Double getHoursWorkedWeek() {
+    	return hoursWorkedWeek;
+    }
 
-    public void setHoursWorkedWeek(Double hoursWorkedWeek) { this.hoursWorkedWeek = hoursWorkedWeek; }
-
-    public Boolean getHasHoliday() { return hasHoliday; }
-
+    public void setHoursWorkedWeek(Double hoursWorkedWeek) {
+    	this.hoursWorkedWeek = hoursWorkedWeek;
+    }
+    public Boolean getHasHoliday() {
+    	return hasHoliday;
+    }
 
     /**
      * TODO: correct this setter!
      * @param hasHoliday
      */
-    public void setHasHoliday(Boolean hasHoliday) { this.hasHoliday = hasHoliday; }
+    public void setHasHoliday(Boolean hasHoliday) {
+    	this.hasHoliday = hasHoliday;
+    }
 
-    public void setLastFlight(Date date){this.lastFlight = date;}
+    public void setLastFlight(Date date) {
+    	this.lastFlight = date;
+    }
 
-    public Date getLastFlight(){return lastFlight;}
+    public Date getLastFlight() {
+    	return lastFlight;
+    }
 
-    public String getJobTitle(){return jobTitle;}
+    public String getJobTitle() {
+    	return jobTitle;
+    }
 
-    public void setJobTitle(String jobTitle){this.jobTitle = jobTitle;}
+    public void setJobTitle(String jobTitle) {
+    	this.jobTitle = jobTitle;
+    }
 
     public String getUsername() {
         return username;
@@ -254,20 +253,15 @@ public class User implements Persistable<String>, Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj == null)
             return false;
-        }
-        if (!(obj instanceof User)) {
+        if (!(obj instanceof User))
             return false;
-        }
         final User other = (User) obj;
-        if (!Objects.equals(this.username, other.username)) {
+        if (!Objects.equals(this.username, other.username))
             return false;
-        }
         return true;
     }
-
-
 
     @Override
     public String toString() {
@@ -287,5 +281,4 @@ public class User implements Persistable<String>, Serializable {
     public boolean isNew() {
         return (null == createDate);
     }
-
 }

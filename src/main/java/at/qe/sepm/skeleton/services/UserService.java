@@ -35,14 +35,9 @@ public class UserService {
     public Collection<User> getAllUsers() {
         return userRepository.findAll();
     }
-
-
+    
     @PreAuthorize("hasAuthority('ADMIN')")
     public Collection<User> getAllPilots(){return userRepository.findPilots();}
-
-
-
-
 
     /**
      * Loads a single user identified by its username.
@@ -54,9 +49,6 @@ public class UserService {
     public User loadUser(String username) {
         return userRepository.findFirstByUsername(username);
     }
-
-
-
 
     /**
      * Saves the user. This method will also set {@link User#createDate} for new
