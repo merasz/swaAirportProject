@@ -1,7 +1,9 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.AuditLog;
 import at.qe.sepm.skeleton.model.Holiday;
+import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import java.util.Collection;
 import java.util.Date;
@@ -26,6 +28,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuditLogRepository auditLogRepository;
+    
     /**
      * Returns a collection of all users.
      *
@@ -61,12 +66,19 @@ public class UserService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public User saveUser(User user) {
+        AuditLog auditlog = new AuditLog();
+        auditlog.setDate(new Date());
+    	
         if (user.isNew()) {
             user.setCreateDate(new Date());
             user.setCreateUser(getAuthenticatedUser());
+            auditlog.setMessage("User: " + user.getUsername() + " was created.");
+            auditLogRepository.save(auditlog);
         } else {
             user.setUpdateDate(new Date());
             user.setUpdateUser(getAuthenticatedUser());
+            auditlog.setMessage("User: " + user.getUsername() + " was updated.");
+            auditLogRepository.save(auditlog);
         }
         return userRepository.save(user);
     }
@@ -79,8 +91,12 @@ public class UserService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(User user) {
+    	AuditLog auditlog = new AuditLog();
+        auditlog.setDate(new Date());
+        auditlog.setMessage("User: " + user.getUsername() + " was deleted.");
+        auditLogRepository.save(auditlog);
+        
         userRepository.delete(user);
-        // :TODO: write some audit log stating who and when this user was permanently deleted.
     }
 
     private User getAuthenticatedUser() {
