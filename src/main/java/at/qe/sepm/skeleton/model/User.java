@@ -52,8 +52,6 @@ public class User implements Persistable<String>, Serializable {
     private Date updateDate;
     private String password;
     
-    @NotNull(message="Username is required!")
-    @Size(min=3, message="Username must be longer than 2 chars!")
     private String firstName;
     
     private String lastName;
