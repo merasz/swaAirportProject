@@ -2,11 +2,15 @@ package at.qe.sepm.skeleton.model;
 
 import java.io.Serializable;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.model.Aircraft;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+
+import javax.annotation.PostConstruct;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -15,6 +19,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -47,11 +53,18 @@ public class Flight implements Persistable<String>, Serializable {
     private Date dateFlight;
     private String flightTime;
     
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "aircraft_id")
+    private Aircraft scheduledAircraft;
+
+    
+    
 	@OneToMany
     private List<User> assignedPilots;
     @OneToMany
     private List<User> assignedBoardpersonal;
     private int numberOfPassengers;
+
 
 
 
@@ -213,5 +226,19 @@ public class Flight implements Persistable<String>, Serializable {
     public boolean isNew() {
         return (null == createDate);
     }
+
+
+	public Aircraft getScheduledAircraft() {
+		return scheduledAircraft;
+	}
+
+
+	public void setScheduledAircraft(Aircraft scheduledAircraft) {
+		this.scheduledAircraft = scheduledAircraft;
+	}
+
+
+    
+	
     
 }
