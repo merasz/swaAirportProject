@@ -1,7 +1,12 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Aircraft;
+import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.services.AircraftService;
+import at.qe.sepm.skeleton.services.FlightService;
+
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -17,11 +22,14 @@ public class AircraftDetailController {
 
     @Autowired
     private AircraftService aircraftService;
-
+    
+    @Autowired
+    private FlightService flightService;
     /**
      * Attribute to cache the currently displayed aircraft
      */
     private Aircraft aircraft;
+    private Flight flight;
 
     /**
      * Sets the currently displayed aircraft and reloads it form db. This aircraft is
@@ -64,7 +72,8 @@ public class AircraftDetailController {
      * Action to delete the currently displayed aircraft.
      */
     public void doDeleteAircraft() {
-        this.aircraftService.deleteAircraft(aircraft);
+
+    		this.aircraftService.deleteAircraft(aircraft);
         aircraft = null;
     }
 

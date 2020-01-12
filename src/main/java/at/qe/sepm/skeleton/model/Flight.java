@@ -26,6 +26,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.domain.Persistable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.List;
@@ -53,8 +56,9 @@ public class Flight implements Persistable<String>, Serializable {
     private Date dateFlight;
     private String flightTime;
     
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "aircraft_id")
+    @ManyToOne
+    @JoinColumn(name = "aircraft_id", nullable=true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Aircraft scheduledAircraft;
 
     

@@ -1,7 +1,10 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Aircraft;
+import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.repositories.AircraftRepository;
+import at.qe.sepm.skeleton.repositories.FlightRepository;
+
 import java.util.Collection;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ public class AircraftService {
 
     @Autowired
     private AircraftRepository aircraftRepository;
+    
 
     /**
      * Returns a collection of all aircrafts.

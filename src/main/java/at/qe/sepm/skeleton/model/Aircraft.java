@@ -1,9 +1,13 @@
 package at.qe.sepm.skeleton.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -13,6 +17,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.data.domain.Persistable;
@@ -32,6 +37,7 @@ public class Aircraft implements Persistable<String>, Serializable{
 	@Column(length =100)
 	private String aircraftId;
 
+	
 
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -40,6 +46,7 @@ public class Aircraft implements Persistable<String>, Serializable{
 	private Aircraft updateAircraft;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateDate;
+	
 
 	private String aircraftType;
 	private int requiredPilotsAircraft;
@@ -152,4 +159,7 @@ public class Aircraft implements Persistable<String>, Serializable{
 	public boolean isNew() {
 		return (null == createDate);
 	}
+
+
+	
 }

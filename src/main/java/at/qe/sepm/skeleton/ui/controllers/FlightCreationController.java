@@ -35,6 +35,7 @@ public class FlightCreationController{
         this.flight.setArrivalTime(new Date());
         this.flight.setDateFlight(new Date());
 
+
         List<User> temp = null;
 
 
@@ -42,6 +43,8 @@ public class FlightCreationController{
         this.flight.setAssignedBoardpersonal(temp);
 
         this.flight.setNumberOfPassengers(0);
+        this.flight.setFlightTime();
+        Aircraft todo = new Aircraft();
 
 
         return true;
