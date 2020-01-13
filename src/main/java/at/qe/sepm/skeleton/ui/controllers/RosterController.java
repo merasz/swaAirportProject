@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
+
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -19,16 +21,17 @@ import java.util.Date;
 
 @Component
 @Scope("view")
-public class RosterController {
+public class RosterController implements Serializable {
 
     @Autowired
     private FlightService flightService;
 
     @Autowired
     private SessionInfoBean infoBean;
+    
+    private User current;
 
     private ScheduleModel eventModel = new DefaultScheduleModel();
-
 
     private ScheduleEvent event = new DefaultScheduleEvent();
 
@@ -36,42 +39,45 @@ public class RosterController {
     @PostConstruct
     public void init() {
         Collection<Flight> flights = flightService.getAllFlights() ;
-        User current = infoBean.getCurrentUser();
+        current = infoBean.getCurrentUser();
 
         DefaultScheduleEvent event = new DefaultScheduleEvent();
-
-        if(current.getJobTitle().contentEquals("Pilot")) {
-        	for (Flight flight : flights) {
-        		if (flight.getAssignedPilots().contains(current)) {
-        			event.setId(flight.getFlightId());
-        			event.setTitle("Flight " + flight.getFlightId());
-        			event.setStartDate(flight.getDepartureTime());
-        			event.setEndDate(flight.getArrivalTime());
-        			event.setDescription("Flight " + flight.getFlightId() + ":from " +
-        				flight.getIataFrom() + " to " + flight.getIataTo() + "with Aircraft:"
-        				+ flight.getScheduledAircraft());
-        			
-        			eventModel.addEvent(event);
-        		}
-        	}
+        	
+        if (current.getJobTitle() != null) {
+	        if(current.getJobTitle().contentEquals("Pilot")) {
+	        		for (Flight flight : flights) {
+	        		if (flight.getAssignedPilots().contains(current)) {
+	        			event.setId(flight.getFlightId());
+	        			event.setTitle("Flight " + flight.getFlightId());
+	        			event.setStartDate(flight.getDepartureTime());
+	        			event.setEndDate(flight.getArrivalTime());
+	        			event.setDescription("Flight " + flight.getFlightId() + ":from " +
+	        				flight.getIataFrom() + " to " + flight.getIataTo() + "with Aircraft:"
+	        				+ flight.getScheduledAircraft());
+	        			event.setEditable(false);
+	        			
+	        			eventModel.addEvent(event);
+	        		}
+	        	}
+	        }
+	        
+	        if(current.getJobTitle().contentEquals("Boardpersonal")) {
+	        	for (Flight flight : flights) {
+	        		if (flight.getAssignedPilots().contains(current)) {
+	        			event.setId(flight.getFlightId());
+	        			event.setTitle("Flight " + flight.getFlightId());
+	        			event.setStartDate(flight.getDepartureTime());
+	        			event.setEndDate(flight.getArrivalTime());
+	        			event.setDescription("Flight " + flight.getFlightId() + ":from " +
+	        				flight.getIataFrom() + " to " + flight.getIataTo() + "with Aircraft:"
+	        				+ flight.getScheduledAircraft());
+	        			event.setEditable(false);
+	        			
+	        			eventModel.addEvent(event);
+	        		}
+	        	}
+	        }
         }
-        
-        if(current.getJobTitle().contentEquals("Boardpersonal")) {
-        	for (Flight flight : flights) {
-        		if (flight.getAssignedPilots().contains(current)) {
-        			event.setId(flight.getFlightId());
-        			event.setTitle("Flight " + flight.getFlightId());
-        			event.setStartDate(flight.getDepartureTime());
-        			event.setEndDate(flight.getArrivalTime());
-        			event.setDescription("Flight " + flight.getFlightId() + ":from " +
-        				flight.getIataFrom() + " to " + flight.getIataTo() + "with Aircraft:"
-        				+ flight.getScheduledAircraft());
-        			
-        			eventModel.addEvent(event);
-        		}
-        	}
-        }
-        
         
         event.setId("123");
         event.setTitle("Champions League Match");
