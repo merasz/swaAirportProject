@@ -71,38 +71,24 @@
                         <p:inputText id ="newFlightId" value ="#{flightCreationController.flight.flightId}" placeholder="Enter flight id" style ="color:white;" />
 
 						<p:outputLabel for="iataFrom" value ="Iata From: "/>
-                        	<p:selectOneMenu id ="newIataFrom" value ="#{flight.iataFrom}" filter="true" filterMatchMode="startsWith" >
-		                        <f:selectItem itemLabel=" " itemValue="" />
-		                        <f:selectItem itemLabel="AAA" itemValue="1" />
-		                        <f:selectItem itemLabel="AAB" itemValue="2" />
-		                        <f:selectItem itemLabel="ABA" itemValue="3" />
-		                        <f:selectItem itemLabel="ABB" itemValue="4" />
-		                        <f:selectItem itemLabel="ABC" itemValue="5" />
-		                        <f:selectItem itemLabel="ABK" itemValue="6" />
-		                        <f:selectItem itemLabel="ABP" itemValue="7" />
-								<f:selectItem itemLabel="ZAA" itemValue="8" />                        
-							</p:selectOneMenu>
+						<h:selectOneMenu id ="newIataFrom" value="#{flight.iataFrom}" filter="true" filterMatchMode="startsWith">
+                			<f:selectItems value="#{iataBean.iataList}" />
+            			</h:selectOneMenu>
+							
+							
                                                 
                         <p:outputLabel for="iataTo" value ="Iata To: "/>
-                      		<p:selectOneMenu id ="newIataTo" value ="#{flight.iataTo}" filter="true" filterMatchMode="startsWith" >
-		                        <f:selectItem itemLabel=" " itemValue="" />
-		                        <f:selectItem itemLabel="AAA" itemValue="1" />
-		                        <f:selectItem itemLabel="AAB" itemValue="2" />
-		                        <f:selectItem itemLabel="ABA" itemValue="3" />
-		                        <f:selectItem itemLabel="ABB" itemValue="4" />
-		                        <f:selectItem itemLabel="ABC" itemValue="5" />
-		                        <f:selectItem itemLabel="ABK" itemValue="6" />
-		                        <f:selectItem itemLabel="ABP" itemValue="7" />
-								<f:selectItem itemLabel="ZAA" itemValue="8" />       
-        					</p:selectOneMenu>              
+						<h:selectOneMenu id ="newIataTo" value="#{flight.iataTo}" filter="true" filterMatchMode="startsWith">
+                			<f:selectItems value="#{iataBean.iataList}" />
+            			</h:selectOneMenu>     
 					</h:panelGrid>
 					<p:separator />
                         
 					<h:panelGrid columns ="2">
- 						<p:outputLabel for="departureTime" value ="Departure Time: "/>
+ 						<p:outputLabel for="departureTime" value ="Departure Time: (yyyy/MM/dd HH:mm)"/>
                         <p:inputText id ="departureTime" value ="#{flightCreationController.flight.departureTime}" required="true" style ="color:white;"/>
                         
-                        <p:outputLabel for="arrivalTime" value ="Arrival Time: "/>
+                        <p:outputLabel for="arrivalTime" value ="Arrival Time: (yyyy/MM/dd HH:mm)"/>
                         <p:inputText id ="arrivalTime" value ="#{flightCreationController.flight.arrivalTime}" required="true" style ="color:white;"/>
                         
 					
@@ -114,10 +100,10 @@
                         <p:inputText type="number" id ="newNumberOfPassengers" value ="#{flightCreationController.flight.numberOfPassengers}" style ="color:white;" >
                         <f:validateLongRange minimum="0" />
                         </p:inputText>
-                        <p:outputLabel for="numberOfPassengers" value ="Select aircraft: "/>
-	                        <p:selectOneMenu value ="#{flight.aviableAircrafts}" style ="color:white;" >
-								<f:selectItems value="#{flight.aviableAircrafts}" var="aircraft" itemValue="#{aircraft.aircraftId}" />
-                        	</p:selectOneMenu>
+                        <p:outputLabel for="availableAircraft" value ="Select aircraft: "/>                        	
+                        <h:selectOneMenu id ="availableAircraft" value="#{flightCreationController.flight.scheduledAircraft}">
+                			<f:selectItems value="#{availableAircraftBean.availableAircraftList}" itemValue="#{aircraft.scheduledAircraft}" />
+            			</h:selectOneMenu>     
                     </h:panelGrid>
 
                     <h:panelGrid columns ="2">
@@ -160,38 +146,24 @@
 					<p:inputText id ="flightId" value ="#{flightDetailController.flight.flightId}" disabled="true" placeholder="Enter flight id" style ="color:white;" />
 
 					<p:outputLabel for="iataFrom" value ="Iata From: "/>
-                		<p:selectOneMenu id ="iataFrom" value ="#{flight.iataFrom}" disabled="true" filter="true" filterMatchMode="startsWith" >
-							<f:selectItem itemLabel="AAA" itemValue="1" />
-		                    <f:selectItem itemLabel="AAB" itemValue="2" />
-		                    <f:selectItem itemLabel="ABA" itemValue="3" />
-							<f:selectItem itemLabel="ABB" itemValue="4" />
-		                    <f:selectItem itemLabel="ABC" itemValue="5" />
-		                    <f:selectItem itemLabel="ABK" itemValue="6" />
-		                    <f:selectItem itemLabel="ABP" itemValue="7" />
-							<f:selectItem itemLabel="ZAA" itemValue="8" />                        
-						</p:selectOneMenu>
+						<h:selectOneMenu id ="iataFrom" value="#{flight.iataFrom}">
+                			<f:selectItems value="#{iataBean.iataList}" />
+            			</h:selectOneMenu>
                         
                         
 					<p:outputLabel for="iataTo" value ="Iata To: "/>
-						<p:selectOneMenu id ="iataTo" value ="#{flight.iataTo}" disabled="true" filter="true" filterMatchMode="startsWith" >
-							<f:selectItem itemLabel="AAA" itemValue="1" />
-							<f:selectItem itemLabel="AAB" itemValue="2" />
-							<f:selectItem itemLabel="ABA" itemValue="3" />
-							<f:selectItem itemLabel="ABB" itemValue="4" />
-							<f:selectItem itemLabel="ABC" itemValue="5" />
-							<f:selectItem itemLabel="ABK" itemValue="6" />
-							<f:selectItem itemLabel="ABP" itemValue="7" />
-							<f:selectItem itemLabel="ZAA" itemValue="8" />       
-        				</p:selectOneMenu>
+						<h:selectOneMenu id ="iataTo" value ="#{flight.iataTo}" filter="true" filterMatchMode="startsWith" >
+                			<f:selectItems value="#{iataBean.iataList}" />
+            			</h:selectOneMenu>
 					</h:panelGrid>
 						
 					<p:separator />         
                         
 					<h:panelGrid columns ="2">
-						<p:outputLabel for="departureTime" value ="Departure Time: "/>
+						<p:outputLabel for="departureTime" value ="Departure Time: (yyyy/MM/dd HH:mm)"/>
 						<p:inputText id ="departureTimes" value ="#{flightCreationController.flight.departureTime}" disabled="true" style ="color:white;"/>
                         
-						<p:outputLabel for="arrivalTime" value ="Arrival Time: "/>
+						<p:outputLabel for="arrivalTime" value ="Arrival Time: (yyyy/MM/dd HH:mm)"/>
 						<p:inputText id ="arrivalTimes" value ="#{flightCreationController.flight.arrivalTime}" disabled="true" style ="color:white;"/>
                         
 	                        
@@ -225,7 +197,7 @@
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
-            <br></br>
+
 
 
            
