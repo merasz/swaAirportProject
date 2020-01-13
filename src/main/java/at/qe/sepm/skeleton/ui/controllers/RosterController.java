@@ -40,6 +40,39 @@ public class RosterController {
 
         DefaultScheduleEvent event = new DefaultScheduleEvent();
 
+        if(current.getJobTitle().contentEquals("Pilot")) {
+        	for (Flight flight : flights) {
+        		if (flight.getAssignedPilots().contains(current)) {
+        			event.setId(flight.getFlightId());
+        			event.setTitle("Flight " + flight.getFlightId());
+        			event.setStartDate(flight.getDepartureTime());
+        			event.setEndDate(flight.getArrivalTime());
+        			event.setDescription("Flight " + flight.getFlightId() + ":from " +
+        				flight.getIataFrom() + " to " + flight.getIataTo() + "with Aircraft:"
+        				+ flight.getScheduledAircraft());
+        			
+        			eventModel.addEvent(event);
+        		}
+        	}
+        }
+        
+        if(current.getJobTitle().contentEquals("Boardpersonal")) {
+        	for (Flight flight : flights) {
+        		if (flight.getAssignedPilots().contains(current)) {
+        			event.setId(flight.getFlightId());
+        			event.setTitle("Flight " + flight.getFlightId());
+        			event.setStartDate(flight.getDepartureTime());
+        			event.setEndDate(flight.getArrivalTime());
+        			event.setDescription("Flight " + flight.getFlightId() + ":from " +
+        				flight.getIataFrom() + " to " + flight.getIataTo() + "with Aircraft:"
+        				+ flight.getScheduledAircraft());
+        			
+        			eventModel.addEvent(event);
+        		}
+        	}
+        }
+        
+        
         event.setId("123");
         event.setTitle("Champions League Match");
         event.setStartDate(flights.iterator().next().getDepartureTime());
