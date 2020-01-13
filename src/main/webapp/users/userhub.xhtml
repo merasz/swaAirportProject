@@ -146,7 +146,34 @@
 
             <p:panel header ="Dienstplan" style = "margin-top:20px;">
 
+            <h:panelGrid >
+                <p:schedule id="schedule" value="#{rosterController.eventModel}" widgetVar="myschedule" >
+
+                    <p:ajax event="eventSelect" listener="#{rosterController.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+
+                </p:schedule>
+            </h:panelGrid>
+
+                <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+                    <h:panelGrid id="eventDetails" columns="2">
+                        <p:outputLabel for="title" value="Titles:" />
+                        <p:outputLabel id="title" value="#{rosterController.event.title}" required="true" />
+
+                        <p:outputLabel for="descr" value="Description:" />
+                        <p:outputLabel id="descr" value="#{rosterController.event.description}" />
+
+                        <p:outputLabel for="from" value="From:" />
+                        <p:outputLabel id="from" value="#{rosterController.event.startDate}" pattern="dd/MM/yyyy" showTime="true"   />
+
+                        <p:outputLabel for="to" value="To:" />
+                        <p:outputLabel id="to" value="#{rosterController.event.endDate}" pattern="dd/MM/yyyy" showTime="true"  />
+
+                    </h:panelGrid>
+                </p:dialog>
+
             </p:panel>
+
+
 
 
         </h:form>
