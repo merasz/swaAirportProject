@@ -37,14 +37,14 @@ public class RosterController {
     public void init() {
         Collection<Flight> flights = flightService.getAllFlights() ;
         User current = infoBean.getCurrentUser();
-        
+
         DefaultScheduleEvent event = new DefaultScheduleEvent();
 
         event.setId("123");
         event.setTitle("Champions League Match");
         event.setStartDate(flights.iterator().next().getDepartureTime());
         event.setEndDate(flights.iterator().next().getArrivalTime());
-        event.setDescription("Team A vs. Team B);
+        event.setDescription("Team A vs. Team B");
         event.setEditable(false);
 
 
