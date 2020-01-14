@@ -29,6 +29,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Persistable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.List;
@@ -60,6 +61,9 @@ public class Flight implements Persistable<String>, Serializable {
     @JoinColumn(name = "aircraft_id", nullable=true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Aircraft scheduledAircraft;
+    
+    @Value("${var.string:#{NULL}}")
+    private String scheduledAircraftId;
 
     
     
@@ -240,6 +244,18 @@ public class Flight implements Persistable<String>, Serializable {
 	public void setScheduledAircraft(Aircraft scheduledAircraft) {
 		this.scheduledAircraft = scheduledAircraft;
 	}
+
+
+	public String getScheduledAircraftId() {
+		return scheduledAircraftId;
+	}
+
+
+	public void setScheduledAircraftId(String scheduledAircraftId) {
+		this.scheduledAircraftId = scheduledAircraftId;
+	}
+	
+	
 
 
     

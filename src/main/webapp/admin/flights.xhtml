@@ -85,11 +85,11 @@
 					<p:separator />
                         
 					<h:panelGrid columns ="2">
- 						<p:outputLabel for="departureTime" value ="Departure Time: (yyyy/MM/dd HH:mm)"/>
-                        <p:inputText id ="departureTime" value ="#{flightCreationController.flight.departureTime}" required="true" style ="color:white;"/>
+ 						<p:outputLabel for="departureTime" value ="Departure Time: (YYYY-MM-DD HH:MM)"/>
+                        <p:inputMask id ="departureTime" value ="#{flightCreationController.flight.departureTime}" mask = "9999-99-99 99:99" required="true" style ="color:white;"/>
                         
-                        <p:outputLabel for="arrivalTime" value ="Arrival Time: (yyyy/MM/dd HH:mm)"/>
-                        <p:inputText id ="arrivalTime" value ="#{flightCreationController.flight.arrivalTime}" required="true" style ="color:white;"/>
+                        <p:outputLabel for="arrivalTime" value ="Arrival Time: (YYYY-MM-DD HH:MM)"/>
+                        <p:inputMask id ="arrivalTime" value ="#{flightCreationController.flight.arrivalTime}" mask = "9999-99-99 99:99" required="true" style ="color:white;"/>
                         
 					
 					</h:panelGrid>
@@ -101,8 +101,8 @@
                         <f:validateLongRange minimum="0" />
                         </p:inputText>
                         <p:outputLabel for="availableAircraft" value ="Select aircraft: "/>                        	
-                        <h:selectOneMenu id ="availableAircraft" value="#{flightCreationController.flight.scheduledAircraft}">
-                			<f:selectItems value="#{availableAircraftBean.availableAircraftList}" itemValue="#{aircraft.scheduledAircraft}" />
+                        <h:selectOneMenu id ="availableAircraft" value="#{flight.scheduledAircraft}">
+                			<f:selectItems value="#{availableAircraftBean.availableAircraftList}" />
             			</h:selectOneMenu>     
                     </h:panelGrid>
 
@@ -160,11 +160,11 @@
 					<p:separator />         
                         
 					<h:panelGrid columns ="2">
-						<p:outputLabel for="departureTime" value ="Departure Time: (yyyy/MM/dd HH:mm)"/>
-						<p:inputText id ="departureTimes" value ="#{flightCreationController.flight.departureTime}" disabled="true" style ="color:white;"/>
+						<p:outputLabel for="departureTime" value ="Departure Time: (YYYY-MM-DD HH:MM)"/>
+						<p:inputMask id ="departureTimes" value ="#{flightCreationController.flight.departureTime}" mask = "9999-99-99 99:99" style ="color:white;"/>
                         
-						<p:outputLabel for="arrivalTime" value ="Arrival Time: (yyyy/MM/dd HH:mm)"/>
-						<p:inputText id ="arrivalTimes" value ="#{flightCreationController.flight.arrivalTime}" disabled="true" style ="color:white;"/>
+						<p:outputLabel for="arrivalTime" value ="Arrival Time: (YYYY-MM-DD HH:MM)"/>
+						<p:inputMask id ="arrivalTimes" value ="#{flightCreationController.flight.arrivalTime}" mask = "9999-99-99 99:99" style ="color:white;"/>
                         
 	                        
 					</h:panelGrid>
