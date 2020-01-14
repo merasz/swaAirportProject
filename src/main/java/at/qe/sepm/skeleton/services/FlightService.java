@@ -30,7 +30,6 @@ public class FlightService {
      *
      * @return
      */
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public Collection<Flight> getAllFlights() {
         return flightRepository.findAll();
     }
