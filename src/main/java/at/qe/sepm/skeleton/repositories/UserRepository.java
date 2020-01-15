@@ -27,6 +27,9 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     @Query("SELECT u FROM User u WHERE u.jobTitle = 'Pilot'")
     List<User> findPilots();
+    
+    @Query("SELECT u FROM User u WHERE u.jobTitle = 'Board Crew'")
+    List<User> findBoardCrew();
 
 
 }

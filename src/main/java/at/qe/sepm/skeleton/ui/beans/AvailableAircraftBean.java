@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.ui.beans;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -17,8 +18,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import at.qe.sepm.skeleton.model.Aircraft;
 import at.qe.sepm.skeleton.services.AircraftService;
+import at.qe.sepm.skeleton.services.FlightService;
 import at.qe.sepm.skeleton.ui.controllers.AircraftListController;
-
 
 @ManagedBean
 @Scope("prototype")
@@ -32,12 +33,19 @@ public class AvailableAircraftBean {
 	@PostConstruct
 	public void init() {
 		availableAircraftList = new ArrayList<>();
-		List<Aircraft> temp = new ArrayList<>();
-		temp.addAll(aircraftService.getAllAircrafts());
-		for (Aircraft val : temp) {
+		Collection<Aircraft> temp = new HashSet<>();
+		temp.addAll(validate(aircraftService.getAllAircrafts()));
+		for (Aircraft val : temp)
 			availableAircraftList.add(val.getAircraftId());
-		}
-		
+	}
+
+
+	private Collection<? extends Aircraft> validate(Collection<Aircraft> allAircrafts) {
+		Collection<Aircraft> temp = new HashSet<>();
+		for (Aircraft aircraft : allAircrafts)
+			if(!aircraft.isScheduled())
+				temp.add(aircraft);
+		return temp;
 	}
 
 

@@ -62,7 +62,6 @@ public class FlightCreationController{
      * Action to save the currently displayed user.
      */
     public void doSaveFlight() {
-
         flight = this.flightService.saveFlight(flight);
     }
 
