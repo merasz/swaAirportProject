@@ -68,17 +68,17 @@
 
  				<h:panelGrid columns ="2">
                         <p:outputLabel for="flightId" value ="Flight ID: "/>
-                        <p:inputText id ="newFlightId" value ="#{flightCreationController.flight.flightId}" placeholder="Enter flight id" style ="color:white;" />
+                        <p:inputText id ="newFlightId" value ="#{flightCreationController.flight.flightId}" required="true" laceholder="Enter flight id" style ="color:white;" />
 
 						<p:outputLabel for="iataFrom" value ="Iata From: "/>
-						<h:selectOneMenu id ="newIataFrom" value="#{flight.iataFrom}" filter="true" filterMatchMode="startsWith">
+						<h:selectOneMenu id ="newIataFrom" value="#{flightCreationController.flight.iataFrom}" required="true" filter="true" filterMatchMode="startsWith">
                 			<f:selectItems value="#{iataBean.iataList}" />
             			</h:selectOneMenu>
 							
 							
                                                 
                         <p:outputLabel for="iataTo" value ="Iata To: "/>
-						<h:selectOneMenu id ="newIataTo" value="#{flight.iataTo}" filter="true" filterMatchMode="startsWith">
+						<h:selectOneMenu id ="newIataTo" value="#{flightCreationController.flight.iataTo}" required="true" filter="true" filterMatchMode="startsWith">
                 			<f:selectItems value="#{iataBean.iataList}" />
             			</h:selectOneMenu>     
 					</h:panelGrid>
@@ -86,11 +86,10 @@
                         
 					<h:panelGrid columns ="2">
  						<p:outputLabel for="departureTime" value ="Departure Time: (YYYY-MM-DD HH:MM)"/>
-                        <p:inputMask id ="departureTime" value ="#{flightCreationController.flight.departureTime}" mask = "9999-99-99 99:99" required="true" style ="color:white;"/>
-                        
+				        <p:calendar id="departureTime" value="#{flightCreationController.flight.departureTime}" locale="de" pattern="dd.MM.yyyy HH:mm" />
+      
                         <p:outputLabel for="arrivalTime" value ="Arrival Time: (YYYY-MM-DD HH:MM)"/>
-                        <p:inputMask id ="arrivalTime" value ="#{flightCreationController.flight.arrivalTime}" mask = "9999-99-99 99:99" required="true" style ="color:white;"/>
-                        
+						<p:calendar id="arrivalTime" value="#{flightCreationController.flight.arrivalTime}" locale="de" pattern="dd.MM.yyyy HH:mm" />                        
 					
 					</h:panelGrid>
 					
@@ -100,12 +99,13 @@
                         <p:inputText type="number" id ="newNumberOfPassengers" value ="#{flightCreationController.flight.numberOfPassengers}" style ="color:white;" >
                         <f:validateLongRange minimum="0" />
                         </p:inputText>
+                        
                         <p:outputLabel for="availableAircraft" value ="Select aircraft: "/>                        	
-                        <h:selectOneMenu id ="availableAircraft" value="#{flight.scheduledAircraft}">
+                        <h:selectOneMenu id ="availableAircraft" value="#{flightCreationController.flight.scheduledAircraftId}" required="true">
                 			<f:selectItems value="#{availableAircraftBean.availableAircraftList}" />
             			</h:selectOneMenu>     
                     </h:panelGrid>
-
+                    
                     <h:panelGrid columns ="2">
                         <p:commandButton value="Save" action="#{flightCreationController.doSaveFlight()}" oncomplete="location.reload()" update=":flightForm:flightsTable"/>
                         <p:commandButton value="Abort" onclick="PF('flightCreationDialog').hide()"/>

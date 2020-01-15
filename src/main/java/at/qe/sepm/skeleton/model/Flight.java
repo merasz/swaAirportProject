@@ -189,8 +189,6 @@ public class Flight implements Persistable<String>, Serializable {
         this.numberOfPassengers = numberOfPassengers;
     }
 
-
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -254,11 +252,5 @@ public class Flight implements Persistable<String>, Serializable {
 	public void setScheduledAircraftId(String scheduledAircraftId) {
 		this.scheduledAircraftId = scheduledAircraftId;
 	}
-	
-	
 
-
-    
-	
-    
 }
