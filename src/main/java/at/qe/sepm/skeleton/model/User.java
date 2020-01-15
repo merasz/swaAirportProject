@@ -59,10 +59,14 @@ public class User implements Persistable<String>, Serializable {
     private String phone;
     boolean enabled;
     private String jobTitle;
+    @Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date lastFlight;
+    @Column(columnDefinition = "int default 0") 
     private Double hoursWorkedWeek;
-    private Boolean hasHoliday;
-    private Boolean available;
+    @Column(columnDefinition="BOOLEAN DEFAULT true")
+    private boolean hasHoliday;
+    @Column(columnDefinition="BOOLEAN DEFAULT true")
+    private boolean available;
     private int remainingHoliday;
 
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
@@ -279,4 +283,12 @@ public class User implements Persistable<String>, Serializable {
     public boolean isNew() {
         return (null == createDate);
     }
+
+	public Boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(Boolean available) {
+		this.available = available;
+	}
 }
