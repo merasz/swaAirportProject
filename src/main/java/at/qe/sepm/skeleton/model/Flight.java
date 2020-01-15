@@ -4,6 +4,7 @@ import java.io.Serializable;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.model.Aircraft;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
