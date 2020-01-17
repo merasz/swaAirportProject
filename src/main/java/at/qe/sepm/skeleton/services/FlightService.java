@@ -24,7 +24,6 @@ public class FlightService {
 
     @Autowired
     private FlightRepository flightRepository;
-
     /**
      * Returns a collection of all flights.
      *
@@ -33,6 +32,7 @@ public class FlightService {
     public Collection<Flight> getAllFlights() {
         return flightRepository.findAll();
     }
+    
 
 
 

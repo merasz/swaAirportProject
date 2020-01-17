@@ -86,37 +86,41 @@
                         
 					<h:panelGrid columns ="2">
  						<p:outputLabel for="departureTime" value ="Departure Time: (YYYY-MM-DD HH:MM)"/>
-				        <p:calendar id="departureTime" value="#{flightCreationController.flight.departureTime}" locale="de" pattern="dd.MM.yyyy HH:mm" />
+				        <p:calendar id="departureTime" value="#{flightCreationController.flight.departureTime}" required="true" locale="de" pattern="dd.MM.yyyy HH:mm" />
       
                         <p:outputLabel for="arrivalTime" value ="Arrival Time: (YYYY-MM-DD HH:MM)"/>
-						<p:calendar id="arrivalTime" value="#{flightCreationController.flight.arrivalTime}" locale="de" pattern="dd.MM.yyyy HH:mm" />                        
-					
-					</h:panelGrid>
-					
-					<p:separator />
-					<h:panelGrid columns ="2">
-                        <p:outputLabel for="numberOfPassengers" value ="Passengers: "/>
+						<p:calendar id="arrivalTime" value="#{flightCreationController.flight.arrivalTime}" required="true" 
+						requiredMessage="Please add a date!" locale="de" pattern="dd.MM.yyyy HH:mm" />
+
+						<p:outputLabel for="numberOfPassengers" value ="Passengers: "/>
                         <p:inputText type="number" id ="newNumberOfPassengers" value ="#{flightCreationController.flight.numberOfPassengers}" style ="color:white;" >
                         <f:validateLongRange minimum="0" />
                         </p:inputText>
-                        
-                        <p:outputLabel for="availableAircraft" value ="Select aircraft: "/>                        	
-                        <h:selectOneMenu id ="availableAircraft" value="#{flightCreationController.flight.scheduledAircraftId}" required="true">
-                			<f:selectItems value="#{availableAircraftBean.availableAircraftList}" />
-            			</h:selectOneMenu>     
-                    </h:panelGrid>
-                    
-                    <h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{flightCreationController.doSaveFlight()}" oncomplete="location.reload()" update=":flightForm:flightsTable"/>
-                        <p:commandButton value="Abort" onclick="PF('flightCreationDialog').hide()"/>
-                    </h:panelGrid>
-                </p:outputPanel>
+					
+					</h:panelGrid>
+						<p:commandButton value="Save Iata and Dates" oncomplete="PF('flightCreationDialogPickAircraft').show()" update=":flightForm:flightCreationDialog"/>
+					</p:outputPanel>                    
             </p:dialog>
 
 
-
-
-
+			<p:dialog id ="pickAircraftDialog" widgetVar ="flightCreationDialogPickAircraft" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
+				<p:outputPanel>
+                    <h:panelGrid columns ="2">    
+                        <p:outputLabel for="availableAircraft" value ="Select aircraft: "/>                        	
+                        <h:selectOneMenu id ="availableAircraft" value="#{flightCreationController.flight.scheduledAircraftId}" required="true">
+							<f:selectItem itemLabel="Select One Aircraft" itemValue="" />
+                			<f:selectItems value="#{availableAircraftBean.availableAircraftList}" />
+            			</h:selectOneMenu>     
+                    </h:panelGrid>
+                    <p:separator />
+                    
+					<h:panelGrid columns ="2">
+                        <p:commandButton value="Save" action="#{flightCreationController.doSaveFlight()}" oncomplete="location.reload()" update=":flightForm:flightsTable"/>
+                        <p:commandButton value="Abort" onclick="PF('flightCreationDialog').hide()"/>
+                    </h:panelGrid>
+                    
+                </p:outputPanel>
+			</p:dialog>
 
 
 
@@ -182,8 +186,6 @@
 		                        <f:selectItem itemLabel="Option 3" itemValue="3" />
                         	</p:selectOneMenu>
                     </h:panelGrid>
-					
-					<p:separator />
 					
                     <h:panelGrid columns="3">
                         <p:commandButton value="Save" action="#{flightDetailController.doSaveFlight()}" oncomplete="PF('flightEditDialog').hide()"  update=":flightForm:flightsTable"/>

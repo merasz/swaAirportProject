@@ -1,5 +1,8 @@
 package at.qe.sepm.skeleton.ui.beans;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -17,15 +20,22 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import at.qe.sepm.skeleton.model.Aircraft;
+import at.qe.sepm.skeleton.model.Flight;
+import at.qe.sepm.skeleton.repositories.FlightRepository;
 import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.services.FlightService;
 import at.qe.sepm.skeleton.ui.controllers.AircraftListController;
+import net.bytebuddy.asm.Advice.Local;
 
 @ManagedBean
 @Scope("prototype")
 public class AvailableAircraftBean {
 	@Autowired
 	private AircraftService aircraftService;
+	
+	@Autowired
+	private FlightService flightService;
+	
 	
 	
 	private List<String> availableAircraftList;
@@ -41,6 +51,7 @@ public class AvailableAircraftBean {
 
 
 	private Collection<? extends Aircraft> validate(Collection<Aircraft> allAircrafts) {
+		
 		Collection<Aircraft> temp = new HashSet<>();
 		for (Aircraft aircraft : allAircrafts)
 			if(!aircraft.isScheduled())
