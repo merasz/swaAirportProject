@@ -2,6 +2,8 @@ package at.qe.sepm.skeleton.repositories;
 
 import at.qe.sepm.skeleton.model.Aircraft;
 import at.qe.sepm.skeleton.model.Flight;
+
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,6 +24,19 @@ public interface FlightRepository extends AbstractRepository<Flight,String>{
 
     @Query("SELECT k FROM Flight k WHERE k.flightId =:flightId")
     List<Flight> findByFlightId(@Param("flightId") String flightId);
+    
+    @Query("SELECT k From Flight k where k.arrivalTime > deadline")
+    List<Flight> findAvailableFlightsByDate(@Param("deadline") Date deadline);
+    
+    //todo search all flights before ... date
+    @Query("SELECT k From Flight k where k.departureTime > deadline")
+    List<Flight> findFlightsBefore(@Param("deadline") Date deadline);
+    
+    //todo
+    @Query("SELECT k From Flight k where k.departureTime > deadline")
+    List<Flight> findFlightsAfter(@Param("deadline") Date deadline);
+    
+    
     
     
 }
