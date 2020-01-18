@@ -110,7 +110,7 @@ public class FlightService {
     public Flight saveFlight(Flight flight) {
         if (flight.isNew()) {
             flight.setCreateDate(new Date());
-            assignPersonalToFlight(flight);
+//            assignPersonalToFlight(flight);
         } else {
             flight.setUpdateDate(new Date());
             flight.setUpdateFlight(getAuthenticatedUser());

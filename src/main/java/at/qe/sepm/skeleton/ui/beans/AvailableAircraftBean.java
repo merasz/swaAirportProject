@@ -54,21 +54,12 @@ public class AvailableAircraftBean {
 		Collection<Aircraft> availableAircrafts = new HashSet<>();
 		List<Flight> allFlights = new ArrayList<>();
 		allFlights.addAll(flightService.getAllFlights());
-		Flight currentFlight = null;
 
 
-		if(allFlights.size() > 0) {
-			currentFlight = allFlights.get(0);
-			for (Flight flight : allFlights) {
-				if(flight.getCreateDate().after(currentFlight.getCreateDate()))
-					currentFlight = flight;
-			}
-		}
 		
 		for (Aircraft aircraft : allAircrafts)
 			if(!aircraft.isScheduled())
-				if(currentFlight.getNumberOfPassengers() <= aircraft.getCapacityAircraft())
-					availableAircrafts.add(aircraft);
+				availableAircrafts.add(aircraft);
 		return availableAircrafts;
 	}
 
