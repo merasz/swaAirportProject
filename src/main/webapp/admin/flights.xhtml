@@ -98,7 +98,7 @@
                         </p:inputText>
 					
 					</h:panelGrid>
-						<p:commandButton value="Save Iata and Dates" oncomplete="PF('flightCreationDialogPickAircraft').show()" update=":flightForm:flightCreationDialog"/>
+						<p:commandButton value="Save Iata and Dates" action="#{flightDetailController.doSaveFlight()}" oncomplete="PF('flightCreationDialogPickAircraft').show()" update=":flightForm:flightCreationDialog"/>
 					</p:outputPanel>                    
             </p:dialog>
 

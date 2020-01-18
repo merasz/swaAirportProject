@@ -28,14 +28,13 @@ import at.qe.sepm.skeleton.ui.controllers.AircraftListController;
 import net.bytebuddy.asm.Advice.Local;
 
 @ManagedBean
-@Scope("prototype")
+@Scope("request")
 public class AvailableAircraftBean {
 	@Autowired
 	private AircraftService aircraftService;
 	
 	@Autowired
 	private FlightService flightService;
-	
 	
 	
 	private List<String> availableAircraftList;
@@ -51,12 +50,26 @@ public class AvailableAircraftBean {
 
 
 	private Collection<? extends Aircraft> validate(Collection<Aircraft> allAircrafts) {
+		//gives me all aircrafts back where the capacity is in range
+		Collection<Aircraft> availableAircrafts = new HashSet<>();
+		List<Flight> allFlights = new ArrayList<>();
+		allFlights.addAll(flightService.getAllFlights());
+		Flight currentFlight = null;
+
+
+		if(allFlights.size() > 0) {
+			currentFlight = allFlights.get(0);
+			for (Flight flight : allFlights) {
+				if(flight.getCreateDate().after(currentFlight.getCreateDate()))
+					currentFlight = flight;
+			}
+		}
 		
-		Collection<Aircraft> temp = new HashSet<>();
 		for (Aircraft aircraft : allAircrafts)
 			if(!aircraft.isScheduled())
-				temp.add(aircraft);
-		return temp;
+				if(currentFlight.getNumberOfPassengers() <= aircraft.getCapacityAircraft())
+					availableAircrafts.add(aircraft);
+		return availableAircrafts;
 	}
 
 

@@ -1,9 +1,17 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Flight;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.FlightRepository;
+import at.qe.sepm.skeleton.repositories.UserRepository;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +32,9 @@ public class FlightService {
 
     @Autowired
     private FlightRepository flightRepository;
+    
+    @Autowired
+    private UserService userService;
     /**
      * Returns a collection of all flights.
      *
@@ -32,12 +43,6 @@ public class FlightService {
     public Collection<Flight> getAllFlights() {
         return flightRepository.findAll();
     }
-    
-
-
-
-
-
     /**
      * Loads a single flight identified by its flightId.
      *
@@ -48,10 +53,6 @@ public class FlightService {
     public Flight loadFlight(String flightId) {
         return flightRepository.findFirstByFlightId(flightId);
     }
-
-
-
-
     /**
      * Saves the flight. This method will also set {@link Flight#createDate} for new
      * entities or {@link Flight#updateDate} for updated entities. The flight
@@ -61,11 +62,55 @@ public class FlightService {
      * @param flight the flight to save
      * @return the updated flight
      */
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public int getRandomNumber(int lengthOfPersonalList) {
+    	Random randomGenerator = new Random();
+    	int pickElement = randomGenerator.nextInt(lengthOfPersonalList) + 1;
+    	return pickElement;
+    }
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void assignPersonalToFlight(Flight flight) {
+    	List<User> boardcrew = new ArrayList<>();
+    	List<User> pilots = new ArrayList<>();
+    	List<User> pilotsExecutingFlight = new ArrayList<>();
+    	List<User> boardcrewExecuting = new ArrayList<>();
+    	
+    	boardcrew.addAll(userService.getBoardcrew());
+    	pilots.addAll(userService.getAllPilots());
+    	
+    	Date flightDeparture = flight.getDepartureTime();
+    	Date flightArrival = flight.getArrivalTime();
+    	
+    	
+    	User tempUser;
+    	//logic for available flights delete useres from boardcrew and pilot list before adding
+    	for (int i = 0; i <= flight.getScheduledAircraft().getRequiredBoardpersonalAircraft(); i++) {
+    		tempUser = boardcrew.get(i);
+    		if(tempUser.getAvailable(tempUser.calculateBreak(tempUser.getLastFlight(), flightDeparture), 
+    				tempUser.calculateHoursWithNewFlight(tempUser.getHoursWorkedWeek(),flight.getFlightTimeInHours()),
+    				tempUser.getHasHoliday()))
+    			boardcrewExecuting.add(boardcrew.get(getRandomNumber(boardcrew.size())));
+    	}
+    	
+    	for (int i = 0; i <= flight.getScheduledAircraft().getRequiredPilotsAircraft(); i++) {
+    		tempUser = pilots.get(i);
+    		if(tempUser.getAvailable(tempUser.calculateBreak(tempUser.getLastFlight(), flightDeparture), 
+    				tempUser.calculateHoursWithNewFlight(tempUser.getHoursWorkedWeek(),flight.getFlightTimeInHours()),
+    				tempUser.getHasHoliday()))
+    			boardcrewExecuting.add(boardcrew.get(getRandomNumber(boardcrew.size())));
+    	}
+    	
+    	flight.setAssignedBoardpersonal(boardcrewExecuting);
+    	flight.setAssignedPilots(pilotsExecutingFlight);
+    }
+    
     @PreAuthorize("hasAuthority('ADMIN')")
     public Flight saveFlight(Flight flight) {
         if (flight.isNew()) {
             flight.setCreateDate(new Date());
-
+            assignPersonalToFlight(flight);
         } else {
             flight.setUpdateDate(new Date());
             flight.setUpdateFlight(getAuthenticatedUser());

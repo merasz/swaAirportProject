@@ -2,10 +2,13 @@ package at.qe.sepm.skeleton.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -14,12 +17,16 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.domain.Persistable;
 
 /**
@@ -94,8 +101,8 @@ public class User implements Persistable<String>, Serializable {
         this.remainingHoliday = remainingHoliday;
     }
 
-    public Boolean getAvailable(Boolean breakTime, Boolean calculateHoursWwithNewFlight, Boolean hasHoliday) {
-        if((breakTime == true) && (calculateHoursWwithNewFlight == false) && (hasHoliday == false)){return true;}
+    public Boolean getAvailable(Boolean breakTime, Boolean calculateHoursWithNewFlight, Boolean hasHoliday) {
+        if((breakTime == true) && (calculateHoursWithNewFlight == false) && (hasHoliday == false)){return true;}
         return false;
     }
 
@@ -108,7 +115,7 @@ public class User implements Persistable<String>, Serializable {
         return true;
     }
 
-    public Boolean calculateHoursWwithNewFlight(Double hoursWorkedWeek, Double flightTime){
+    public Boolean calculateHoursWithNewFlight(Double hoursWorkedWeek, Double flightTime){
         if(hoursWorkedWeek + flightTime >= 40)
         	return false;
         return true;

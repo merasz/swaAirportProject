@@ -1,6 +1,8 @@
 package at.qe.sepm.skeleton.model;
 
 import java.io.Serializable;
+import java.sql.Time;
+
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.model.Aircraft;
@@ -31,6 +33,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Persistable;
+
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.List;
 import java.text.SimpleDateFormat;
@@ -85,7 +89,13 @@ public class Flight implements Persistable<String>, Serializable {
     private Date updateDate;
     
 
-    public void setFlightTime(){
+    
+    public String getFlightTime() {
+		return flightTime;
+	}
+
+
+	public void setFlightTime(){
 
         this.flightTime = calcFlightTime(this.departureTime, this.arrivalTime);
 
@@ -96,9 +106,24 @@ public class Flight implements Persistable<String>, Serializable {
 
         long dep = deparTime.getTime();
         long arr = arrTime.getTime();
-        long ft = arr - dep;
-
-        return (new SimpleDateFormat("hh:mm")).format(new Date(ft));
+        long diffInMillis = Math.abs(arr - dep);
+        long minutes = TimeUnit.MINUTES.convert(diffInMillis, TimeUnit.MILLISECONDS);
+        int hoursFlight = 0;
+        int minutesFlight = 0;
+        while(minutes > 59) {
+        	hoursFlight += 1;
+        	minutes -= 60;
+        }
+        minutesFlight = (int) minutes;
+        StringBuilder hoursAndMinutesConverted = new StringBuilder();
+        if(hoursFlight < 10);
+        	hoursAndMinutesConverted.append("0");
+        hoursAndMinutesConverted.append(Integer.toString(hoursFlight));
+        hoursAndMinutesConverted.append(":");
+        if(minutesFlight < 10);
+    		hoursAndMinutesConverted.append("0");
+        hoursAndMinutesConverted.append(Integer.toString(minutesFlight));
+        return hoursAndMinutesConverted.toString();
     }
 
     public Flight getUpdateFlight() {
@@ -252,5 +277,22 @@ public class Flight implements Persistable<String>, Serializable {
 	public void setScheduledAircraftId(String scheduledAircraftId) {
 		this.scheduledAircraftId = scheduledAircraftId;
 	}
+	
+	public long getFlightTimeInMilli() {
+		String[] temp = getFlightTime().split(":");
+		int hours = Integer.parseInt(temp[0]);
+		int minutes = Integer.parseInt(temp[1]);
+		minutes += hours*60;
+		long milli = (long) minutes*60000;
+		return milli;
+	}
+	
+	public Double getFlightTimeInHours() {
+		long milli = getFlightTimeInMilli();
+		double hours = milli / 1000 * 60 * 60;
+		return (double) milli;
+	}
+	
+	
 
 }

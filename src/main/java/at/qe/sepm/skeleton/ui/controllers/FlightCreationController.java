@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import at.qe.sepm.skeleton.model.User;
 
@@ -34,6 +36,7 @@ public class FlightCreationController{
         this.flight.setDepartureTime(new Date());
         this.flight.setArrivalTime(new Date());
         this.flight.setDateFlight(new Date());
+        this.flight.setCreateDate(new Date());
 
 
         List<User> temp = null;
@@ -45,8 +48,6 @@ public class FlightCreationController{
         this.flight.setNumberOfPassengers(0);
         this.flight.setFlightTime();
         Aircraft todo = new Aircraft();
-
-
         return true;
 
     }

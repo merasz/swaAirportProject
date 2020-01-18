@@ -29,7 +29,7 @@ public interface UserRepository extends AbstractRepository<User, String> {
     List<User> findPilots();
     
     @Query("SELECT u FROM User u WHERE u.jobTitle = 'Board Crew'")
-    List<User> findBoardCrew();
+    List<User> findBoardcrew();
 
 
 }
