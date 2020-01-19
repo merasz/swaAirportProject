@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.beans;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -28,14 +29,18 @@ import at.qe.sepm.skeleton.ui.controllers.AircraftListController;
 import net.bytebuddy.asm.Advice.Local;
 
 @ManagedBean
-@Scope("prototype")
-public class AvailableAircraftBean {
+@Scope("request")
+public class AvailableAircraftBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	private AircraftService aircraftService;
 	
 	@Autowired
 	private FlightService flightService;
-	
 	
 	
 	private List<String> availableAircraftList;
@@ -51,12 +56,17 @@ public class AvailableAircraftBean {
 
 
 	private Collection<? extends Aircraft> validate(Collection<Aircraft> allAircrafts) {
+		//gives me all aircrafts back where the capacity is in range
+		Collection<Aircraft> availableAircrafts = new HashSet<>();
+		List<Flight> allFlights = new ArrayList<>();
+		allFlights.addAll(flightService.getAllFlights());
+
+
 		
-		Collection<Aircraft> temp = new HashSet<>();
 		for (Aircraft aircraft : allAircrafts)
 			if(!aircraft.isScheduled())
-				temp.add(aircraft);
-		return temp;
+				availableAircrafts.add(aircraft);
+		return availableAircrafts;
 	}
 
 
