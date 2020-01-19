@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.beans;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,7 +30,12 @@ import net.bytebuddy.asm.Advice.Local;
 
 @ManagedBean
 @Scope("request")
-public class AvailableAircraftBean {
+public class AvailableAircraftBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	private AircraftService aircraftService;
 	

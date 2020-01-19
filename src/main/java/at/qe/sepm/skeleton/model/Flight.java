@@ -20,12 +20,15 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -61,9 +64,8 @@ public class Flight implements Persistable<String>, Serializable {
     private Date dateFlight;
     private String flightTime;
     
-    @ManyToOne
-    @JoinColumn(name = "aircraft_id", nullable=true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne(optional = true, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    @JoinTable(name="aircraft_id", joinColumns={@JoinColumn(name="aircraft_id")})
     private Aircraft scheduledAircraft;
     
     @Value("${var.string:#{NULL}}")
@@ -108,22 +110,10 @@ public class Flight implements Persistable<String>, Serializable {
         long arr = arrTime.getTime();
         long diffInMillis = Math.abs(arr - dep);
         long minutes = TimeUnit.MINUTES.convert(diffInMillis, TimeUnit.MILLISECONDS);
-        int hoursFlight = 0;
-        int minutesFlight = 0;
-        while(minutes > 59) {
-        	hoursFlight += 1;
-        	minutes -= 60;
-        }
-        minutesFlight = (int) minutes;
-        StringBuilder hoursAndMinutesConverted = new StringBuilder();
-        if(hoursFlight < 10);
-        	hoursAndMinutesConverted.append("0");
-        hoursAndMinutesConverted.append(Integer.toString(hoursFlight));
-        hoursAndMinutesConverted.append(":");
-        if(minutesFlight < 10);
-    		hoursAndMinutesConverted.append("0");
-        hoursAndMinutesConverted.append(Integer.toString(minutesFlight));
-        return hoursAndMinutesConverted.toString();
+        int minutesFlight = (int) minutes;
+        StringBuilder minutesConverted = new StringBuilder();
+        minutesConverted.append(Integer.toString(minutesFlight));
+        return minutesConverted.toString();
     }
 
     public Flight getUpdateFlight() {

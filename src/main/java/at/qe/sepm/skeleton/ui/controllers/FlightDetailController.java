@@ -1,6 +1,8 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Aircraft;
 import at.qe.sepm.skeleton.model.Flight;
+import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.services.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -21,7 +23,8 @@ public class FlightDetailController{
 
     @Autowired
     private FlightService flightService;
-
+    
+    
     /**
      * Attribute to cache the currently displayed flight
      */

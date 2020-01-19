@@ -6,6 +6,8 @@ import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.services.FlightService;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -72,7 +74,18 @@ public class AircraftDetailController {
      * Action to delete the currently displayed aircraft.
      */
     public void doDeleteAircraft() {
-
+    		List<Flight> temp = (List<Flight>) flightService.getAllFlights();
+    		Flight saveTempFlight = null;
+    		for (Flight flight : temp) {
+				if(flight.getScheduledAircraftId() == aircraft.getAircraftId()) {
+					saveTempFlight = flight;
+					this.flightService.deleteFlight(flight);
+		    		saveTempFlight.setUpdateDate(new Date());
+		    		saveTempFlight.setScheduledAircraft(null);
+		    		saveTempFlight.setScheduledAircraftId(null);
+		    		this.flightService.saveFlight(saveTempFlight);
+				}
+    		}
     		this.aircraftService.deleteAircraft(aircraft);
         aircraft = null;
     }

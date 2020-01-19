@@ -1,7 +1,9 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.model.Aircraft;
 import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.repositories.AircraftRepository;
 import at.qe.sepm.skeleton.repositories.FlightRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 
@@ -34,12 +36,19 @@ public class FlightService {
     private FlightRepository flightRepository;
     
     @Autowired
+    private AircraftRepository aircraftRepository;
+    
+    @Autowired
     private UserService userService;
+    
+    @Autowired
+    private AircraftService aircraftService;
     /**
      * Returns a collection of all flights.
      *
      * @return
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Collection<Flight> getAllFlights() {
         return flightRepository.findAll();
     }
@@ -49,7 +58,7 @@ public class FlightService {
      * @param flightId the flightId to search for
      * @return the flight with the given flightname
      */
-    @PreAuthorize("hasAuthority('ADMIN') or principal.flightId eq #flightId")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Flight loadFlight(String flightId) {
         return flightRepository.findFirstByFlightId(flightId);
     }
@@ -110,6 +119,9 @@ public class FlightService {
     public Flight saveFlight(Flight flight) {
         if (flight.isNew()) {
             flight.setCreateDate(new Date());
+            flight.setDateFlight(flight.getDepartureTime());
+            flight.setScheduledAircraft(aircraftService.loadAircraft(flight.getScheduledAircraftId()));
+            flight.setFlightTime();
 //            assignPersonalToFlight(flight);
         } else {
             flight.setUpdateDate(new Date());
