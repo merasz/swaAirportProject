@@ -36,6 +36,9 @@ public interface FlightRepository extends AbstractRepository<Flight,String>{
     @Query("SELECT k From Flight k where k.departureTime > deadline")
     List<Flight> findFlightsAfter(@Param("deadline") Date deadline);
     
+    @Query("SELECT k From Flight k where k.departureTime >= startDate AND k.departureTime <= endDate")
+    List<Flight> findFlightsBetween(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    
     
     
     

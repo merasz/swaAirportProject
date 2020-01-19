@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,22 +81,42 @@ public class FlightService {
     	return pickElement;
     }
     
-    public Collection<User> assignPersonal(List<User> personal, int requiredPersonal, Flight flight) {
+    
+    public Collection<User> assignPersonal(Collection<User> personal, int requiredPersonal, Flight flight) {
+    	List<User> pers = new ArrayList<>();
+    	pers.addAll(personal);
     	Date flightDeparture = flight.getDepartureTime();
     	Date flightArrival = flight.getArrivalTime();
     	User tempUser;
     	List<User> availablePersonal = new ArrayList<>();
     	List<User> executingPersonal = new ArrayList<>();
+    	double tempHoursWorkedWeek;
+    	
+    	
+    	Collection<Flight> allFlights = getAllFlights();
+    	
+    	double hoursWorked = 0;
+    	
     	for (int i = 0; i <= requiredPersonal; i++) {
-    		tempUser = personal.get(i);
+    		tempUser = pers.get(i);
+    		List<Date> weekOfInterest = tempUser.getWeekOfInterest(flight.getDepartureTime(), flight.getArrivalTime());
+    		List<Flight> flightsBetween = flightRepository.findFlightsBetween(weekOfInterest.get(0), weekOfInterest.get(1));
+    		hoursWorked = 0;
+    		for (Flight val : flightsBetween) {
+    				if(val.getAssignedBoardpersonal().contains(tempUser))
+    					hoursWorked += val.getFlightTimeInHours();
+    				if(val.getAssignedPilots().contains(tempUser))
+    					hoursWorked += val.getFlightTimeInHours();
+			}
     		if(tempUser.getAvailable(tempUser.calculateBreak(tempUser.getLastFlight(), flightDeparture), 
-    				tempUser.calculateHoursWithNewFlight(tempUser.getHoursWorkedWeek(),flight.getFlightTimeInHours()),
+    				tempUser.calculateHoursWithNewFlight(hoursWorked,flight.getFlightTimeInHours()),
     				tempUser.getHasHoliday()))
     			availablePersonal.add(tempUser);
     	}
-//    	hier am besten ersteller des fluges ein prompt ausgeben dass kein personal vorhanden ist und flug erstellung abbrechen
+    	
+    	
+    	
     	if(availablePersonal.size() < requiredPersonal) {
-    		System.out.println("Kein Personal vorhanden für diesen Flug!");
     		return null;
     	}
     	else {
@@ -109,19 +132,22 @@ public class FlightService {
     
     @PreAuthorize("hasAuthority('ADMIN')")
     public void assignPersonalToFlight(Flight flight) {
-    	List<User> boardcrew = new ArrayList<>();
-    	List<User> pilots = new ArrayList<>();
-    	List<User> pilotsExecutingFlight = new ArrayList<>();
+    	Collection<User> boardcrew = userService.getBoardcrew();
+    	Collection<User> pilots = userService.getAllPilots();
+    	List<User> pilotsExecuting = new ArrayList<>();
     	List<User> boardcrewExecuting = new ArrayList<>();
     	
-    	boardcrew.addAll(userService.getBoardcrew());
-    	pilots.addAll(userService.getAllPilots());
     	
     	boardcrewExecuting.addAll(assignPersonal(boardcrew, boardcrew.size(), flight));
-    	pilotsExecutingFlight.addAll(assignPersonal(pilots, pilots.size(), flight));
+    	if(boardcrewExecuting.isEmpty())
+    		errorMessage("No available Boardcrew!", FacesMessage.SEVERITY_ERROR);
+    	
+    	pilotsExecuting.addAll(assignPersonal(pilots, pilots.size(), flight));
+    	if(pilotsExecuting.isEmpty())
+    		errorMessage("No available Pilots!", FacesMessage.SEVERITY_ERROR);
     	
     	flight.setAssignedBoardpersonal(boardcrewExecuting);
-    	flight.setAssignedPilots(pilotsExecutingFlight);
+    	flight.setAssignedPilots(pilotsExecuting);
     }
     
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -155,5 +181,9 @@ public class FlightService {
         return flightRepository.findFirstByFlightId(auth.getName());
     }
     
+    public void errorMessage(String errorMsg, FacesMessage.Severity severity) {
+    	FacesMessage msg = new FacesMessage(severity, errorMsg, null);
+    	FacesContext.getCurrentInstance().addMessage(errorMsg, msg);
+    }
     
 }

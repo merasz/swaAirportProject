@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -298,4 +299,26 @@ public class User implements Persistable<String>, Serializable {
 	public void setAvailable(Boolean available) {
 		this.available = available;
 	}
+	
+	public List<Date> getWeekOfInterest(Date flightDeparture, Date flightArrival) {
+		Date startDate = this.getCreateDate();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(startDate);
+		Date weekBeginDate;
+		Date weekEndDate;
+		while(startDate.before(flightDeparture)) {
+			cal.add(Calendar.DATE, 7);
+			startDate = cal.getTime();
+		}
+		cal.add(Calendar.DATE, -7);
+		weekBeginDate = cal.getTime();
+		cal.add(Calendar.DATE, 7);
+		weekEndDate = cal.getTime();
+		List<Date> listOfDates = new ArrayList<>();
+		listOfDates.add(weekBeginDate);
+		listOfDates.add(weekEndDate);
+		return listOfDates;
+	}
+	
+
 }
