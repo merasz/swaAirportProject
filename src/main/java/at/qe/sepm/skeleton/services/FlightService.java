@@ -74,8 +74,37 @@ public class FlightService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public int getRandomNumber(int lengthOfPersonalList) {
     	Random randomGenerator = new Random();
-    	int pickElement = randomGenerator.nextInt(lengthOfPersonalList) + 1;
+    	int pickElement = randomGenerator.nextInt(lengthOfPersonalList);
     	return pickElement;
+    }
+    
+    public Collection<User> assignPersonal(List<User> personal, int requiredPersonal, Flight flight) {
+    	Date flightDeparture = flight.getDepartureTime();
+    	Date flightArrival = flight.getArrivalTime();
+    	User tempUser;
+    	List<User> availablePersonal = new ArrayList<>();
+    	List<User> executingPersonal = new ArrayList<>();
+    	for (int i = 0; i <= requiredPersonal; i++) {
+    		tempUser = personal.get(i);
+    		if(tempUser.getAvailable(tempUser.calculateBreak(tempUser.getLastFlight(), flightDeparture), 
+    				tempUser.calculateHoursWithNewFlight(tempUser.getHoursWorkedWeek(),flight.getFlightTimeInHours()),
+    				tempUser.getHasHoliday()))
+    			availablePersonal.add(tempUser);
+    	}
+//    	hier am besten ersteller des fluges ein prompt ausgeben dass kein personal vorhanden ist und flug erstellung abbrechen
+    	if(availablePersonal.size() < requiredPersonal) {
+    		System.out.println("Kein Personal vorhanden für diesen Flug!");
+    		return null;
+    	}
+    	else {
+    		while(requiredPersonal > 0) {
+    			int randNum = getRandomNumber(availablePersonal.size());
+    			executingPersonal.add(availablePersonal.get(randNum));
+    			availablePersonal.remove(randNum);
+    			--requiredPersonal;
+    		}
+    	}
+    	return executingPersonal;
     }
     
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -88,27 +117,8 @@ public class FlightService {
     	boardcrew.addAll(userService.getBoardcrew());
     	pilots.addAll(userService.getAllPilots());
     	
-    	Date flightDeparture = flight.getDepartureTime();
-    	Date flightArrival = flight.getArrivalTime();
-    	
-    	
-    	User tempUser;
-    	//logic for available flights delete useres from boardcrew and pilot list before adding
-    	for (int i = 0; i <= flight.getScheduledAircraft().getRequiredBoardpersonalAircraft(); i++) {
-    		tempUser = boardcrew.get(i);
-    		if(tempUser.getAvailable(tempUser.calculateBreak(tempUser.getLastFlight(), flightDeparture), 
-    				tempUser.calculateHoursWithNewFlight(tempUser.getHoursWorkedWeek(),flight.getFlightTimeInHours()),
-    				tempUser.getHasHoliday()))
-    			boardcrewExecuting.add(boardcrew.get(getRandomNumber(boardcrew.size())));
-    	}
-    	
-    	for (int i = 0; i <= flight.getScheduledAircraft().getRequiredPilotsAircraft(); i++) {
-    		tempUser = pilots.get(i);
-    		if(tempUser.getAvailable(tempUser.calculateBreak(tempUser.getLastFlight(), flightDeparture), 
-    				tempUser.calculateHoursWithNewFlight(tempUser.getHoursWorkedWeek(),flight.getFlightTimeInHours()),
-    				tempUser.getHasHoliday()))
-    			boardcrewExecuting.add(boardcrew.get(getRandomNumber(boardcrew.size())));
-    	}
+    	boardcrewExecuting.addAll(assignPersonal(boardcrew, boardcrew.size(), flight));
+    	pilotsExecutingFlight.addAll(assignPersonal(pilots, pilots.size(), flight));
     	
     	flight.setAssignedBoardpersonal(boardcrewExecuting);
     	flight.setAssignedPilots(pilotsExecutingFlight);
