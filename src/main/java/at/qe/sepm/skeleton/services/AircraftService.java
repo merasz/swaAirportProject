@@ -1,8 +1,10 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Aircraft;
+import at.qe.sepm.skeleton.model.AuditLog;
 import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.repositories.AircraftRepository;
+import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.FlightRepository;
 
 import java.util.Collection;
@@ -26,6 +28,9 @@ public class AircraftService {
 
     @Autowired
     private AircraftRepository aircraftRepository;
+    
+    @Autowired
+    private AuditLogRepository auditLogRepository;
     
 
     /**
@@ -75,8 +80,12 @@ public class AircraftService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteAircraft(Aircraft aircraft) {
-        aircraftRepository.delete(aircraft);
-        // :TODO: write some audit log stating who and when this aircraft was permanently deleted.
+        AuditLog auditlog = new AuditLog();
+        auditlog.setDate(new Date());
+        auditlog.setMessage("Aircraft: " + aircraft.getAircraftId() + " was deleted.");
+        auditLogRepository.save(auditlog);
+        
+    	aircraftRepository.delete(aircraft);
     }
 
     private Aircraft getAuthenticatedUser() {
