@@ -288,6 +288,9 @@ public class Flight implements Persistable<String>, Serializable {
     	for( User user: this.assignedBoardpersonal) {
     		personal = personal + user.getUsername() + ", ";
     	}
+    	if ( personal.contentEquals("")) {
+    		return "";
+    	}
     	return personal.substring(0, personal.length()-2);
     }
 	

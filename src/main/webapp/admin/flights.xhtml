@@ -47,6 +47,11 @@
                 <p:column headerText="Aircraft">
                     <h:outputText value ="#{flight.scheduledAircraftId}"/>
                 </p:column>
+                
+                <p:column headerText="Personal">
+                    <h:outputText value ="#{flight.getPersonal()}"/>
+                </p:column>
+                
                 <p:column style="width:100px;text-align: center">
                 	<p:commandButton update=":flightForm:flightEditDialog" oncomplete="PF('flightEditDialog').show()" icon="ui-icon-note" title="Edit">
                 		<f:setPropertyActionListener value="#{flight}" target="#{flightDetailController.flight}" />
