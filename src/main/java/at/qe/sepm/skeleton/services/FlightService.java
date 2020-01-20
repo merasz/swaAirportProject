@@ -92,30 +92,31 @@ public class FlightService {
     	List<User> executingPersonal = new ArrayList<>();
     	double tempHoursWorkedWeek;
     	
-    	
     	Collection<Flight> allFlights = getAllFlights();
     	
     	double hoursWorked = 0;
     	
-    	for (int i = 0; i <= requiredPersonal; i++) {
+    	for (int i = 0; i < requiredPersonal; i++) {
     		tempUser = pers.get(i);
     		List<Date> weekOfInterest = tempUser.getWeekOfInterest(flight.getDepartureTime(), flight.getArrivalTime());
-    		List<Flight> flightsBetween = flightRepository.findFlightsBetween(weekOfInterest.get(0), weekOfInterest.get(1));
+    		Date startDate = weekOfInterest.get(0);
+    		Date endDate = weekOfInterest.get(1);
+    		List<Flight> flightsBetween = flightRepository.findFlightsBetween(startDate, endDate);
     		hoursWorked = 0;
-    		for (Flight val : flightsBetween) {
-    				if(val.getAssignedBoardpersonal().contains(tempUser))
-    					hoursWorked += val.getFlightTimeInHours();
-    				if(val.getAssignedPilots().contains(tempUser))
-    					hoursWorked += val.getFlightTimeInHours();
-			}
-    		if(tempUser.getAvailable(tempUser.calculateBreak(tempUser.getLastFlight(), flightDeparture), 
-    				tempUser.calculateHoursWithNewFlight(hoursWorked,flight.getFlightTimeInHours()),
-    				tempUser.getHasHoliday()))
+    		if(flightsBetween.size() > 0)
+	    		for (Flight val : flightsBetween) {
+	    				if(val.getAssignedBoardpersonal().contains(tempUser))
+	    					hoursWorked += val.getFlightTimeInHours();
+	    				if(val.getAssignedPilots().contains(tempUser))
+	    					hoursWorked += val.getFlightTimeInHours();
+				}
+    		//update this logic currently wrong
+//    		if(tempUser.getAvailable(tempUser.calculateBreak(tempUser.getLastFlight(), flightDeparture), 
+//    				tempUser.calculateHoursWithNewFlight(hoursWorked,flight.getFlightTimeInHours()),
+//    				tempUser.getHasHoliday()))
     			availablePersonal.add(tempUser);
     	}
-    	
-    	
-    	
+
     	if(availablePersonal.size() < requiredPersonal) {
     		return null;
     	}
@@ -137,8 +138,8 @@ public class FlightService {
     	List<User> pilotsExecuting = new ArrayList<>();
     	List<User> boardcrewExecuting = new ArrayList<>();
     	
-    	
     	boardcrewExecuting.addAll(assignPersonal(boardcrew, boardcrew.size(), flight));
+    	
     	if(boardcrewExecuting.isEmpty())
     		errorMessage("No available Boardcrew!", FacesMessage.SEVERITY_ERROR);
     	
@@ -157,7 +158,7 @@ public class FlightService {
             flight.setDateFlight(flight.getDepartureTime());
             flight.setScheduledAircraft(aircraftService.loadAircraft(flight.getScheduledAircraftId()));
             flight.setFlightTime();
-//            assignPersonalToFlight(flight);
+            assignPersonalToFlight(flight);
         } else {
             flight.setUpdateDate(new Date());
             flight.setUpdateFlight(getAuthenticatedUser());
