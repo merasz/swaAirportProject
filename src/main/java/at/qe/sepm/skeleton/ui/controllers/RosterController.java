@@ -47,16 +47,17 @@ public class RosterController implements Serializable {
 	        if(current.getJobTitle().contentEquals("Pilot")) {
 	        		for (Flight flight : flights) {
 	        		if (flight.getAssignedPilots().contains(current)) {
-	        			event.setId(flight.getFlightId());
-	        			event.setTitle("Flight " + flight.getFlightId());
-	        			event.setStartDate(flight.getDepartureTime());
-	        			event.setEndDate(flight.getArrivalTime());
-	        			event.setDescription("Flight " + flight.getFlightId() + ":from " +
-	        				flight.getIataFrom() + " to " + flight.getIataTo() + "with Aircraft:"
-	        				+ flight.getScheduledAircraft());
-	        			event.setEditable(false);
+	        			DefaultScheduleEvent event1 = new DefaultScheduleEvent();
+	        			event1.setId(flight.getFlightId());
+	        			event1.setTitle("Flight " + flight.getFlightId());
+	        			event1.setStartDate(flight.getDepartureTime());
+	        			event1.setEndDate(flight.getArrivalTime());
+	        			event1.setDescription("Flight " + flight.getFlightId() + " from " +
+	        				flight.getIataFrom() + " to " + flight.getIataTo() + " with Aircraft "
+	        				+ flight.getScheduledAircraftId());
+	        			event1.setEditable(false);
 	        			
-	        			eventModel.addEvent(event);
+	        			eventModel.addEvent(event1);
 	        		}
 	        	}
 	        }
@@ -64,16 +65,17 @@ public class RosterController implements Serializable {
 	        if(current.getJobTitle().contentEquals("Boardpersonal")) {
 	        	for (Flight flight : flights) {
 	        		if (flight.getAssignedPilots().contains(current)) {
-	        			event.setId(flight.getFlightId());
-	        			event.setTitle("Flight " + flight.getFlightId());
-	        			event.setStartDate(flight.getDepartureTime());
-	        			event.setEndDate(flight.getArrivalTime());
-	        			event.setDescription("Flight " + flight.getFlightId() + ":from " +
-	        				flight.getIataFrom() + " to " + flight.getIataTo() + "with Aircraft:"
-	        				+ flight.getScheduledAircraft());
-	        			event.setEditable(false);
+	        			DefaultScheduleEvent event2 = new DefaultScheduleEvent();
+	        			event2.setId(flight.getFlightId());
+	        			event2.setTitle("Flight " + flight.getFlightId());
+	        			event2.setStartDate(flight.getDepartureTime());
+	        			event2.setEndDate(flight.getArrivalTime());
+	        			event2.setDescription("Flight " + flight.getFlightId() + " from " +
+	        				flight.getIataFrom() + " to " + flight.getIataTo() + " with Aircraft "
+	        				+ flight.getScheduledAircraftId());
+	        			event2.setEditable(false);
 	        			
-	        			eventModel.addEvent(event);
+	        			eventModel.addEvent(event2);
 	        		}
 	        	}
 	        }

@@ -74,10 +74,21 @@ public class Flight implements Persistable<String>, Serializable {
 
     
     
-	@OneToMany
-    private List<User> assignedPilots;
-    @OneToMany
-    private List<User> assignedBoardpersonal;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+            name = "assigned_Pilots",
+            joinColumns = @JoinColumn(name = "flight_Id"),
+            inverseJoinColumns = @JoinColumn(name = "username")
+            )
+    private Set<User> assignedPilots;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+            name = "assigned_Boardcrew",
+            joinColumns = @JoinColumn(name = "flight_Id"),
+            inverseJoinColumns = @JoinColumn(name = "username")
+            )
+    private Set<User> assignedBoardpersonal;
+	private String personal = "";
     private int numberOfPassengers;
 
 
@@ -181,19 +192,19 @@ public class Flight implements Persistable<String>, Serializable {
         this.dateFlight = dateFlight;
     }
 
-    public List<User> getAssignedPilots() {
+    public Set<User> getAssignedPilots() {
         return assignedPilots;
     }
 
-    public void setAssignedPilots(List<User> assignedPilots) {
+    public void setAssignedPilots(Set<User> assignedPilots) {
         this.assignedPilots = assignedPilots;
     }
 
-    public List<User> getAssignedBoardpersonal() {
+    public Set<User> getAssignedBoardpersonal() {
         return assignedBoardpersonal;
     }
 
-    public void setAssignedBoardpersonal(List<User> assignedBoardpersonal) {
+    public void setAssignedBoardpersonal(Set<User> assignedBoardpersonal) {
         this.assignedBoardpersonal = assignedBoardpersonal;
     }
 
@@ -268,6 +279,17 @@ public class Flight implements Persistable<String>, Serializable {
 	public void setScheduledAircraftId(String scheduledAircraftId) {
 		this.scheduledAircraftId = scheduledAircraftId;
 	}
+	
+    public String getPersonal() {
+    	personal = "";
+    	for( User user: this.assignedPilots) {
+    		personal = personal + user.getUsername() +", ";
+    	}
+    	for( User user: this.assignedBoardpersonal) {
+    		personal = personal + user.getUsername() + ", ";
+    	}
+    	return personal.substring(0, personal.length()-2);
+    }
 	
 	public long getFlightTimeInMilli() {
 		String[] temp = getFlightTime().split(":");

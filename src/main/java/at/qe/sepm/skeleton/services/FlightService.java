@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -135,8 +136,8 @@ public class FlightService {
     public void assignPersonalToFlight(Flight flight) {
     	Collection<User> boardcrew = userService.getBoardcrew();
     	Collection<User> pilots = userService.getAllPilots();
-    	List<User> pilotsExecuting = new ArrayList<>();
-    	List<User> boardcrewExecuting = new ArrayList<>();
+    	Set<User> pilotsExecuting = new HashSet<>();
+    	Set<User> boardcrewExecuting = new HashSet<>();
     	
     	boardcrewExecuting.addAll(assignPersonal(boardcrew, boardcrew.size(), flight));
     	
