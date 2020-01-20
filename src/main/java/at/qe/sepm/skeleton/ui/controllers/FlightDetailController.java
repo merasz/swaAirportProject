@@ -4,6 +4,9 @@ import at.qe.sepm.skeleton.model.Aircraft;
 import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.services.FlightService;
+
+import java.text.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -63,8 +66,9 @@ public class FlightDetailController{
 
     /**
      * Action to save the currently displayed flight.
+     * @throws ParseException 
      */
-    public void doSaveFlight() {
+    public void doSaveFlight() throws ParseException {
 
         flight = this.flightService.saveFlight(flight);
     }

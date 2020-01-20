@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Set;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -66,8 +67,9 @@ public class FlightCreationController{
 
     /**
      * Action to save the currently displayed user.
+     * @throws ParseException 
      */
-    public void doSaveFlight() {
+    public void doSaveFlight() throws ParseException {
         flight = this.flightService.saveFlight(flight);
     }
 

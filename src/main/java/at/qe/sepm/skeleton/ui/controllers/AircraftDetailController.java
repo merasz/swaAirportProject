@@ -5,6 +5,7 @@ import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.services.FlightService;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,8 +73,9 @@ public class AircraftDetailController {
 
     /**
      * Action to delete the currently displayed aircraft.
+     * @throws ParseException 
      */
-    public void doDeleteAircraft() {
+    public void doDeleteAircraft() throws ParseException {
     		List<Flight> temp = (List<Flight>) flightService.getAllFlights();
     		Flight saveTempFlight = null;
     		for (Flight flight : temp) {
