@@ -36,15 +36,15 @@ public class UserService {
      *
      * @return
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Collection<User> getAllUsers() {
         return userRepository.findAll();
     }
     
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Collection<User> getAllPilots(){return userRepository.findPilots();}
     
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Collection<User> getBoardpersonal(){return userRepository.findBoardcrew();}
 
     /**
@@ -53,7 +53,7 @@ public class UserService {
      * @param username the username to search for
      * @return the user with the given username
      */
-    @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
+    @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username or hasAuthority('MANAGER')")
     public User loadUser(String username) {
         return userRepository.findFirstByUsername(username);
     }
@@ -67,7 +67,7 @@ public class UserService {
      * @param user the user to save
      * @return the updated user
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public User saveUser(User user) {
         AuditLog auditlog = new AuditLog();
         auditlog.setDate(new Date());
@@ -92,7 +92,7 @@ public class UserService {
      *
      * @param user the user to delete
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public void deleteUser(User user) {
     	AuditLog auditlog = new AuditLog();
         auditlog.setDate(new Date());

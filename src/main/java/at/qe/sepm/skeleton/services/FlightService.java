@@ -67,7 +67,7 @@ public class FlightService {
      * @param flightId the flightId to search for
      * @return the flight with the given flightname
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Flight loadFlight(String flightId) {
         return flightRepository.findFirstByFlightId(flightId);
     }
@@ -81,7 +81,7 @@ public class FlightService {
      * @return the updated flight
      */
     
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public int getRandomNumber(int lengthOfPersonalList) {
     	Random randomGenerator = new Random();
     	int pickElement = randomGenerator.nextInt(lengthOfPersonalList);
@@ -159,7 +159,7 @@ public class FlightService {
     	return executingPersonal;
     }
     
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public void assignPersonalToFlight(Flight flight) throws ParseException {
     	Collection<User> boardcrew = userService.getBoardpersonal();
     	Collection<User> pilots = userService.getAllPilots();
@@ -178,7 +178,7 @@ public class FlightService {
     	flight.setAssignedPilots(pilotsExecuting);
     }
     
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Flight saveFlight(Flight flight) throws ParseException {
         if (flight.isNew()) {
             flight.setCreateDate(new Date());
@@ -198,7 +198,7 @@ public class FlightService {
      *
      * @param flight the flight to delete
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public void deleteFlight(Flight flight) {
         flightRepository.delete(flight);
         // :TODO: write some audit log stating who and when this flight was permanently deleted.

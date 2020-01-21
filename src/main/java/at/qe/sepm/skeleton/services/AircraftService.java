@@ -38,7 +38,7 @@ public class AircraftService {
      *
      * @return
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Collection<Aircraft> getAllAircrafts() {
         return aircraftRepository.findAll();
     }
@@ -49,7 +49,7 @@ public class AircraftService {
      * @param aircraftname the id to search for
      * @return the aircraft with the given id
      */
-    @PreAuthorize("hasAuthority('ADMIN') or principal.aircraftname eq #aircraftname")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER') or principal.aircraftname eq #aircraftname")
     public Aircraft loadAircraft(String aircraftId) {
         return aircraftRepository.findFirstByAircraftId(aircraftId);
     }
@@ -60,7 +60,7 @@ public class AircraftService {
      * @param aircraft the aircraft to save
      * @return the updated aircraft
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Aircraft saveAircraft(Aircraft aircraft) {
 
         if (aircraft.isNew()) {
@@ -78,7 +78,7 @@ public class AircraftService {
      *
      * @param aircraft the aircraft to delete
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public void deleteAircraft(Aircraft aircraft) {
         AuditLog auditlog = new AuditLog();
         auditlog.setDate(new Date());

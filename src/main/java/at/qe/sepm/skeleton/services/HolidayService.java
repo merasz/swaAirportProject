@@ -31,7 +31,7 @@ public class HolidayService {
      *
      * @return
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Collection<Holiday> getAllHolidays() {
         return holidayRepository.findAll();
     }

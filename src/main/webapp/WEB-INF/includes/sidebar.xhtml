@@ -24,6 +24,10 @@
                 <p:submenu label = "Flugzeuge" rendered="#{sessionInfoBean.hasRole('ADMIN')}" >
                     <p:menuitem value="Bearbeiten" url="/admin/aircrafts.xhtml"/>
                 </p:submenu>
+                
+                <p:submenu label = "Flugzeuge" rendered="#{sessionInfoBean.hasRole('MANAGER')}" >
+                    <p:menuitem value="Bearbeiten" url="/manager/aircrafts.xhtml"/>
+                </p:submenu>
 
                 <p:submenu label="User Hub" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}">
                     <p:menuitem value="Ansehen" url ="/users/userhub.xhtml"/>
@@ -31,10 +35,14 @@
                 </p:submenu>
 
                 <p:submenu label="Manager Submenu" rendered="#{sessionInfoBean.hasRole('MANAGER')}">
+                    <p:menuitem value="Flüge verwalten" rendered="#{sessionInfoBean.hasRole('MANAGER')}" url="/manager/flights.xhtml"/>
                     <p:menuitem value="Flüge-Portal" rendered="#{sessionInfoBean.hasRole('MANAGER')}" url="/manager/flightsPortal.xhtml"/>
                 </p:submenu>
                 <p:submenu label="Users" rendered="#{sessionInfoBean.hasRole('ADMIN')}">
                     <p:menuitem value="Manage Users" url="/admin/users.xhtml"/>
+                </p:submenu>
+                <p:submenu label="Users" rendered="#{sessionInfoBean.hasRole('MANAGER')}">
+                    <p:menuitem value="Manage Users" url="/manager/users.xhtml"/>
                 </p:submenu>
                 <p:submenu label="Security Tests" rendered="#{sessionInfoBean.loggedIn}">
                     <p:menuitem value="Security Test" url="/secured/test.xhtml"/>
