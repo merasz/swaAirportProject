@@ -16,11 +16,6 @@
 
         <h:form>
             <p:panelMenu>
-                <p:submenu label = "Dienstplan" rendered="#{sessionInfoBean.hasRole('MANAGER')}">
-                    <p:menuitem value="Erstellen" rendered="#{sessionInfoBean.hasRole('MANAGER')}" style = "background :yellow;"/>
-                    <p:menuitem value="Ansehen" url="/views/schedule.xhtml"/>
-
-                </p:submenu>
 
                 <p:submenu label = "Flüge" rendered="#{sessionInfoBean.hasRole('ADMIN')}" >
                     <p:menuitem value ="Bearbeiten" url ="/admin/flights.xhtml"/>
