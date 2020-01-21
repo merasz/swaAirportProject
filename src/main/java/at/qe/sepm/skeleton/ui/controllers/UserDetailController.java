@@ -1,7 +1,14 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.services.FlightService;
 import at.qe.sepm.skeleton.services.UserService;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -20,10 +27,16 @@ public class UserDetailController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FlightService flightService;
+    
+    @Autowired
+    private RosterController rosterController;
     /**
      * Attribute to cache the currently displayed user
      */
     private User user;
+    private Flight flight;
 
     /**
      * Sets the currently displayed user and reloads it form db. This user is
@@ -67,9 +80,27 @@ public class UserDetailController {
 
     /**
      * Action to delete the currently displayed user.
+     * @throws ParseException 
      */
-    public void doDeleteUser() {
+    public void doDeleteUser() throws ParseException {
+    	List<Flight> temp = (List<Flight>) flightService.getAllFlights();
+		Flight saveTempFlight = null;
+		for (Flight flight : temp) {
+			if(user.getJobTitle().contentEquals("Pilot")) {
+				if(flight.getAssignedPilots().contains(user))
+					flight.getAssignedPilots().remove(user);
+			}
+			if(user.getJobTitle().contentEquals("Board Crew")) {
+				if(flight.getAssignedBoardpersonal().contains(user))
+					flight.getAssignedBoardpersonal().remove(user);
+			}
+			saveTempFlight = flight;
+				this.flightService.deleteFlight(flight);
+	    		saveTempFlight.setUpdateDate(new Date());
+	    		this.flightService.saveFlight(saveTempFlight);
+			}
         this.userService.deleteUser(user);
+        
         user = null;
     }
 

@@ -45,7 +45,7 @@ public class UserService {
     public Collection<User> getAllPilots(){return userRepository.findPilots();}
     
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<User> getBoardcrew(){return userRepository.findBoardcrew();}
+    public Collection<User> getBoardpersonal(){return userRepository.findBoardcrew();}
 
     /**
      * Loads a single user identified by its username.

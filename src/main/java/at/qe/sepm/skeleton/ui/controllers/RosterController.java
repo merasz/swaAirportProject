@@ -62,9 +62,9 @@ public class RosterController implements Serializable {
 	        	}
 	        }
 	        
-	        if(current.getJobTitle().contentEquals("Boardpersonal")) {
+	        if(current.getJobTitle().contentEquals("Board Crew")) {
 	        	for (Flight flight : flights) {
-	        		if (flight.getAssignedPilots().contains(current)) {
+	        		if (flight.getAssignedBoardpersonal().contains(current)) {
 	        			DefaultScheduleEvent event2 = new DefaultScheduleEvent();
 	        			event2.setId(flight.getFlightId());
 	        			event2.setTitle("Flight " + flight.getFlightId());

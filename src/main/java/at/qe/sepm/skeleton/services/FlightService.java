@@ -161,7 +161,7 @@ public class FlightService {
     
     @PreAuthorize("hasAuthority('ADMIN')")
     public void assignPersonalToFlight(Flight flight) throws ParseException {
-    	Collection<User> boardcrew = userService.getBoardcrew();
+    	Collection<User> boardcrew = userService.getBoardpersonal();
     	Collection<User> pilots = userService.getAllPilots();
     	Set<User> pilotsExecuting = new HashSet<>();
     	Set<User> boardcrewExecuting = new HashSet<>();
