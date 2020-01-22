@@ -21,4 +21,17 @@ public class CurrentDate {
 	    return calendar.getTime();
 	}
 	
+	private Date temp;
+
+	public Date getTemp() {
+		return temp;
+	}
+
+	public void setTemp(Date temp) {
+		this.temp = temp;
+	}
+	
+	
+	
+	
 }

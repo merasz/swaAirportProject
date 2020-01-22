@@ -57,25 +57,26 @@
                 		<f:setPropertyActionListener value="#{flight}" target="#{flightDetailController.flight}" />
                 	</p:commandButton>
                 	
-                	<p:commandButton action="#{flightDetailController.doDeleteFlight}" icon="ui-icon-trash" title="Delete" update=":flightForm:flightTable" >
+                <p:commandButton action="#{flightDetailController.doDeleteFlight}" icon="ui-icon-trash" update=":flightForm:flightTable" >
                 		<f:setPropertyActionListener value="#{flight}" target="#{flightDetailController.flight}" />
                 		<p:confirm header="Confirmation" message="Are you sure that you want to delete this flight? You cannot undo this operation." icon="ui-icon-alert" />
                 	</p:commandButton>
-                 </p:column>               
+				</p:column>               
             </p:dataTable>
 
-			<p:commandButton  oncomplete="PF('flightCreationDialog').show()" icon="ui-icon-add-box" value ="New Flight">
+
+			<p:commandButton  onclick="PF('flightCreationDialog').show()" icon="ui-icon-add-box" value ="New Flight" process="departureTime">
 			 <f:setPropertyActionListener value="#{flight}" target="#{flightCreationController.flight}" />
 			</p:commandButton>
-			
-            <p:dialog header ="Create Flight" id ="flightCreationDialog" widgetVar ="flightCreationDialog" visible="#{facesContext.validationFailed}" closeOnEscape="true" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
+
+ 			<p:dialog header ="Create Flight" id ="flightCreationDialog" widgetVar ="flightCreationDialog" visible="#{facesContext.validationFailed}" closeOnEscape="true" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
 			<p:outputPanel id ="flightCreateData" >
+			<h:panelGrid columns ="3">
 
- 				<h:panelGrid columns ="3">
-                        <p:outputLabel for="flightId" value ="Flight ID: "/>
-                        <p:inputText id ="newFlightId" value ="#{flightCreationController.flight.flightId}" required="true" placeholder="Enter flight id" style ="color:white;" />
+						<p:outputLabel for="flightId" value ="Flight ID: "/>
+                        <p:inputText id ="newFlightId" value ="#{flightCreationController.flight.flightId}" required="false" requiredMessage="FlightId is required!" placeholder="Enter flight id" style ="color:white;" />
                         <p:message for="newFlightId" display="icon text"/>
-
+					
 						<p:outputLabel for="iataFrom" value ="Iata From: "/>
 						<h:selectOneMenu id ="newIataFrom" value="#{flightCreationController.flight.iataFrom}" required="true" filter="true" filterMatchMode="startsWith">
                 			<f:selectItems value="#{iataBean.iataList}" />
@@ -91,34 +92,35 @@
 					</h:panelGrid>
 					<p:separator />
                         
+			</p:outputPanel>
 					<h:panelGrid columns ="3">
  						<p:outputLabel for="departureTime" value ="Departure Time: (YYYY-MM-DD HH:MM)"/>
-				        <p:calendar id="departureTime" value="#{flightCreationController.flight.departureTime}" required="true" requiredMessage="Enter a departure time!" mindate="#{currentDate.currentDate}" locale="de" pattern="dd.MM.yyyy HH:mm" />
+				        <p:calendar id="departureTime" value="#{flightCreationController.flight.departureTime}" required="false" requiredMessage="Enter a departure time!" mindate="#{currentDate.currentDate}" locale="de" pattern="dd.MM.yyyy HH:mm" >
+				        </p:calendar>
       					<p:message for="departureTime" display="icon text"/>
       					
-                        <p:outputLabel for="arrivalTime" value ="Arrival Time: (YYYY-MM-DD HH:MM)"/>
-						<p:calendar id="arrivalTime" value="#{flightCreationController.flight.arrivalTime}" required="true" requiredMessage="Enter an arrival time!" mindate="#{currentDate.currentDateArr}" locale="de" pattern="dd.MM.yyyy HH:mm" />
+      					
+      					 <p:outputLabel for="arrivalTime" value ="Arrival Time: (YYYY-MM-DD HH:MM)"/>
+						<p:calendar id="arrivalTime" value="#{flightCreationController.flight.arrivalTime}" required="false" mindate="#{currentDate.currentDateArr}" requiredMessage="Enter an arrival time!" locale="de" pattern="dd.MM.yyyy HH:mm" />
 						<p:message for="arrivalTime" display="icon text"/>
 						
 						<p:outputLabel for="numberOfPassengers" value ="Passengers: "/>
-                        <p:inputText type="number" id ="newNumberOfPassengers" value ="#{flightCreationController.flight.numberOfPassengers}" required="true" style ="color:white;" >
-                        <f:validateLongRange minimum="1" />
+                        <p:inputText type="number" id ="newNumberOfPassengers" value ="#{flightCreationController.flight.numberOfPassengers}" style ="color:white" required="false">
                         </p:inputText>
-                        <p:message for="newNumberOfPassengers" display="icon text"/>
-					
-					</h:panelGrid>
-						<p:commandButton value="Save Iata and Dates" action="#{flightDetailController.doSaveFlight()}" 
+						<p:message for="newNumberOfPassengers" display="icon text"/>
+						
+						</h:panelGrid>
+						<p:commandButton value="Save Iata and Dates" action="#{flightCreationController.doSaveFlight()}" 
 						process=":flightForm:flightCreationDialog" 
-						oncomplete="if (args &amp;&amp; !args.validationFailed) PF('flightCreationDialogPickAircraft').show()" update=":flightForm:flightCreationDialog"/>
-					</p:outputPanel>
-            </p:dialog>
+						oncomplete="if (args &amp;&amp; !args.validationFailed) PF('flightCreationDialogPickAircraft').show()" 
+						update=":flightForm:flightCreationDialog"/>
+			</p:dialog>
 
-
-			<p:dialog id ="pickAircraftDialog" widgetVar ="flightCreationDialogPickAircraft" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
+		<p:dialog id ="pickAircraftDialog" widgetVar ="flightCreationDialogPickAircraft" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
 				<p:outputPanel>
                     <h:panelGrid columns ="2">    
-                        <p:outputLabel for="availableAircraft" value ="Select aircraft: "/>                        	
-                        <h:selectOneMenu id ="availableAircraft" value="#{flightCreationController.flight.scheduledAircraftId}" required="false">
+                        <p:outputLabel for="availableAircraft" value ="Select aircraft: " />                        	
+                        <h:selectOneMenu id ="availableAircraft" value="#{flightCreationController.flight.scheduledAircraftId}" required="false" >
 							<f:selectItem itemLabel="Select One Aircraft" itemValue="" />
                 			<f:selectItems value="#{availableAircraftBean.availableAircraftList}" />
             			</h:selectOneMenu>     
@@ -142,19 +144,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-			<p:dialog header="Edit Flight" id="flightEditDialog" widgetVar="flightEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+<p:dialog header="Edit Flight" id="flightEditDialog" widgetVar="flightEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <p:outputPanel id="flightData" rendered="#{flightController.flight}">
 				<h:panelGrid columns ="2">
 					<p:outputLabel for="flightId" value ="Flight ID: "/>
@@ -172,12 +162,6 @@
             			</h:selectOneMenu>
 					</h:panelGrid>
 						
-                        
-                        
-                        
-	                        
-					
-						
                         <p:outputLabel for="numberOfPassengers" value ="Number of Passengers: "/>
                         <p:inputText type="number" id ="numberOfPassengers" value ="#{flightDetailController.flight.numberOfPassengers}" disabled="true" style ="color:white;" />
                         
@@ -190,13 +174,12 @@
                     </h:panelGrid>
                 </p:outputPanel>
             </p:dialog>
+            
 
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" width="300">
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" width="300">
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
-
-
 
            
         </h:form>
