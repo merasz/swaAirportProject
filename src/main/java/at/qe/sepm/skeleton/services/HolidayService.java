@@ -1,7 +1,9 @@
 package at.qe.sepm.skeleton.services;
 
 
+import at.qe.sepm.skeleton.model.AuditLog;
 import at.qe.sepm.skeleton.model.Holiday;
+import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.HolidayRepository;
 import java.util.Collection;
 import java.util.Date;
@@ -25,6 +27,9 @@ public class HolidayService {
 
     @Autowired
     private HolidayRepository holidayRepository;
+    
+    @Autowired
+    private AuditLogRepository auditLogRepository;
 
     /**
      * Returns a collection of all holidays.
@@ -83,8 +88,11 @@ public class HolidayService {
      */
 
     public void deleteHoliday(Holiday holiday) {
+    	AuditLog auditlog = new AuditLog();
+        auditlog.setDate(new Date());
+        auditlog.setMessage("Holiday from User " + holiday.getUsername() + " from " + holiday.getHolidayFrom()+ " until " + holiday.getHolidayUntil() + " was deleted.");
+        auditLogRepository.save(auditlog);
         holidayRepository.delete(holiday);
-        // :TODO: write some audit log stating who and when this holiday was permanently deleted.
     }
 
 
