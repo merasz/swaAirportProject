@@ -107,12 +107,33 @@ public class User implements Persistable<String>, Serializable {
         return false;
     }
 
-    public Boolean calculateBreak(Date lastFlight, Date currentFlight){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(lastFlight);
-        calendar.add(Calendar.HOUR_OF_DAY, 12);
-        if(calendar.getTime().compareTo(currentFlight) < 0)
-        	return false;
+    public Boolean calculateBreak(List<Flight> allFlights, Flight flight){
+    	long currentFlightDep = flight.getDepartureTime().getTime();
+        long currentFlightArr = flight.getArrivalTime().getTime();
+        
+        final long BREAK_TIME = 12*60*60*1000;
+        
+        for (Flight val: allFlights) {
+        	long timeRange = 0;
+			long flightDep = val.getDepartureTime().getTime();
+			long flightArr = val.getArrivalTime().getTime();
+			
+			if(currentFlightDep == flightDep)
+				return false;
+			
+			if(currentFlightDep > flightDep) {
+				timeRange = currentFlightDep - flightArr;
+				if(timeRange < BREAK_TIME)
+					return false;
+			}
+			
+			if(currentFlightDep < flightDep) {
+				timeRange = flightDep - currentFlightArr;
+				if(timeRange < BREAK_TIME)
+					return false;
+			}
+		}
+        
         return true;
     }
 

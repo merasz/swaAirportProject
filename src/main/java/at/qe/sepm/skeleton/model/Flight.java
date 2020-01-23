@@ -64,6 +64,7 @@ public class Flight implements Persistable<String>, Serializable {
     private Date arrivalTime;
     private Date dateFlight;
     private String flightTime;
+    private Boolean isValidFlight;
     
     @OneToOne(optional = true, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
     @JoinTable(name="aircraft_id", joinColumns={@JoinColumn(name="aircraft_id")})
@@ -308,6 +309,18 @@ public class Flight implements Persistable<String>, Serializable {
 		double hours = milli / 1000 * 60 * 60;
 		return (double) milli;
 	}
+
+
+	public Boolean getIsValidFlight() {
+		return isValidFlight;
+	}
+
+
+	public void setIsValidFlight(Boolean isValidFlight) {
+		this.isValidFlight = isValidFlight;
+	}
+	
+	
 	
 	
 

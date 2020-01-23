@@ -13,6 +13,7 @@ import at.qe.sepm.skeleton.repositories.UserRepository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -97,12 +98,40 @@ public class FlightService {
     	return (new SimpleDateFormat("yyyy-mm-dd").parse(date));    
     }
     
-    public boolean betweenDate(Date holidayFrom, Date holidayUntil, Date dep, Date arr) {
-    	if(holidayFrom.before(dep))
-    		if(holidayUntil.before(holidayUntil))
-    			return true;
-    	if(holidayFrom.after(arr))
-    		return true;
+    public boolean betweenDate(Date start, Date end, Date depTime, Date arrTime, Flight flight) {
+    	List<Date> holidayDayList = new ArrayList<>();
+		Calendar from = Calendar.getInstance();
+		Calendar to = Calendar.getInstance();
+		
+		Calendar dep = Calendar.getInstance();
+		dep.setTime(depTime);
+		Calendar arr = Calendar.getInstance();
+		arr.setTime(arrTime);
+		
+		from.setTime(start);
+		to.setTime(end);
+		
+		while(from.before(to)) {
+			holidayDayList.add(from.getTime());
+			from.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		
+		Calendar personalIsAgainHomeAirport = Calendar.getInstance();
+		long persHomeInMilli = arrTime.getTime();
+		persHomeInMilli += 7200000;
+		persHomeInMilli += flight.getFlightTimeInMilli();
+		personalIsAgainHomeAirport.setTimeInMillis(persHomeInMilli);
+		
+		Date personalHomeTime = personalIsAgainHomeAirport.getTime();
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+		for (Date holi : holidayDayList) {
+			if(fmt.format(holi).equals(fmt.format(depTime)) || 
+					fmt.format(holi).equals(fmt.format(arrTime)) || 
+						fmt.format(holi).equals(fmt.format(personalHomeTime))) {
+				return true;
+			}
+		}
+    	
     	return false;
     }
     
@@ -116,32 +145,36 @@ public class FlightService {
     	Collection<Flight> allFlights = getAllFlights();
     	double hoursWorked = 0;
     	
+    	for (int i = 0; i < 100; i++) {
+			System.out.println("in assignpers sizeboardcrew: " + personal.size());
+		}
+    	
     	for (User currentUser : personal) {
     		Collection<Holiday> listOfHolidays = holidayService.getHolidayByUser(currentUser.getUsername());
-    		boolean userHasHolidayOnFlight = true;
+    		boolean userHasHolidayOnFlight = false;
     		
-    		if(listOfHolidays.isEmpty())
+    		if(listOfHolidays.isEmpty()) {
     			userHasHolidayOnFlight = false;
+    		}
     		else {
-    			for (int j = 0; j < listOfHolidays.size(); j++) {
-					for (Holiday holiday : listOfHolidays) {
-						if(betweenDate(parseStringdateToDate(holiday.getHolidayFrom()), parseStringdateToDate(holiday.getHolidayUntil()), flightDeparture, flightArrival))
-								userHasHolidayOnFlight = false;
+    			for (Holiday holiday : listOfHolidays) {
+    				if(betweenDate(parseStringdateToDate(holiday.getHolidayFrom()), parseStringdateToDate(holiday.getHolidayUntil()), flightDeparture, flightArrival, flight))
+    					userHasHolidayOnFlight = true;
 					}
-				}
     		}
     		List<Date> weekOfInterest = currentUser.getWeekOfInterest(flight.getDepartureTime(), flight.getArrivalTime());
     		List<Flight> flightsBetween = flightRepository.findFlightsBetween(weekOfInterest.get(0), weekOfInterest.get(1));
     		hoursWorked = 0;
+    		boolean isBetweenFlightBreak = false;
     		if(!(flightsBetween.isEmpty())) {
+    			isBetweenFlightBreak = currentUser.calculateBreak(flightsBetween, flight);
 	    		for (Flight val : flightsBetween) {
 	    				if(val.getAssignedBoardpersonal().contains(currentUser))
-	    					hoursWorked += val.getFlightTimeInHours();
+	    					hoursWorked += val.getFlightTimeInHours()*2+12;
 	    				if(val.getAssignedPilots().contains(currentUser))
-	    					hoursWorked += val.getFlightTimeInHours();
+	    					hoursWorked += val.getFlightTimeInHours()*2+12;
 				}
-	    		if(currentUser.getAvailable(currentUser.calculateBreak(currentUser.getLastFlight(), flightDeparture), 
-	    				currentUser.calculateHoursWithNewFlight(hoursWorked,flight.getFlightTimeInHours()), !(userHasHolidayOnFlight)))
+	    		if(currentUser.getAvailable(isBetweenFlightBreak, currentUser.calculateHoursWithNewFlight(hoursWorked,flight.getFlightTimeInHours()), !(userHasHolidayOnFlight)))
 	    			availablePersonal.add(currentUser);
     		}
     		else {
@@ -181,20 +214,47 @@ public class FlightService {
     	
     	flight.setAssignedBoardpersonal(boardcrewExecuting);
     	flight.setAssignedPilots(pilotsExecuting);
+    	
     }
+    
+    public void callReturnFlight(Flight returnFlight) {
+    	returnFlight.setFlightId(returnFlight.getFlightId() + " Flight back");
+    	String tempIataTo = returnFlight.getIataFrom();
+    	returnFlight.setIataFrom(returnFlight.getIataTo());
+    	returnFlight.setIataTo(tempIataTo);
+    	
+    	flightRepository.save(returnFlight);
+    }
+    
+
     
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Flight saveFlight(Flight flight) throws ParseException {
+    	String tempFrom = flight.getIataFrom();
+    	String tempTo = flight.getIataTo();
+    	String flightId = flight.getFlightId() + " 101";
+
         if (flight.isNew()) {
             flight.setCreateDate(new Date());
             flight.setDateFlight(flight.getDepartureTime());
             flight.setScheduledAircraft(aircraftService.loadAircraft(flight.getScheduledAircraftId()));
             flight.setFlightTime();
             assignPersonalToFlight(flight);
+            flightRepository.save(flight);
         } else {
             flight.setUpdateDate(new Date());
             flight.setUpdateFlight(getAuthenticatedUser());
         }
+        flight.setFlightId(flightId);
+        flight.setIataFrom(tempTo);
+        flight.setIataTo(tempFrom);
+        flight.setNumberOfPassengers(0);
+        Calendar tmp = Calendar.getInstance();
+        tmp.set(2020, 2, 22, 3, 0);
+        flight.setDepartureTime(tmp.getTime());
+        tmp.add(Calendar.HOUR_OF_DAY, 4);
+        flight.setArrivalTime(tmp.getTime());
+        flightRepository.save(flight);
         return flightRepository.save(flight);
     }
 
@@ -205,11 +265,8 @@ public class FlightService {
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public void deleteFlight(Flight flight) {
-    	AuditLog auditlog = new AuditLog();
-        auditlog.setDate(new Date());
-        auditlog.setMessage("Flight: " + flight.getFlightId()+ " from " + flight.getIataFrom() + " to " + flight.getIataTo() + " was deleted.");
-        auditLogRepository.save(auditlog);
         flightRepository.delete(flight);
+        // :TODO: write some audit log stating who and when this flight was permanently deleted.
     }
 
     private Flight getAuthenticatedUser() {
