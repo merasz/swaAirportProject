@@ -38,61 +38,50 @@ public class RosterController implements Serializable {
 
     @PostConstruct
     public void init() {
-        Collection<Flight> flights = flightService.getAllFlights() ;
         current = infoBean.getCurrentUser();
 
-        DefaultScheduleEvent event = new DefaultScheduleEvent();
-        	
-        if (current.getJobTitle() != null) {
-	        if(current.getJobTitle().contentEquals("Pilot")) {
-	        		for (Flight flight : flights) {
-	        		if (flight.getAssignedPilots().contains(current)) {
-	        			DefaultScheduleEvent event1 = new DefaultScheduleEvent();
-	        			event1.setId(flight.getFlightId());
-	        			event1.setTitle("Flight " + flight.getFlightId());
-	        			event1.setStartDate(flight.getDepartureTime());
-	        			event1.setEndDate(flight.getArrivalTime());
-	        			event1.setDescription("Flight " + flight.getFlightId() + " from " +
-	        				flight.getIataFrom() + " to " + flight.getIataTo() + " with Aircraft "
-	        				+ flight.getScheduledAircraftId());
-	        			event1.setEditable(false);
-	        			
-	        			eventModel.addEvent(event1);
-	        		}
-	        	}
+        if(!flightService.getAllFlights().isEmpty()) {
+	        Collection<Flight> flights = flightService.getAllFlights();
+	        if (current.getJobTitle() != null) {
+		        if(current.getJobTitle().contentEquals("Pilot")) {
+		        		for (Flight flight : flights) {
+		        		if (flight.getAssignedPilots().contains(current)) {
+		        			DefaultScheduleEvent event1 = new DefaultScheduleEvent();
+		        			event1.setId(flight.getFlightId());
+		        			event1.setTitle("Flight " + flight.getFlightId());
+		        			event1.setStartDate(flight.getDepartureTime());
+		        			event1.setEndDate(flight.getArrivalTime());
+		        			event1.setDescription("Flight " + flight.getFlightId() + " from " +
+		        				flight.getIataFrom() + " to " + flight.getIataTo() + " with Aircraft "
+		        				+ flight.getScheduledAircraftId());
+		        			event1.setEditable(false);
+		        			
+		        			eventModel.addEvent(event1);
+		        		}
+		        	}
+		        }
+		        
+		        if(current.getJobTitle().contentEquals("Board Crew")) {
+		        	for (Flight flight : flights) {
+		        		if (flight.getAssignedBoardpersonal().contains(current)) {
+		        			DefaultScheduleEvent event2 = new DefaultScheduleEvent();
+		        			event2.setId(flight.getFlightId());
+		        			event2.setTitle("Flight " + flight.getFlightId());
+		        			event2.setStartDate(flight.getDepartureTime());
+		        			event2.setEndDate(flight.getArrivalTime());
+		        			event2.setDescription("Flight " + flight.getFlightId() + " from " +
+		        				flight.getIataFrom() + " to " + flight.getIataTo() + " with Aircraft "
+		        				+ flight.getScheduledAircraftId());
+		        			event2.setEditable(false);
+		        			
+		        			eventModel.addEvent(event2);
+		        		}
+		        	}
+		        }
 	        }
-	        
-	        if(current.getJobTitle().contentEquals("Board Crew")) {
-	        	for (Flight flight : flights) {
-	        		if (flight.getAssignedBoardpersonal().contains(current)) {
-	        			DefaultScheduleEvent event2 = new DefaultScheduleEvent();
-	        			event2.setId(flight.getFlightId());
-	        			event2.setTitle("Flight " + flight.getFlightId());
-	        			event2.setStartDate(flight.getDepartureTime());
-	        			event2.setEndDate(flight.getArrivalTime());
-	        			event2.setDescription("Flight " + flight.getFlightId() + " from " +
-	        				flight.getIataFrom() + " to " + flight.getIataTo() + " with Aircraft "
-	        				+ flight.getScheduledAircraftId());
-	        			event2.setEditable(false);
-	        			
-	        			eventModel.addEvent(event2);
-	        		}
-	        	}
-	        }
-        }
-        
-        event.setId("123");
-        event.setTitle("Champions League Match");
-        event.setStartDate(flights.iterator().next().getDepartureTime());
-        event.setEndDate(flights.iterator().next().getArrivalTime());
-        event.setDescription("Team A vs. Team B");
-        event.setEditable(false);
-
-
-        eventModel.addEvent(event);
-
     }
-
+    
+    }
     public ScheduleModel getEventModel() {
 
 
