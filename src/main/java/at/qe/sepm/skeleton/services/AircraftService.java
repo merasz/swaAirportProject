@@ -6,6 +6,7 @@ import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.repositories.AircraftRepository;
 import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.FlightRepository;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
 
 import java.util.Collection;
 import java.util.Date;
@@ -31,6 +32,9 @@ public class AircraftService {
     
     @Autowired
     private AuditLogRepository auditLogRepository;
+    
+    @Autowired
+    private MessageBean messageBean;
     
 
     /**
@@ -84,6 +88,9 @@ public class AircraftService {
         auditlog.setDate(new Date());
         auditlog.setMessage("Aircraft: " + aircraft.getAircraftId() + " was deleted.");
         auditLogRepository.save(auditlog);
+        
+    	messageBean.alertInformation("Success", "Deleted aircraft " + aircraft.getAircraftId() + " !");
+
         
     	aircraftRepository.delete(aircraft);
     }

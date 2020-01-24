@@ -8,6 +8,9 @@
                 template="/WEB-INF/templates/main.xhtml">
     <ui:define name ="content">
         <h:form id = "aircraftForm">
+        <p:growl id="growl" showDetail="false" life="6000" >
+                <p:autoUpdate/>
+        </p:growl>
             <p:dataTable id ="aircraftTable" var ="aircraft" value ="#{aircraftListController.aircrafts}" style ="margin-top:10%;">
                 <p:column headerText ="Aircraft ID">
                     <h:outputText value ="#{aircraft.aircraftId}" />

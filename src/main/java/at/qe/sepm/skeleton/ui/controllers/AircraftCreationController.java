@@ -2,6 +2,8 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Aircraft;
 import at.qe.sepm.skeleton.services.AircraftService;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,9 @@ public class AircraftCreationController{
 
     @Autowired
     private AircraftService aircraftService;
+    
+    @Autowired
+    private MessageBean messageBean;
 
     /**
      * Creates a new aircraft
@@ -48,8 +53,8 @@ public class AircraftCreationController{
      * Action to save the currently displayed user.
      */
     public void doSaveAircraft() {
-
         aircraft = this.aircraftService.saveAircraft(aircraft);
+        messageBean.alertInformation("Success", "Aircraft successfully saved!");
     }
 
 
