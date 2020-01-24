@@ -5,6 +5,8 @@ import at.qe.sepm.skeleton.model.AuditLog;
 import at.qe.sepm.skeleton.model.Holiday;
 import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
+
 import java.util.Collection;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class UserService {
 
     @Autowired
     private AuditLogRepository auditLogRepository;
+    
+	@Autowired
+	private MessageBean messageBean;
     
     /**
      * Returns a collection of all users.
@@ -98,6 +103,9 @@ public class UserService {
         auditlog.setDate(new Date());
         auditlog.setMessage("User: " + user.getUsername() + " was deleted.");
         auditLogRepository.save(auditlog);
+        
+    	messageBean.alertInformation("Success", "Deleted user " + user.getUsername() + " !");
+
         
         userRepository.delete(user);
     }

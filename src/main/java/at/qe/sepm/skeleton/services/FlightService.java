@@ -9,6 +9,7 @@ import at.qe.sepm.skeleton.repositories.AircraftRepository;
 import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.FlightRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,6 +60,9 @@ public class FlightService {
     
     @Autowired
     private AircraftService aircraftService;
+    
+    @Autowired
+    private MessageBean messageBean;
     /**
      * Returns a collection of all flights.
      *
@@ -204,14 +208,20 @@ public class FlightService {
     	Set<User> pilotsExecuting = new HashSet<>();
     	Set<User> boardcrewExecuting = new HashSet<>();
     	
+    	if(!boardcrew.isEmpty())
     	boardcrewExecuting.addAll(assignPersonal(boardcrew, flight.getScheduledAircraft().getRequiredBoardpersonalAircraft(), flight));
-    	if(boardcrewExecuting.isEmpty())
+    	if(boardcrewExecuting.isEmpty()) {
     		errorMessage("No available Boardcrew!", FacesMessage.SEVERITY_ERROR);
+    		messageBean.alertError("Error", "No Boardcrew for flight " + flight.getFlightId() + " !");
+    	}
     	
+    	if(!pilots.isEmpty())
     	pilotsExecuting.addAll(assignPersonal(pilots, flight.getScheduledAircraft().getRequiredPilotsAircraft(), flight));
-    	if(pilotsExecuting.isEmpty())
-    		errorMessage("No available Pilots!", FacesMessage.SEVERITY_ERROR);
     	
+    	if(pilotsExecuting.isEmpty()) {
+    		errorMessage("No available Pilots!", FacesMessage.SEVERITY_ERROR);
+    	messageBean.alertError("Error", "No Pilots for flight " + flight.getFlightId() + " !");
+    	}
     	flight.setAssignedBoardpersonal(boardcrewExecuting);
     	flight.setAssignedPilots(pilotsExecuting);
     	
@@ -265,8 +275,8 @@ public class FlightService {
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public void deleteFlight(Flight flight) {
+    	messageBean.alertInformation("Sucess", "Deleted flight " + flight.getFlightId() + " !");
         flightRepository.delete(flight);
-        // :TODO: write some audit log stating who and when this flight was permanently deleted.
     }
 
     private Flight getAuthenticatedUser() {

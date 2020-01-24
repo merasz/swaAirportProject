@@ -3,6 +3,8 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ public class UserCreationController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private MessageBean messageBean;
 
 
 
@@ -69,6 +73,8 @@ public class UserCreationController {
 
         user.addToRoles();
         user = this.userService.saveUser(user);
+    	messageBean.alertInformation("Sucess", "Saved user");
+
     }
 
 

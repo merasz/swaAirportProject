@@ -8,6 +8,9 @@
                 template="/WEB-INF/templates/main.xhtml">
     <ui:define name ="content">
         <h:form id="flightForm">
+        <p:growl id="growl" showDetail="false" life="6000" >
+                <p:autoUpdate/>
+        </p:growl>
             <p:dataTable id="flightTable" var="flight" value="#{flightListController.flights}" style ="margin-top:10%;">
                 <p:column headerText="Flight ID">
                     <h:outputText value ="#{flight.flightId}"/>
