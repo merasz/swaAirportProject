@@ -296,11 +296,11 @@ public class Flight implements Persistable<String>, Serializable {
     }
 	
 	public long getFlightTimeInMilli() {
-		String[] temp = getFlightTime().split(":");
-		int hours = Integer.parseInt(temp[0]);
-		int minutes = Integer.parseInt(temp[1]);
-		minutes += hours*60;
-		long milli = (long) minutes*60000;
+		if(departureTime == null || arrivalTime == null)
+			return 0;
+		long milli = getArrivalTime().getTime() - getDepartureTime().getTime();
+		if(milli < 0)
+			return 0;
 		return milli;
 	}
 	

@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -149,10 +150,6 @@ public class FlightService {
     	Collection<Flight> allFlights = getAllFlights();
     	double hoursWorked = 0;
     	
-    	for (int i = 0; i < 100; i++) {
-			System.out.println("in assignpers sizeboardcrew: " + personal.size());
-		}
-    	
     	for (User currentUser : personal) {
     		Collection<Holiday> listOfHolidays = holidayService.getHolidayByUser(currentUser.getUsername());
     		boolean userHasHolidayOnFlight = false;
@@ -201,30 +198,34 @@ public class FlightService {
     	return executingPersonal;
     }
     
+    
+    
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
-    public void assignPersonalToFlight(Flight flight) throws ParseException {
+    public boolean assignPersonalToFlight(Flight flight) throws ParseException {
     	Collection<User> boardcrew = userService.getBoardpersonal();
     	Collection<User> pilots = userService.getAllPilots();
     	Set<User> pilotsExecuting = new HashSet<>();
     	Set<User> boardcrewExecuting = new HashSet<>();
     	
     	if(!boardcrew.isEmpty())
-    	boardcrewExecuting.addAll(assignPersonal(boardcrew, flight.getScheduledAircraft().getRequiredBoardpersonalAircraft(), flight));
+    		boardcrewExecuting.addAll(assignPersonal(boardcrew, flight.getScheduledAircraft().getRequiredBoardpersonalAircraft(), flight));
+    	
     	if(boardcrewExecuting.isEmpty()) {
-    		errorMessage("No available Boardcrew!", FacesMessage.SEVERITY_ERROR);
     		messageBean.alertError("Error", "No Boardcrew for flight " + flight.getFlightId() + " !");
+    		return false;
     	}
     	
     	if(!pilots.isEmpty())
-    	pilotsExecuting.addAll(assignPersonal(pilots, flight.getScheduledAircraft().getRequiredPilotsAircraft(), flight));
+    		pilotsExecuting.addAll(assignPersonal(pilots, flight.getScheduledAircraft().getRequiredPilotsAircraft(), flight));
     	
     	if(pilotsExecuting.isEmpty()) {
-    		errorMessage("No available Pilots!", FacesMessage.SEVERITY_ERROR);
-    	messageBean.alertError("Error", "No Pilots for flight " + flight.getFlightId() + " !");
+    		messageBean.alertError("Error", "No Pilots for flight " + flight.getFlightId() + " !");
+    		return false;
     	}
+    	
     	flight.setAssignedBoardpersonal(boardcrewExecuting);
     	flight.setAssignedPilots(pilotsExecuting);
-    	
+    	return true;
     }
     
     public void callReturnFlight(Flight returnFlight) {
@@ -240,31 +241,27 @@ public class FlightService {
     
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Flight saveFlight(Flight flight) throws ParseException {
-    	String tempFrom = flight.getIataFrom();
-    	String tempTo = flight.getIataTo();
-    	String flightId = flight.getFlightId() + " 101";
 
         if (flight.isNew()) {
             flight.setCreateDate(new Date());
             flight.setDateFlight(flight.getDepartureTime());
-            flight.setScheduledAircraft(aircraftService.loadAircraft(flight.getScheduledAircraftId()));
             flight.setFlightTime();
-            assignPersonalToFlight(flight);
-            flightRepository.save(flight);
+            flight.setScheduledAircraft(aircraftService.loadAircraft(flight.getScheduledAircraftId()));
+            if(flight.getDepartureTime().after(flight.getArrivalTime())) {
+            	messageBean.alertError("Error", "Flight departure time is greater than arrivaltime!");
+            	return null;
+            }
+
+            if(assignPersonalToFlight(flight)) {
+            	flight.setIsValidFlight(true);
+            	flightRepository.save(flight);
+            }
+            else
+            	messageBean.alertError("Error", "Flight was not created!");
         } else {
             flight.setUpdateDate(new Date());
             flight.setUpdateFlight(getAuthenticatedUser());
         }
-        flight.setFlightId(flightId);
-        flight.setIataFrom(tempTo);
-        flight.setIataTo(tempFrom);
-        flight.setNumberOfPassengers(0);
-        Calendar tmp = Calendar.getInstance();
-        tmp.set(2020, 2, 22, 3, 0);
-        flight.setDepartureTime(tmp.getTime());
-        tmp.add(Calendar.HOUR_OF_DAY, 4);
-        flight.setArrivalTime(tmp.getTime());
-        flightRepository.save(flight);
         return flightRepository.save(flight);
     }
 

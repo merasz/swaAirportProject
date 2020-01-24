@@ -71,7 +71,7 @@
 			 <f:setPropertyActionListener value="#{flight}" target="#{flightCreationController.flight}" />
 			</p:commandButton>
 			
-            <p:dialog header ="Create Flight" id ="flightCreationDialog" widgetVar ="flightCreationDialog" visible="#{facesContext.validationFailed}" closeOnEscape="true" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
+            <p:dialog header ="Create Flight" id ="flightCreationDialog" widgetVar ="flightCreationDialog" closeOnEscape="true" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
 			<p:outputPanel id ="flightCreateData" >
 
  				<h:panelGrid columns ="3">
@@ -111,7 +111,7 @@
 					</h:panelGrid>
 						<p:commandButton value="Save Iata and Dates" action="#{flightDetailController.doSaveFlight()}" 
 						process=":flightForm:flightCreationDialog" 
-						oncomplete="if (args &amp;&amp; !args.validationFailed) PF('flightCreationDialogPickAircraft').show()" update=":flightForm:flightCreationDialog"/>
+						oncomplete="PF('flightCreationDialog').show(); PF('flightCreationDialogPickAircraft').show()" update=":flightForm:flightCreationDialog"/>
 					</p:outputPanel>
             </p:dialog>
 
@@ -128,7 +128,7 @@
                     <p:separator />
                     
 					<h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{flightCreationController.doSaveFlight()}" oncomplete="location.reload()" update=":flightForm:flightTable"/>
+                        <p:commandButton value="Save" action="#{flightCreationController.doSaveFlight()}" onSuccess="location.reload()" update=":flightForm:flightTable"/>
                         <p:commandButton value="Abort" onclick="PF('flightCreationDialog').hide()"/>
                     </h:panelGrid>
                     
