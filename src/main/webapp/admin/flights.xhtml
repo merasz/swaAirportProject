@@ -55,6 +55,10 @@
                     <h:outputText value ="#{flight.getPersonal()}"/>
                 </p:column>
                 
+				<p:column headerText="Valid State">
+                    <h:outputText value ="#{flight.isValidFlight}"/>
+                </p:column>
+                
                 <p:column style="width:100px;text-align: center">
                 	<p:commandButton update=":flightForm:flightEditDialog" oncomplete="PF('flightEditDialog').show()" icon="ui-icon-note" title="Edit">
                 		<f:setPropertyActionListener value="#{flight}" target="#{flightDetailController.flight}" />
@@ -109,9 +113,10 @@
                         <p:message for="newNumberOfPassengers" display="icon text"/>
 					
 					</h:panelGrid>
-						<p:commandButton value="Save Iata and Dates" action="#{flightDetailController.doSaveFlight()}" 
+						<p:commandButton value="Save Iata and Dates" action="#{flightDetailController.doSaveFlight()}"
 						process=":flightForm:flightCreationDialog" 
-						oncomplete="PF('flightCreationDialog').show(); PF('flightCreationDialogPickAircraft').show()" update=":flightForm:flightCreationDialog"/>
+						oncomplete="PF('flightCreationDialog').show(); PF('flightCreationDialogPickAircraft').show()" update=":flightForm:flightCreationDialog">
+						</p:commandButton>
 					</p:outputPanel>
             </p:dialog>
 
@@ -119,11 +124,11 @@
 			<p:dialog id ="pickAircraftDialog" widgetVar ="flightCreationDialogPickAircraft" modal ="true" showEffect ="fade" hideEffect ="fade" resizable ="false">
 				<p:outputPanel>
                     <h:panelGrid columns ="2">    
-                        <p:outputLabel for="availableAircraft" value ="Select aircraft: "/>                        	
+					<p:outputLabel for="availableAircraft" value ="Select aircraft: "/>                        	
                         <h:selectOneMenu id ="availableAircraft" value="#{flightCreationController.flight.scheduledAircraftId}" required="false">
 							<f:selectItem itemLabel="Select One Aircraft" itemValue="" />
                 			<f:selectItems value="#{availableAircraftBean.availableAircraftList}" />
-            			</h:selectOneMenu>     
+            			</h:selectOneMenu>    
                     </h:panelGrid>
                     <p:separator />
                     
@@ -135,6 +140,7 @@
                 </p:outputPanel>
 			</p:dialog>
 
+	
 
 
 

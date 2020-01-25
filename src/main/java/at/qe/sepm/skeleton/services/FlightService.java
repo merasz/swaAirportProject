@@ -9,6 +9,7 @@ import at.qe.sepm.skeleton.repositories.AircraftRepository;
 import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.FlightRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.ui.beans.AvailableAircraftBean;
 import at.qe.sepm.skeleton.ui.beans.MessageBean;
 
 import java.text.ParseException;
@@ -23,9 +24,11 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -237,33 +240,88 @@ public class FlightService {
     	flightRepository.save(returnFlight);
     }
     
+    private List<String> availableAircraftList;
+    
+	public void init() {
+		availableAircraftList = new ArrayList<>();
+		Collection<Aircraft> tempAllAir = aircraftRepository.findAll();
+		Collection<Flight> tempAllFlights = flightRepository.findAll();
+		
+		for (Flight fl: tempAllFlights) {
+			for (Aircraft val : tempAllAir) {
+				if(fl.getScheduledAircraft().equals(val))
+					continue;
+				availableAircraftList.add(val.getAircraftId());
+			}
+		}
+	}
 
     
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
+    public List<String> getAvailableAircraftList() {
+		return availableAircraftList;
+	}
+	public void setAvailableAircraftList(List<String> availableAircraftList) {
+		this.availableAircraftList = availableAircraftList;
+	}
+	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Flight saveFlight(Flight flight) throws ParseException {
-
+    	List<String> flightIds = new ArrayList<>();
+    	for (Flight val: flightRepository.findAll()) {
+			flightIds.add(val.getFlightId());
+		}
         if (flight.isNew()) {
             flight.setCreateDate(new Date());
             flight.setDateFlight(flight.getDepartureTime());
             flight.setFlightTime();
             flight.setScheduledAircraft(aircraftService.loadAircraft(flight.getScheduledAircraftId()));
-            if(flight.getDepartureTime().after(flight.getArrivalTime())) {
+            if(flight.getFlightId() == null)
+            	messageBean.alertError("Error", "Please enter FlightId!");
+            if(flightIds.contains(flight.getFlightId()))
+            	messageBean.alertError("Error", "FlightId already in Use!");
+            if(flight.getDepartureTime().after(flight.getArrivalTime()))
             	messageBean.alertError("Error", "Flight departure time is greater than arrivaltime!");
-            	return null;
-            }
-
+            if(flight.getIataFrom().equals(flight.getIataTo()))
+            	messageBean.alertError("Error", "Flight IATAs are the same!");
+            if(flight.getFlightTimeInMilli() > (3600000*12))
+            	messageBean.alertError("Error", "Flight time is more than 12 hours!");
+            if(flight.getNumberOfPassengers() > flight.getScheduledAircraft().getCapacityAircraft())
+            	messageBean.alertError("Error", "Aircraft has not the capacity!");
             if(assignPersonalToFlight(flight)) {
             	flight.setIsValidFlight(true);
-            	flightRepository.save(flight);
             }
-            else
-            	messageBean.alertError("Error", "Flight was not created!");
+
         } else {
             flight.setUpdateDate(new Date());
             flight.setUpdateFlight(getAuthenticatedUser());
         }
-        return flightRepository.save(flight);
-    }
+
+        if(flight.getIsValidFlight())
+        	messageBean.alertInformation("Success", "Flight was successfully created!");
+        else
+        	messageBean.alertError("Error", "Flight was not created!");
+        
+        RequestContext.getCurrentInstance().execute("PF('flightCreationDialogPickAircraft').hide()");
+        RequestContext.getCurrentInstance().execute("PF('flightCreationDialog').hide()");
+        if(flight.getIsValidFlight()) {
+        	flightRepository.save(flight);
+        	Flight returnFlight = flight;
+        	returnFlight.setFlightId(flight.getFlightId() + " 101");
+        	String flightBackIata = flight.getIataFrom(); 
+        	returnFlight.setIataFrom(flight.getIataTo());
+        	returnFlight.setIataTo(flightBackIata);
+        	Calendar flightBackTime = Calendar.getInstance();
+        	flightBackTime.setTime(flight.getArrivalTime());
+        	flightBackTime.add(Calendar.HOUR_OF_DAY, 12);
+        	returnFlight.setDepartureTime(flightBackTime.getTime());
+        	long flightBackArrivalTime = returnFlight.getDepartureTime().getTime() + flight.getFlightTimeInMilli();
+        	returnFlight.setArrivalTime(new Date(flightBackArrivalTime));
+        	returnFlight.setIsValidFlight(true);
+        	returnFlight.setNumberOfPassengers(0);
+        	return flightRepository.save(returnFlight);
+        }
+        else
+        	return null;
+	}
 
     /**
      * Deletes the flight.
