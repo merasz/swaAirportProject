@@ -74,7 +74,7 @@
 
 
                     <h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{aircraftCreationController.doSaveAircraft()}" oncomplete="location.reload()" update=":aircraftForm:aircraftTable"/>
+                        <p:commandButton value="Save" action="#{aircraftCreationController.doSaveAircraft()}" oncomplete="PF('aircraftEditDialog').hide()" update=":aircraftForm:aircraftTable"/>
                         <p:commandButton value="Abort" onclick="PF('aircraftCreationDialog').hide()"/>
                     </h:panelGrid>
                 </p:outputPanel>
