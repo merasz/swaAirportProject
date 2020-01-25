@@ -320,6 +320,7 @@ public class FlightService {
         if(flight.getIsValidFlight()) {
         	flightRepository.save(flight);
         	Flight returnFlight = flight;
+        	long flightBackArrivalTime = flight.getArrivalTime().getTime() - flight.getDepartureTime().getTime();
         	returnFlight.setFlightId(flight.getFlightId() + " 101");
         	String flightBackIata = flight.getIataFrom(); 
         	returnFlight.setIataFrom(flight.getIataTo());
@@ -328,8 +329,7 @@ public class FlightService {
         	flightBackTime.setTime(flight.getArrivalTime());
         	flightBackTime.add(Calendar.HOUR_OF_DAY, 12);
         	returnFlight.setDepartureTime(flightBackTime.getTime());
-        	long flightBackArrivalTime = returnFlight.getDepartureTime().getTime() + flight.getFlightTimeInMilli();
-        	returnFlight.setArrivalTime(new Date(flightBackArrivalTime));
+        	returnFlight.setArrivalTime(new Date(flightBackArrivalTime + returnFlight.getDepartureTime().getTime()));
         	returnFlight.setIsValidFlight(true);
         	returnFlight.setNumberOfPassengers(0);
         	return flightRepository.save(returnFlight);
