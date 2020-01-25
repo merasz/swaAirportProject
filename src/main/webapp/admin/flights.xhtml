@@ -133,8 +133,8 @@
                     <p:separator />
                     
 					<h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{flightCreationController.doSaveFlight()}" oncomplete="PF('flightEditDialog').hide()" update=":flightForm:flightTable"/>
-                        <p:commandButton value="Abort" onclick="PF('flightCreationDialog').hide()"/>
+                        <p:commandButton value="Save" action="#{flightCreationController.doSaveFlight()}" oncomplete="PF('flightCreationDialog').hide()" update=":flightForm:flightTable"/>
+                        <p:commandButton value="Abort" onclick="PF('flightCreationDialog').hide()" />
                     </h:panelGrid>
                     
                 </p:outputPanel>

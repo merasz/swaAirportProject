@@ -274,18 +274,33 @@ public class FlightService {
             flight.setDateFlight(flight.getDepartureTime());
             flight.setFlightTime();
             flight.setScheduledAircraft(aircraftService.loadAircraft(flight.getScheduledAircraftId()));
-            if(flight.getFlightId() == null)
+            boolean setInputInvalid = false;
+            if(flight.getFlightId() == null) {
             	messageBean.alertError("Error", "Please enter FlightId!");
-            if(flightIds.contains(flight.getFlightId()))
+            	setInputInvalid = true;
+            }
+            if(flightIds.contains(flight.getFlightId())) {
             	messageBean.alertError("Error", "FlightId already in Use!");
-            if(flight.getDepartureTime().after(flight.getArrivalTime()))
+            	setInputInvalid = true;
+            }
+            if(flight.getDepartureTime().after(flight.getArrivalTime())) {
             	messageBean.alertError("Error", "Flight departure time is greater than arrivaltime!");
-            if(flight.getIataFrom().equals(flight.getIataTo()))
+            	setInputInvalid = true;
+            }
+            if(flight.getIataFrom().equals(flight.getIataTo())) {
             	messageBean.alertError("Error", "Flight IATAs are the same!");
-            if(flight.getFlightTimeInMilli() > (3600000*12))
+            setInputInvalid = true;
+            }
+            if(flight.getFlightTimeInMilli() > (3600000*12)) {
             	messageBean.alertError("Error", "Flight time is more than 12 hours!");
-            if(flight.getNumberOfPassengers() > flight.getScheduledAircraft().getCapacityAircraft())
+            setInputInvalid = true;
+            }
+            if(flight.getNumberOfPassengers() > flight.getScheduledAircraft().getCapacityAircraft()) {
             	messageBean.alertError("Error", "Aircraft has not the capacity!");
+         		setInputInvalid = true;
+            }
+            if(setInputInvalid)
+            	return null;
             if(assignPersonalToFlight(flight)) {
             	flight.setIsValidFlight(true);
             }
