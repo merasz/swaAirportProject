@@ -90,6 +90,7 @@ public class AircraftDetailController {
 		    		saveTempFlight.setUpdateDate(new Date());
 		    		saveTempFlight.setScheduledAircraft(null);
 		    		saveTempFlight.setScheduledAircraftId(null);
+		    		saveTempFlight.setIsValidFlight(false);;
 		    		executedFlight = true;
 		    		flightService.hardSave(saveTempFlight);
 				}
