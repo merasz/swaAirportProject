@@ -89,12 +89,16 @@
                     </h:outputText>
                 </p:column>
 
-                <p:column filterBy="#{flight.numberOfPassengers}" headerText="Passengers" filterMatchMode="contains" >
+                <p:column filterBy="#{flight.numberOfPassengers}" headerText="Passengers" style="width:87px" filterMatchMode="contains" >
                     <h:outputText value ="#{flight.numberOfPassengers}"/>
                 </p:column>
 
                 <p:column filterBy="#{flight.scheduledAircraft.aircraftId}" headerText="Aircraft" filterMatchMode="contains" >
                     <h:outputText value ="#{flight.scheduledAircraft.aircraftId}"/>
+                </p:column>
+
+                <p:column filterBy="#{flight.getPersonal()}" headerText="Personal" filterMatchMode="contains" >
+                    <h:outputText value ="#{flight.getPersonal()}"/>
                 </p:column>
 
 
