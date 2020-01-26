@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
 /**
- * Message Bean to show alerts or errors to the user
+ * Message Bean to show informations or errors to the user
  */
 @ManagedBean
 public class MessageBean implements Serializable {
@@ -22,10 +22,10 @@ public class MessageBean implements Serializable {
      * @param summary Short summary.
      * @param text    Text to be displayed.
      */
-    public void alertInformation(String summary, String text) {
-        logger.info("Message Success: " + text);
+    public void alertInformation(String summary, String info) {
+        logger.info("Message Success: " + info);
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(summary , new FacesMessage(FacesMessage.SEVERITY_INFO, summary + ": " + text, null));
+        context.addMessage(summary , new FacesMessage(FacesMessage.SEVERITY_INFO, summary + ": " + info, null));
     }
 
     /**
@@ -34,10 +34,10 @@ public class MessageBean implements Serializable {
      * @param summary Short summary.
      * @param text    Text to be displayed.
      */
-    public void alertError(String summary, String text) {
-        logger.info("Message Error: " + text);
+    public void alertError(String summary, String info) {
+        logger.info("Message Error: " + info);
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(summary, new FacesMessage(FacesMessage.SEVERITY_ERROR, summary + ": " + text, null));
+        context.addMessage(summary, new FacesMessage(FacesMessage.SEVERITY_ERROR, summary + ": " + info, null));
     }
 
 }
