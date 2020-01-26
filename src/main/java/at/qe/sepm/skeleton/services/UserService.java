@@ -80,12 +80,12 @@ public class UserService {
         if (user.isNew()) {
             user.setCreateDate(new Date());
             user.setCreateUser(getAuthenticatedUser());
-            auditlog.setMessage("User: " + user.getUsername() + " was created.");
+            auditlog.setMessage("User " + user.getUsername() + " was created.");
             auditLogRepository.save(auditlog);
         } else {
             user.setUpdateDate(new Date());
             user.setUpdateUser(getAuthenticatedUser());
-            auditlog.setMessage("User: " + user.getUsername() + " was updated.");
+            auditlog.setMessage("User " + user.getUsername() + " was updated.");
             auditLogRepository.save(auditlog);
         }
         return userRepository.save(user);
@@ -101,7 +101,7 @@ public class UserService {
     public void deleteUser(User user) {
     	AuditLog auditlog = new AuditLog();
         auditlog.setDate(new Date());
-        auditlog.setMessage("User: " + user.getUsername() + " was deleted.");
+        auditlog.setMessage("User " + user.getUsername() + " was deleted.");
         auditLogRepository.save(auditlog);
         
     	messageBean.alertInformation("Success", "Deleted user " + user.getUsername() + " !");

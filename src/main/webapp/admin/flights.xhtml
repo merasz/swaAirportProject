@@ -26,14 +26,14 @@
 
                 <p:column headerText="Departure Time">
                     <h:outputText value ="#{flight.departureTime}" >
-						<f:convertDateTime pattern="dd.MM.yyyy hh.mm" />
+						<f:convertDateTime pattern="dd.MM.yyyy HH.mm" />
                     </h:outputText>
                 </p:column>
 
 
                 <p:column headerText="Arrival Time">
                     <h:outputText value ="#{flight.arrivalTime}">
-                    <f:convertDateTime pattern="dd.MM.yyyy hh.mm" />
+                    <f:convertDateTime pattern="dd.MM.yyyy HH.mm" />
                     </h:outputText>
                 </p:column>
 
@@ -85,7 +85,7 @@
 
 						<p:outputLabel for="iataFrom" value ="Iata From: "/>
 						<h:selectOneMenu id ="newIataFrom" value="#{flightCreationController.flight.iataFrom}" required="false" filter="true" filterMatchMode="startsWith">
-                			<f:selectItems value="#{iataBean.iataList}" />
+							<f:selectItem itemLabel="INN" itemValue="INN" />
             			</h:selectOneMenu>
 						<p:message for="newIataFrom" display="icon"/>
 							

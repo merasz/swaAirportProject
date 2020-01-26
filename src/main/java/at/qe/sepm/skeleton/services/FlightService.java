@@ -11,6 +11,7 @@ import at.qe.sepm.skeleton.repositories.FlightRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.AvailableAircraftBean;
 import at.qe.sepm.skeleton.ui.beans.MessageBean;
+import at.qe.sepm.skeleton.ui.controllers.FlightDetailController;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,6 +65,7 @@ public class FlightService {
     
     @Autowired
     private AircraftService aircraftService;
+    
     
     @Autowired
     private MessageBean messageBean;
@@ -281,6 +283,8 @@ public class FlightService {
 	 */
 	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Flight saveFlight(Flight flight) throws ParseException {
+        AuditLog auditlog = new AuditLog();
+        auditlog.setDate(new Date());
     	List<String> flightIds = new ArrayList<>();
     	for (Flight val: flightRepository.findAll()) {
 			flightIds.add(val.getFlightId());
@@ -328,14 +332,16 @@ public class FlightService {
 
         if(flight.getIsValidFlight())
         	messageBean.alertInformation("Success", "Flight was successfully created!");
-        else
+        else {
         	messageBean.alertError("Error", "Flight was not created!");
-        
+        	return null;
+        }
         RequestContext.getCurrentInstance().execute("PF('flightCreationDialogPickAircraft').hide()");
         RequestContext.getCurrentInstance().execute("PF('flightCreationDialog').hide()");
         if(flight.getIsValidFlight()) {
         	flightRepository.save(flight);
         	Flight returnFlight = flight;
+        	long flightBackArrivalTime = flight.getArrivalTime().getTime() - flight.getDepartureTime().getTime();
         	returnFlight.setFlightId(flight.getFlightId() + " 101");
         	String flightBackIata = flight.getIataFrom(); 
         	returnFlight.setIataFrom(flight.getIataTo());
@@ -344,10 +350,11 @@ public class FlightService {
         	flightBackTime.setTime(flight.getArrivalTime());
         	flightBackTime.add(Calendar.HOUR_OF_DAY, 12);
         	returnFlight.setDepartureTime(flightBackTime.getTime());
-        	long flightBackArrivalTime = returnFlight.getDepartureTime().getTime() + flight.getFlightTimeInMilli();
-        	returnFlight.setArrivalTime(new Date(flightBackArrivalTime));
+        	returnFlight.setArrivalTime(new Date(flightBackArrivalTime + returnFlight.getDepartureTime().getTime()));
         	returnFlight.setIsValidFlight(true);
         	returnFlight.setNumberOfPassengers(0);
+            auditlog.setMessage("Flight " + flight.getFlightId()+ " was created.");
+            auditLogRepository.save(auditlog);
         	return flightRepository.save(returnFlight);
         }
         else
@@ -361,8 +368,21 @@ public class FlightService {
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public void deleteFlight(Flight flight) {
-    	messageBean.alertInformation("Sucess", "Deleted flight " + flight.getFlightId() + " !");
-        flightRepository.delete(flight);
+        AuditLog auditlog = new AuditLog();
+        auditlog.setDate(new Date());
+        auditlog.setMessage("Flight " + flight.getFlightId() + " was deleted.");
+        auditLogRepository.save(auditlog);
+        
+    	messageBean.alertInformation("Success", "Deleted flight " + flight.getFlightId() + "!");
+    	String tempPostFix = flight.getFlightId()+" 101";
+    	String tempPreFix = flight.getFlightId();
+    	String fixed = tempPreFix.replace(" 101", "");
+    	flightRepository.delete(flight);
+    	List<Flight> allFlights = (List<Flight>) getAllFlights();
+    	for (Flight val: allFlights) {
+			if(val.getId().contentEquals(tempPostFix) || val.getId().contentEquals(tempPreFix) || val.getId().contentEquals(fixed))
+				flightRepository.delete(val);
+		}
     }
 
     private Flight getAuthenticatedUser() {
@@ -373,6 +393,10 @@ public class FlightService {
     public void errorMessage(String errorMsg, FacesMessage.Severity severity) {
     	FacesMessage msg = new FacesMessage(severity, errorMsg, null);
     	FacesContext.getCurrentInstance().addMessage(errorMsg, msg);
+    }
+    
+    public void hardSave(Flight flight) {
+    	flightRepository.save(flight);
     }
     
 }

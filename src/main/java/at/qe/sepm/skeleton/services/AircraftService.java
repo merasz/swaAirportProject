@@ -64,14 +64,19 @@ public class AircraftService {
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Aircraft saveAircraft(Aircraft aircraft) {
-
+    	AuditLog auditlog = new AuditLog();
+        auditlog.setDate(new Date());
+        
         if (aircraft.isNew()) {
             aircraft.setCreateDate(new Date());
-
+            auditlog.setMessage("Aircraft " + aircraft.getAircraftId() + " was created." );
         } else {
             aircraft.setUpdateDate(new Date());
             aircraft.setUpdateAircraft(getAuthenticatedUser());
+            aircraft.setCreateDate(new Date());
+            auditlog.setMessage("Aircraft " + aircraft.getAircraftId() + " was updated." );
         }
+        auditLogRepository.save(auditlog);
         return aircraftRepository.save(aircraft);
     }
 
@@ -84,7 +89,7 @@ public class AircraftService {
     public void deleteAircraft(Aircraft aircraft) {
         AuditLog auditlog = new AuditLog();
         auditlog.setDate(new Date());
-        auditlog.setMessage("Aircraft: " + aircraft.getAircraftId() + " was deleted.");
+        auditlog.setMessage("Aircraft " + aircraft.getAircraftId() + " was deleted.");
         auditLogRepository.save(auditlog);
         
     	messageBean.alertInformation("Success", "Deleted aircraft " + aircraft.getAircraftId() + " !");

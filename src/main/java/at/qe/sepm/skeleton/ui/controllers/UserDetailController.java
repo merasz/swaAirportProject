@@ -87,18 +87,21 @@ public class UserDetailController {
 		Flight saveTempFlight = null;
 		for (Flight flight : temp) {
 			if(user.getJobTitle().contentEquals("Pilot")) {
-				if(flight.getAssignedPilots().contains(user))
+				if(flight.getAssignedPilots().contains(user)) {
 					flight.getAssignedPilots().remove(user);
+					flight.setIsValidFlight(false);
+				}
 			}
 			if(user.getJobTitle().contentEquals("Board Crew")) {
-				if(flight.getAssignedBoardpersonal().contains(user))
+				if(flight.getAssignedBoardpersonal().contains(user)) {
 					flight.getAssignedBoardpersonal().remove(user);
+					flight.setIsValidFlight(false);
+				}
 			}
 			saveTempFlight = flight;
-				this.flightService.deleteFlight(flight);
-	    		saveTempFlight.setUpdateDate(new Date());
-	    		this.flightService.saveFlight(saveTempFlight);
-			}
+	    	saveTempFlight.setUpdateDate(new Date());
+	    	this.flightService.hardSave(saveTempFlight);
+		}
         this.userService.deleteUser(user);
         
         user = null;

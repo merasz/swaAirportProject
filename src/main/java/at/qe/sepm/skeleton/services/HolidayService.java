@@ -75,13 +75,17 @@ public class HolidayService {
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('EMPLOYEE') or hasAuthority('MANAGER')")
     public Holiday saveHoliday(Holiday holiday) {
+    	AuditLog auditlog = new AuditLog();
+        auditlog.setDate(new Date());
+        
         if (holiday.isNew()) {
             holiday.setCreateDate(new Date());
-
+            auditlog.setMessage("Holiday from " + holiday.getHolidayFrom() + " until " + holiday.getHolidayUntil() + " for " + holiday.getUsername() +" was created.");
         } else {
             holiday.setUpdateDate(new Date());
-
+            auditlog.setMessage("Holiday from " + holiday.getHolidayFrom() + " until " + holiday.getHolidayUntil() +" for " + holiday.getUsername() + " was updated.");
         }
+        auditLogRepository.save(auditlog);
         return holidayRepository.save(holiday);
     }
 
@@ -94,7 +98,7 @@ public class HolidayService {
     public void deleteHoliday(Holiday holiday) {
     	AuditLog auditlog = new AuditLog();
         auditlog.setDate(new Date());
-        auditlog.setMessage("Holiday from User " + holiday.getUsername() + " from " + holiday.getHolidayFrom()+ " until " + holiday.getHolidayUntil() + " was deleted.");
+        auditlog.setMessage("Holiday from " + holiday.getHolidayFrom() + " until " + holiday.getHolidayUntil() + " for " + holiday.getUsername() +" was deleted.");
         auditLogRepository.save(auditlog);
         holidayRepository.delete(holiday);
     }
