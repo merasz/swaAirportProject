@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.text.ParseException;
 import java.util.Date;
 
 
@@ -55,10 +57,12 @@ public class HolidayCreationController{
 
     /**
      * Action to save the currently displayed holiday
+     * @throws ParseException 
      */
-    public String doSaveHoliday(){
-
+    public String doSaveHoliday() throws ParseException{
         holiday = this.holidayService.saveHoliday(holiday);
+        if(holiday == null)
+        	messageBean.alertInformation("Error", "Holiday was not created!");
         return "viewid?faces-redirect=true";
     }
 
