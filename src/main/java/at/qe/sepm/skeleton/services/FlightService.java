@@ -399,4 +399,8 @@ public class FlightService {
     	flightRepository.save(flight);
     }
     
+    public Flight editFlight(Flight flight) {
+    	return flightRepository.save(flight);
+    }
+    
 }
