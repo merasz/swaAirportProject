@@ -2,6 +2,9 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Holiday;
 import at.qe.sepm.skeleton.services.HolidayService;
+
+import java.text.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -59,8 +62,9 @@ public class HolidayDetailController {
 
     /**
      * Action to save the currently displayed holiday.
+     * @throws ParseException 
      */
-    public void doSaveHoliday() {
+    public void doSaveHoliday() throws ParseException {
 
         holiday = this.holidayService.saveHoliday(holiday);
     }
