@@ -148,9 +148,9 @@ public class FlightService {
     	return false;
     }
 
+
 	/**
-	 * Assign personal to a flight
-	 * @throws ParseException
+	 * gets used by the assign personal function
 	 */
     public Collection<User> assignPersonal(Collection<User> personal, int requiredPersonal, Flight flight) throws ParseException {
     	Date flightDeparture = flight.getDepartureTime();
@@ -200,19 +200,20 @@ public class FlightService {
     		return null;
     	}
     	else {
-    		while(requiredPersonal > 0) {
-    			int randNum = getRandomNumber(availablePersonal.size());
-    			executingPersonal.add(availablePersonal.get(randNum));
-    			availablePersonal.remove(randNum);
-    			--requiredPersonal;
-    		}
-    	}
+			while (requiredPersonal > 0) {
+				int randNum = getRandomNumber(availablePersonal.size());
+				executingPersonal.add(availablePersonal.get(randNum));
+				availablePersonal.remove(randNum);
+				--requiredPersonal;
+			}
+		}
     	return executingPersonal;
     }
 
 
 	/**
-	 * gets used by the assign personal function
+	 * Assign personal to a flight
+	 * @throws ParseException
 	 */
 	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public boolean assignPersonalToFlight(Flight flight) throws ParseException {
@@ -239,6 +240,7 @@ public class FlightService {
     	
     	flight.setAssignedBoardpersonal(boardcrewExecuting);
     	flight.setAssignedPilots(pilotsExecuting);
+
     	return true;
     }
     

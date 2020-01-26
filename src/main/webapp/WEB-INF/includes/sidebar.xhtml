@@ -19,6 +19,7 @@
 
                 <p:submenu label = "Flüge" rendered="#{sessionInfoBean.hasRole('ADMIN')}" >
                     <p:menuitem value ="Bearbeiten" url ="/admin/flights.xhtml"/>
+                    <p:menuitem value="Flüge-Portal" url="/manager/flightsPortal.xhtml"/>
                 </p:submenu>
 
                 <p:submenu label = "Flugzeuge" rendered="#{sessionInfoBean.hasRole('ADMIN')}" >
