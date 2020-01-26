@@ -112,7 +112,8 @@ public class UserDetailController {
 	    	
 	    	this.flightService.hardSave(saveTempFlight);
 		}
-		messageBean.alertInformation("Info", "Flight got invalid!");
+		if(executedFlight)
+			messageBean.alertInformation("Info", "Flight got invalid!");
         this.userService.deleteUser(user);
         user = null;
     }

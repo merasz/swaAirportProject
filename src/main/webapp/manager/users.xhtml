@@ -8,6 +8,9 @@
                 template="/WEB-INF/templates/main.xhtml">
     <ui:define name ="content">
         <h:form id="userForm">
+                <p:growl id="growl" showDetail="false" life="6000" >
+                <p:autoUpdate/>
+        </p:growl>
             <p:dataTable id="usersTable" var="user" value="#{userListController.users}" style ="margin-top:10%;">
                 <p:column headerText="Username">
                     <h:outputText value="#{user.username}"/>

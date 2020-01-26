@@ -73,8 +73,6 @@ public class UserCreationController {
 
         user.addToRoles();
         user = this.userService.saveUser(user);
-    	messageBean.alertInformation("Sucess", "Saved user");
-
     }
 
 

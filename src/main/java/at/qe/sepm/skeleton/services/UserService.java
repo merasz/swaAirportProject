@@ -93,7 +93,10 @@ public class UserService {
             String text = "Dear "+user.getLastName()+",\na new account at the airport was created for you for more information check online";
             emailService.sendMessage(user.getEmail(),"A new account was created for you",text);
         }
-
+        if(user.getUpdateDate() == null)
+        	messageBean.alertInformation("Info", "User was created!");
+        else
+        	messageBean.alertInformation("Info", "User was updated!");
         return userRepository.save(user);
     }
 

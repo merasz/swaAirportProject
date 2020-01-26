@@ -5,6 +5,8 @@ import at.qe.sepm.skeleton.model.AuditLog;
 import at.qe.sepm.skeleton.model.Holiday;
 import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.HolidayRepository;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
+
 import java.util.Collection;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class HolidayService {
     
     @Autowired
     private AuditLogRepository auditLogRepository;
+    
+    @Autowired
+    private MessageBean messageBean;
 
     /**
      * method to get all holidays
@@ -85,6 +90,10 @@ public class HolidayService {
             holiday.setUpdateDate(new Date());
             auditlog.setMessage("Holiday from " + holiday.getHolidayFrom() + " until " + holiday.getHolidayUntil() +" for " + holiday.getUsername() + " was updated.");
         }
+        if(holiday.isNew())
+        	messageBean.alertInformation("Info", "Holiday was created!");
+        else
+        	messageBean.alertInformation("Info", "Holiday was updated!");
         auditLogRepository.save(auditlog);
         return holidayRepository.save(holiday);
     }
@@ -101,6 +110,7 @@ public class HolidayService {
         auditlog.setMessage("Holiday from " + holiday.getHolidayFrom() + " until " + holiday.getHolidayUntil() + " for " + holiday.getUsername() +" was deleted.");
         auditLogRepository.save(auditlog);
         holidayRepository.delete(holiday);
+        messageBean.alertInformation("Info", "Holiday was deleted!");
     }
 
 

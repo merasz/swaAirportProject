@@ -95,7 +95,8 @@ public class AircraftDetailController {
 		    		flightService.hardSave(saveTempFlight);
 				}
     		}
-    		messageBean.alertInformation("Info", "Flight got invalid!");
+    		if(executedFlight)
+    			messageBean.alertInformation("Info", "Flight got invalid!");
     		this.aircraftService.deleteAircraft(aircraft);
         aircraft = null;
     }

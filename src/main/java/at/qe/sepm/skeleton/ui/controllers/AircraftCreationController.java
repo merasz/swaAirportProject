@@ -53,7 +53,6 @@ public class AircraftCreationController{
      */
     public void doSaveAircraft() {
         aircraft = this.aircraftService.saveAircraft(aircraft);
-        messageBean.alertInformation("Success", "Aircraft successfully saved!");
     }
 
 

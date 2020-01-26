@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Holiday;
 import at.qe.sepm.skeleton.services.HolidayService;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,6 +24,9 @@ public class HolidayCreationController{
 
     @Autowired
     private HolidayService holidayService;
+    
+    @Autowired
+    MessageBean messageBean;
 
 
 

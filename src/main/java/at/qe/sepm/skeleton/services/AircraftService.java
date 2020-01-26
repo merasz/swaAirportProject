@@ -77,6 +77,10 @@ public class AircraftService {
             auditlog.setMessage("Aircraft " + aircraft.getAircraftId() + " was updated." );
         }
         auditLogRepository.save(auditlog);
+        if(aircraft.getUpdateDate() == null)
+        	messageBean.alertInformation("Info", "Aircraft was created!");
+        else
+        	messageBean.alertInformation("Info", "Aircraft was updated!");
         return aircraftRepository.save(aircraft);
     }
 

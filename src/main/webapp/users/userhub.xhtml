@@ -28,7 +28,11 @@
 
         </script>
 
+
         <h:form id="holidayForm">
+                       <p:growl id="growl" showDetail="false" life="6000" >
+                <p:autoUpdate/>
+        </p:growl>
             <p:panel header ="Registered Holiday">
                 <p:dataTable id="holidayTable" var="holiday" value="#{holidayListController.getHolidayByUser(userService.loadUser(sessionInfoBean.getCurrentUserName()))}">
                     <p:column headerText="Holiday From:">
@@ -78,7 +82,7 @@
                     <h:panelGrid columns ="2">
                         <p:outputLabel for="holidayFrom" value ="Holiday From: "/>
                         <p:inputText id ="holidayFrom" value ="#{holidayDetailController.holiday.holidayFrom}" disabled = "true"/>
-                        <p:outputLabel for="holidayUntil" value ="Holiday Type: "/>
+                        <p:outputLabel for="holidayUntil" value ="Holiday Until: "/>
                         <p:inputText id ="holidayUntil" value ="#{holidayDetailController.holiday.holidayUntil}" />
 
                     </h:panelGrid>
@@ -93,7 +97,7 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:commandButton  oncomplete="PF('holidayCreationDialog').show()" icon="ui-icon-add-box" value ="New Holiday" rendered="#{holidayListController.getHolidayByUser(userService.loadUser(sessionInfoBean.getCurrentUserName())).stream().map(holiday->holiday.holidayDays).sum() le 35}">
+            <p:commandButton oncomplete="PF('holidayCreationDialog').show()" icon="ui-icon-add-box" value ="New Holiday" rendered="#{holidayListController.getHolidayByUser(userService.loadUser(sessionInfoBean.getCurrentUserName())).stream().map(holiday->holiday.holidayDays).sum() le 35}">
                 <f:setPropertyActionListener value="#{sessionInfoBean.currentUserName}" target="#{holidayCreationController.holiday.username}" />
             </p:commandButton>
 
