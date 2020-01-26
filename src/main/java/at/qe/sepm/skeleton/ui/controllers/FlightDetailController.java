@@ -80,6 +80,10 @@ public class FlightDetailController{
         this.flightService.deleteFlight(flight);
         flight = null;
     }
+    
+    public void doHardSaveFlight() {
+        flight = this.flightService.editFlight(flight);
+    }
 
 
 }
