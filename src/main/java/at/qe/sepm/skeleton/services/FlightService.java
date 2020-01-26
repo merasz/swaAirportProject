@@ -105,7 +105,10 @@ public class FlightService {
     public Date parseStringdateToDate(String date) throws ParseException {
     	return (new SimpleDateFormat("yyyy-mm-dd").parse(date));    
     }
-    
+
+	/**
+	 * Returns, if the Date is between two Dates
+	 */
     public boolean betweenDate(Date start, Date end, Date depTime, Date arrTime, Flight flight) {
     	List<Date> holidayDayList = new ArrayList<>();
 		Calendar from = Calendar.getInstance();
@@ -142,7 +145,11 @@ public class FlightService {
     	
     	return false;
     }
-    
+
+	/**
+	 * Assign personal to a flight
+	 * @throws ParseException
+	 */
     public Collection<User> assignPersonal(Collection<User> personal, int requiredPersonal, Flight flight) throws ParseException {
     	Date flightDeparture = flight.getDepartureTime();
     	Date flightArrival = flight.getArrivalTime();
@@ -200,10 +207,12 @@ public class FlightService {
     	}
     	return executingPersonal;
     }
-    
-    
-    
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
+
+
+	/**
+	 * gets used by the assign personal function
+	 */
+	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public boolean assignPersonalToFlight(Flight flight) throws ParseException {
     	Collection<User> boardcrew = userService.getBoardpersonal();
     	Collection<User> pilots = userService.getAllPilots();
@@ -263,6 +272,13 @@ public class FlightService {
 	public void setAvailableAircraftList(List<String> availableAircraftList) {
 		this.availableAircraftList = availableAircraftList;
 	}
+
+	/**
+	 * saves the flight
+	 * @param flight
+	 * @return returns the saved flight
+	 * @throws ParseException
+	 */
 	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Flight saveFlight(Flight flight) throws ParseException {
     	List<String> flightIds = new ArrayList<>();
