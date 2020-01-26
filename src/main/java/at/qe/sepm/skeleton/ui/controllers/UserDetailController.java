@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.FlightService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -32,6 +33,9 @@ public class UserDetailController {
     
     @Autowired
     private RosterController rosterController;
+    
+    @Autowired
+    private MessageBean messageBean;
     /**
      * Attribute to cache the currently displayed user
      */
@@ -85,25 +89,31 @@ public class UserDetailController {
     public void doDeleteUser() throws ParseException {
     	List<Flight> temp = (List<Flight>) flightService.getAllFlights();
 		Flight saveTempFlight = null;
+		boolean executedFlight = false;
 		for (Flight flight : temp) {
 			if(user.getJobTitle().contentEquals("Pilot")) {
 				if(flight.getAssignedPilots().contains(user)) {
 					flight.getAssignedPilots().remove(user);
+					flight.setCurrentPersonal(flight.getCurrentPersonal()-1);
 					flight.setIsValidFlight(false);
+					executedFlight = true;
 				}
 			}
 			if(user.getJobTitle().contentEquals("Board Crew")) {
 				if(flight.getAssignedBoardpersonal().contains(user)) {
 					flight.getAssignedBoardpersonal().remove(user);
+					flight.setCurrentPersonal(flight.getCurrentPersonal()-1);
 					flight.setIsValidFlight(false);
+					 executedFlight = true;
 				}
 			}
 			saveTempFlight = flight;
 	    	saveTempFlight.setUpdateDate(new Date());
+	    	
 	    	this.flightService.hardSave(saveTempFlight);
 		}
+		messageBean.alertInformation("Info", "Flight got invalid!");
         this.userService.deleteUser(user);
-        
         user = null;
     }
 

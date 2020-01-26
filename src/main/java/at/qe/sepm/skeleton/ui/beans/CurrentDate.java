@@ -24,6 +24,13 @@ public class CurrentDate {
 	    return calendar.getTime();
 	}
 	
+	public Date getCurrentDateMaxArr(Date date) {
+	    Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+	    calendar.add(Calendar.HOUR_OF_DAY, 11);
+	    return calendar.getTime();
+	}
+	
 	private Date temp;
 
 	public Date getTemp() {

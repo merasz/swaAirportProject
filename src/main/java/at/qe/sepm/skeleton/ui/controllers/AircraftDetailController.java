@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.Aircraft;
 import at.qe.sepm.skeleton.model.Flight;
 import at.qe.sepm.skeleton.services.AircraftService;
 import at.qe.sepm.skeleton.services.FlightService;
+import at.qe.sepm.skeleton.ui.beans.MessageBean;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class AircraftDetailController {
     
     @Autowired
     private FlightService flightService;
+    
+    @Autowired
+    private MessageBean messageBean;
     /**
      * Attribute to cache the currently displayed aircraft
      */
@@ -78,16 +82,20 @@ public class AircraftDetailController {
     public void doDeleteAircraft() throws ParseException {
     		List<Flight> temp = (List<Flight>) flightService.getAllFlights();
     		Flight saveTempFlight = null;
+    		boolean executedFlight = false;
     		for (Flight flight : temp) {
 				if(flight.getScheduledAircraftId() == aircraft.getAircraftId()) {
 					saveTempFlight = flight;
-					this.flightService.deleteFlight(flight);
+					flightService.hardDelete(flight);
 		    		saveTempFlight.setUpdateDate(new Date());
 		    		saveTempFlight.setScheduledAircraft(null);
 		    		saveTempFlight.setScheduledAircraftId(null);
-		    		this.flightService.saveFlight(saveTempFlight);
+		    		saveTempFlight.setIsValidFlight(false);;
+		    		executedFlight = true;
+		    		flightService.hardSave(saveTempFlight);
 				}
     		}
+    		messageBean.alertInformation("Info", "Flight got invalid!");
     		this.aircraftService.deleteAircraft(aircraft);
         aircraft = null;
     }

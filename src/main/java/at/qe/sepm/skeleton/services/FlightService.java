@@ -344,6 +344,8 @@ public class FlightService {
         RequestContext.getCurrentInstance().execute("PF('flightCreationDialogPickAircraft').hide()");
         RequestContext.getCurrentInstance().execute("PF('flightCreationDialog').hide()");
         if(flight.getIsValidFlight()) {
+        	flight.setRequiredPersonal(flight.getScheduledAircraft().getRequiredBoardpersonalAircraft() + flight.getScheduledAircraft().getRequiredPilotsAircraft());
+        	flight.setCurrentPersonal(flight.getRequiredPersonal());
         	flightRepository.save(flight);
         	Flight returnFlight = flight;
         	long flightBackArrivalTime = flight.getArrivalTime().getTime() - flight.getDepartureTime().getTime();
@@ -351,6 +353,8 @@ public class FlightService {
         	String flightBackIata = flight.getIataFrom(); 
         	returnFlight.setIataFrom(flight.getIataTo());
         	returnFlight.setIataTo(flightBackIata);
+        	returnFlight.setCurrentPersonal(flight.getCurrentPersonal());
+        	returnFlight.setRequiredPersonal(flight.getRequiredPersonal());
         	Calendar flightBackTime = Calendar.getInstance();
         	flightBackTime.setTime(flight.getArrivalTime());
         	flightBackTime.add(Calendar.HOUR_OF_DAY, 12);
@@ -404,7 +408,12 @@ public class FlightService {
     	flightRepository.save(flight);
     }
     
+    public void hardDelete(Flight flight) {
+    	flightRepository.delete(flight);
+    }
+    
     public Flight editFlight(Flight flight) {
+    	messageBean.alertInformation("Success", "Edited flight " + flight.getFlightId() + "!");
     	return flightRepository.save(flight);
     }
     
