@@ -69,6 +69,7 @@ public class FlightService {
     
     @Autowired
     private MessageBean messageBean;
+
     /**
      * Returns a collection of all flights.
      *
@@ -241,6 +242,8 @@ public class FlightService {
     	flight.setAssignedBoardpersonal(boardcrewExecuting);
     	flight.setAssignedPilots(pilotsExecuting);
 
+    	//EmailService emailService = new EmailService();
+    	//emailService.sendMailToCrew(pilotsExecuting,boardcrewExecuting,flight);
     	return true;
     }
     

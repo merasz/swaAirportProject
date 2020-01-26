@@ -1,5 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.model.Flight;
+import at.qe.sepm.skeleton.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
@@ -7,7 +9,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Service to send e-mails to users
@@ -15,7 +19,6 @@ import java.util.Properties;
 @Component
 public class EmailService{
 
-    @Autowired
     public JavaMailSender emailSender;
 
     /**
@@ -33,6 +36,36 @@ public class EmailService{
         message.setSubject(subject);
         message.setText(text);
         emailSender.send(message);
+    }
+
+    /**
+     * Sends a Mail to the whole Crew of a flight
+     * @param pilotsExecuting the pilots of the plane
+     * @param boardCrewExecuting the crew of the plane
+     * @param flight the flight
+     */
+    public void sendMailToCrew(Set<User> pilotsExecuting, Set<User> boardCrewExecuting, Flight flight){
+        String subject = "You got added to a new flight";
+        SendToSet(pilotsExecuting, flight, subject);
+        SendToSet(boardCrewExecuting, flight, subject);
+    }
+
+    /**
+     * Iterates through the set and sends a mail to each one, if he/she has a email-address
+     * @param users
+     * @param flight
+     * @param subject
+     */
+    private void SendToSet(Set<User> users, Flight flight, String subject) {
+        System.out.println(users);
+        for (User crew: users) {
+            if(!crew.getEmail().isEmpty() && crew.getEmail()!=null){
+                String text = "Dear "+crew.getLastName()+",\nyou got added to the flight "+flight.getFlightId()+ " from "
+                        +flight.getIataFrom()+" to "+flight.getIataTo()+" at "+flight.getFlightTime()
+                        +"\n for more information check your schedule online";
+                sendMessage("test@gendu.at",subject,text);
+            }
+        }
     }
 
     /**
