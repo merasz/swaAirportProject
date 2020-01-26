@@ -60,7 +60,6 @@ public class HolidayCreationController{
      * @throws ParseException 
      */
     public String doSaveHoliday() throws ParseException{
-
         holiday = this.holidayService.saveHoliday(holiday);
         if(holiday == null)
         	messageBean.alertInformation("Error", "Holiday was not created!");
