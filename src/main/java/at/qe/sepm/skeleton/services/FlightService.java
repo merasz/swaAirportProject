@@ -242,8 +242,8 @@ public class FlightService {
     	flight.setAssignedBoardpersonal(boardcrewExecuting);
     	flight.setAssignedPilots(pilotsExecuting);
 
-    	//EmailService emailService = new EmailService();
-    	//emailService.sendMailToCrew(pilotsExecuting,boardcrewExecuting,flight);
+    	EmailService emailService = new EmailService();
+    	emailService.sendMailToCrew(pilotsExecuting,boardcrewExecuting,flight);
     	return true;
     }
     

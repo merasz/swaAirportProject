@@ -57,13 +57,14 @@ public class EmailService{
      * @param subject
      */
     private void SendToSet(Set<User> users, Flight flight, String subject) {
-        System.out.println(users);
-        for (User crew: users) {
-            if(!crew.getEmail().isEmpty() && crew.getEmail()!=null){
-                String text = "Dear "+crew.getLastName()+",\nyou got added to the flight "+flight.getFlightId()+ " from "
-                        +flight.getIataFrom()+" to "+flight.getIataTo()+" at "+flight.getFlightTime()
-                        +"\n for more information check your schedule online";
-                sendMessage("test@gendu.at",subject,text);
+        if(users!=null) {
+            for (User crew : users) {
+                if (crew.getEmail() != null) {
+                    String text = "Dear " + crew.getLastName() + ",\nyou got added to the flight " + flight.getFlightId() + " from "
+                            + flight.getIataFrom() + " to " + flight.getIataTo() + " at " + flight.getDepartureTime()
+                            + "\n for more information check your schedule online";
+                    sendMessage(crew.getEmail(), subject, text);
+                }
             }
         }
     }

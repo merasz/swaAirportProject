@@ -89,7 +89,7 @@ public class UserService {
             auditLogRepository.save(auditlog);
         }
         EmailService emailService = new EmailService();
-        if(user.getEmail()!=null && !user.getEmail().isEmpty()){
+        if(user.getEmail()!=null){
             String text = "Dear "+user.getLastName()+",\na new account at the airport was created for you for more information check online";
             emailService.sendMessage(user.getEmail(),"A new account was created for you",text);
         }
