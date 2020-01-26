@@ -44,6 +44,7 @@ import java.util.List;
 import java.text.SimpleDateFormat;
 /**
  * Entity representing flights.
+ * The flight model saves everything about a flight
  *
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the

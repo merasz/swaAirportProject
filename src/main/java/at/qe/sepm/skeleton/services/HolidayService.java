@@ -32,15 +32,20 @@ public class HolidayService {
     private AuditLogRepository auditLogRepository;
 
     /**
-     * Returns a collection of all holidays.
+     * method to get all holidays
      *
-     * @return
+     * @return Returns a collection of all holidays.
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Collection<Holiday> getAllHolidays() {
         return holidayRepository.findAll();
     }
 
+    /**
+     * method to get the holidays of a single user
+     * @param username the username of the user
+     * @return returns the holidays of this user
+     */
     public Collection <Holiday> getHolidayByUser(String username){return holidayRepository.findByUsername(username);}
 
 
@@ -86,7 +91,6 @@ public class HolidayService {
      *
      * @param holiday the holiday to delete
      */
-
     public void deleteHoliday(Holiday holiday) {
     	AuditLog auditlog = new AuditLog();
         auditlog.setDate(new Date());

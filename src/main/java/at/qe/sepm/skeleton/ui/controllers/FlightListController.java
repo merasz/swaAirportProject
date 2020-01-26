@@ -30,8 +30,4 @@ public class FlightListController {
 
         return flightService.getAllFlights();
     }
-
-
-
-
 }

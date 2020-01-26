@@ -5,8 +5,6 @@ import at.qe.sepm.skeleton.services.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +14,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Date;
 
+/**
+ * Controller to filter the flights for the manager flight overview
+ */
 @Component
 @Scope("view")
 public class FlightFilterController {
@@ -38,6 +39,10 @@ public class FlightFilterController {
         this.filteredFlights = filteredFlights;
     }
 
+    /**
+     * custom filter to check, if a flight is between two dates
+     * @return true or false, if the flight is in the time span
+     */
     public boolean filterByDate(Object value, Object filter, Locale locale) {
 
         String filterText = (filter == null) ? null : filter.toString().trim();

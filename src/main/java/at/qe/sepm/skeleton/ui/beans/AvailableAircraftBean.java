@@ -35,6 +35,9 @@ import at.qe.sepm.skeleton.ui.controllers.AircraftListController;
 import at.qe.sepm.skeleton.ui.controllers.FlightCreationController;
 import net.bytebuddy.asm.Advice.Local;
 
+/**
+ * This Bean is to get all available aircraft for flights
+ */
 @ManagedBean
 @Scope("request")
 public class AvailableAircraftBean implements Serializable {
@@ -94,7 +97,11 @@ public class AvailableAircraftBean implements Serializable {
 		Collections.sort(availableAircraftList);
 	}
 
-
+	/**
+	 * checks if a aircraft is already scheduled
+	 * @param allAircrafts all aircrafts which should be checked
+	 * @return returns all none scheduled aircrafts
+	 */
 	private Collection<? extends Aircraft> validate(Collection<Aircraft> allAircrafts) {
 		//gives me all aircrafts back where the capacity is in range
 		Collection<Aircraft> availableAircrafts = new HashSet<>();

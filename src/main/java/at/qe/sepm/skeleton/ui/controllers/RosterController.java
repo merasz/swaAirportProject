@@ -35,7 +35,9 @@ public class RosterController implements Serializable {
 
     private ScheduleEvent event = new DefaultScheduleEvent();
 
-
+	/**
+	 * Prepares and build the schedule for the current user
+	 */
     @PostConstruct
     public void init() {
         current = infoBean.getCurrentUser();
@@ -82,7 +84,12 @@ public class RosterController implements Serializable {
     }
     
     }
-    public ScheduleModel getEventModel() {
+
+	/**
+	 * returns all the eventModel, which contains all events for the schedule
+	 * @return
+	 */
+	public ScheduleModel getEventModel() {
 
 
         return eventModel;

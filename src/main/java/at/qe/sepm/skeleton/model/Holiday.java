@@ -28,8 +28,6 @@ import java.time.LocalDate;
 /**
  * Entity of a class repersenting the holiday of a user
  */
-
-
 @Entity
 public class Holiday implements Persistable<Long>, Serializable{
 

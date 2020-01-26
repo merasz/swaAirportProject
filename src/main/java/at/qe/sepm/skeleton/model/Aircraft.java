@@ -28,9 +28,9 @@ import org.springframework.data.domain.Persistable;
 
 /**
  *
- * Entity representing an aircraft
+ * Entity representing an aircraft.
+ * Includes everything needed for an aircraft
  */
-
 @Entity
 public class Aircraft implements Persistable<String>, Serializable{
 

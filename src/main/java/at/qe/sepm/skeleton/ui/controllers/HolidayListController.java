@@ -30,6 +30,11 @@ public class HolidayListController {
         return holidayService.getAllHolidays();
     }
 
+    /**
+     * Fetches the holidays for a certain user
+     * @param username the user to fetch the holidays from
+     * @return returns a Collection of all holidays of the user
+     */
     public Collection<Holiday> getHolidayByUser(String username){
 
         return holidayService.getHolidayByUser(username);

@@ -47,7 +47,6 @@ public class HolidayCreationController{
      * Returns the currently displayed holiday
      * @return
      */
-
     public Holiday getHoliday(){ return holiday;}
 
     /**

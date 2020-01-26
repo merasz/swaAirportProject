@@ -21,8 +21,6 @@ import org.springframework.stereotype.Component;
 /**
  * Service for accessing and manipulating aircraft data.
  */
-
-
 @Component
 @Scope("application")
 public class AircraftService {
@@ -38,9 +36,9 @@ public class AircraftService {
     
 
     /**
-     * Returns a collection of all aircrafts.
+     * Method to access all aircrafts
      *
-     * @return
+     * @return Returns a collection of all aircrafts.
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public Collection<Aircraft> getAllAircrafts() {
@@ -50,7 +48,7 @@ public class AircraftService {
     /**
      * Loads a single aircraft identified by its id.
      *
-     * @param aircraftname the id to search for
+     * @param aircraftId the id the aircraft should have
      * @return the aircraft with the given id
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER') or principal.aircraftname eq #aircraftname")

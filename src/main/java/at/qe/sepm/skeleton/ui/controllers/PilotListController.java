@@ -22,11 +22,10 @@ public class PilotListController {
     private UserService userService;
 
     /**
-     * Returns a list of all users.
+     * Returns a list of all pilots
      *
      * @return
      */
-
     public Collection<User> getPilots() { return userService.getAllPilots(); }
 
 }

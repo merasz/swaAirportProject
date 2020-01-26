@@ -9,7 +9,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
-
+/**
+ * Message Bean to show alerts or errors to the user
+ */
 @ManagedBean
 public class MessageBean implements Serializable {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

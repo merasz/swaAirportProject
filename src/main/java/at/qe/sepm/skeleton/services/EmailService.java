@@ -9,12 +9,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
+/**
+ * Service to send e-mails to users
+ */
 @Component
 public class EmailService{
 
     @Autowired
     public JavaMailSender emailSender;
 
+    /**
+     * Method to send a mail to a user
+     * @param to the target mail-address
+     * @param subject the subject of the mail
+     * @param text to text of the mail
+     */
     public void sendMessage(String to, String subject, String text){
         if(emailSender==null){
             emailSender = getEmailSender();
@@ -26,6 +35,10 @@ public class EmailService{
         emailSender.send(message);
     }
 
+    /**
+     * Method to get a Instance of EmailSender
+     * @return returns a JavaMailSender
+     */
     @Bean
     public JavaMailSender getEmailSender(){
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

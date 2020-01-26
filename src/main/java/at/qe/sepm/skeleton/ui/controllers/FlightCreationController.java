@@ -57,7 +57,6 @@ public class FlightCreationController{
      * Returns the currently displayed flight
      * @return
      */
-
     public Flight getFlight(){ return flight;}
     
     public void setFlight(){

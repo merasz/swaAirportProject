@@ -14,6 +14,9 @@ import javax.persistence.TemporalType;
 
 import org.springframework.data.domain.Persistable;
 
+/**
+ * With the AuditLog we save changes made
+ */
 @Entity
 public class AuditLog implements Persistable<Long>, Serializable {
 	

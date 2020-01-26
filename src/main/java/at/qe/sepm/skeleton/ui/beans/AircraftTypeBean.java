@@ -12,6 +12,9 @@ import javax.faces.model.SelectItemGroup;
 
 import org.springframework.web.context.annotation.ApplicationScope;
 
+/**
+ * Contains all aircraft types, which are supported
+ */
 @ManagedBean
 @ApplicationScoped
 public class AircraftTypeBean {

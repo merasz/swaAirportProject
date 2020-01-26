@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 /**
  Controller for the creation of aircrafts
  **/
-
 @Component
 @Scope("view")
 public class AircraftCreationController{
@@ -27,6 +26,7 @@ public class AircraftCreationController{
      * Creates a new aircraft
      */
     private Aircraft aircraft = new Aircraft();
+
 
     public boolean setNewAircraft(){
 
@@ -46,7 +46,6 @@ public class AircraftCreationController{
      * Returns the currently displayed aircraft
      * @return
      */
-
     public Aircraft getAircraft(){ return aircraft;}
 
     /**

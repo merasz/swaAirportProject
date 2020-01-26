@@ -12,6 +12,9 @@ import javax.faces.model.SelectItemGroup;
 
 import org.springframework.web.context.annotation.ApplicationScope;
 
+/**
+ * Contains all possible IATA Codes
+ */
 @ManagedBean
 @ApplicationScoped
 public class IataBean {
