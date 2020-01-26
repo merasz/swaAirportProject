@@ -337,7 +337,7 @@ public class FlightService {
         	returnFlight.setArrivalTime(new Date(flightBackArrivalTime + returnFlight.getDepartureTime().getTime()));
         	returnFlight.setIsValidFlight(true);
         	returnFlight.setNumberOfPassengers(0);
-            auditlog.setMessage("Flight: " + flight.getFlightId()+ " was created.");
+            auditlog.setMessage("Flight " + flight.getFlightId()+ " was created.");
             auditLogRepository.save(auditlog);
         	return flightRepository.save(returnFlight);
         }
@@ -354,10 +354,10 @@ public class FlightService {
     public void deleteFlight(Flight flight) {
         AuditLog auditlog = new AuditLog();
         auditlog.setDate(new Date());
-        auditlog.setMessage("Flight: " + flight.getFlightId() + " was deleted.");
+        auditlog.setMessage("Flight " + flight.getFlightId() + " was deleted.");
         auditLogRepository.save(auditlog);
         
-    	messageBean.alertInformation("Sucess", "Deleted flight " + flight.getFlightId() + "!");
+    	messageBean.alertInformation("Success", "Deleted flight " + flight.getFlightId() + "!");
     	String tempPostFix = flight.getFlightId()+" 101";
     	String tempPreFix = flight.getFlightId();
     	String fixed = tempPreFix.replace(" 101", "");
