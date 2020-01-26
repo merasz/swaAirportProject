@@ -21,7 +21,7 @@
   </class>  
   <enumeration id="3" language="java" name="at.qe.sepm.skeleton.model.UserRole" project="ws2019_ps_swa_3_3" 
     file="/ws2019_ps_swa_3_3/src/main/java/at/qe/sepm/skeleton/model/UserRole.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-2461" y="962"/>    
+    <position height="-1" width="-1" x="-2486" y="1046"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
