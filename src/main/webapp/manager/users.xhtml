@@ -8,7 +8,7 @@
                 template="/WEB-INF/templates/main.xhtml">
     <ui:define name ="content">
         <h:form id="userForm">
-                <p:growl id="growl" showDetail="false" life="6000" >
+        <p:growl id="growl" showDetail="false" life="6000" >
                 <p:autoUpdate/>
         </p:growl>
             <p:dataTable id="usersTable" var="user" value="#{userListController.users}" style ="margin-top:10%;">
@@ -91,8 +91,9 @@
                     </h:panelGrid>
 
                     <p:separator />
+                    
                     <h:panelGrid columns ="2">
-                        <p:commandButton value="Save" action="#{userCreationController.doSaveUser()}" oncomplete="location.reload()" update=":userForm:usersTable">
+                        <p:commandButton value="Save" action="#{userCreationController.doSaveUser()}" oncomplete="PF('userEditDialog').hide()" update=":userForm:usersTable">
 
                         </p:commandButton>
                         <p:commandButton value="Reload" action="#{userCreationController.doReloadForm()}" update=":userForm:userData"/>
