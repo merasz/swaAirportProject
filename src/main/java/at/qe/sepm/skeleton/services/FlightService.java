@@ -379,4 +379,8 @@ public class FlightService {
     	FacesContext.getCurrentInstance().addMessage(errorMsg, msg);
     }
     
+    public void hardSave(Flight flight) {
+    	flightRepository.save(flight);
+    }
+    
 }

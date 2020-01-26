@@ -21,7 +21,6 @@ public class IataBean {
 	@PostConstruct
 	public void init() {
         iataList = new ArrayList<>();		
-		iataList.add("INN");
 		iataList.add("HAM");
 		iataList.add("STR");
 		iataList.add("SXF");
@@ -29,6 +28,11 @@ public class IataBean {
 		iataList.add("DUS");
 		iataList.add("SXF");
 		iataList.add("FRA");
+		iataList.add("ADR");
+		iataList.add("EIN");
+		iataList.add("GLG");
+		iataList.add("ROT");
+		iataList.add("HMS");
 	}
 
 	public String getIata() {
