@@ -66,6 +66,8 @@ public class Flight implements Persistable<String>, Serializable {
     private Date dateFlight;
     private String flightTime;
     private Boolean isValidFlight;
+    private int requiredPersonal;
+    private int currentPersonal;
     
     @OneToOne(optional = true, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
     @JoinTable(name="aircraft_id", joinColumns={@JoinColumn(name="aircraft_id")})
@@ -320,6 +322,28 @@ public class Flight implements Persistable<String>, Serializable {
 	public void setIsValidFlight(Boolean isValidFlight) {
 		this.isValidFlight = isValidFlight;
 	}
+
+
+	public int getRequiredPersonal() {
+		return requiredPersonal;
+	}
+
+
+	public void setRequiredPersonal(int requiredPersonal) {
+		this.requiredPersonal = requiredPersonal;
+	}
+
+
+	public int getCurrentPersonal() {
+		return currentPersonal;
+	}
+
+
+	public void setCurrentPersonal(int currentPersonal) {
+		this.currentPersonal = currentPersonal;
+	}
+	
+	
 	
 	
 	
