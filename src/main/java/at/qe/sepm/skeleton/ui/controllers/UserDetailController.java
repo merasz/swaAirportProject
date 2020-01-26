@@ -85,7 +85,6 @@ public class UserDetailController {
     public void doDeleteUser() throws ParseException {
     	List<Flight> temp = (List<Flight>) flightService.getAllFlights();
 		Flight saveTempFlight = null;
-		boolean flightPersonalChanged = false;
 		for (Flight flight : temp) {
 			if(user.getJobTitle().contentEquals("Pilot")) {
 				if(flight.getAssignedPilots().contains(user)) {
