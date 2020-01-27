@@ -106,10 +106,6 @@ public class FlightService {
     }
     
     public Date parseStringdateToDate(String date) throws ParseException {
-    	for (int i = 0; i < 100; i++) {
-			System.out.println("dateFormate: " + (new SimpleDateFormat("yyyy-mm-dd").parse(date)));
-		}
-    	
     	return (new SimpleDateFormat("yyyy-mm-dd").parse(date));    
     }
 
@@ -202,9 +198,6 @@ public class FlightService {
     	}
 
     	if(availablePersonal.size() < requiredPersonal) {
-        	for (int i = 0; i < 100; i++) {
-    			System.out.println("executin personal size:" + executingPersonal.size() + " required " +requiredPersonal);
-    		}
     		return null;
     	}
     	else {
@@ -214,9 +207,6 @@ public class FlightService {
 				availablePersonal.remove(randNum);
 				--requiredPersonal;
 			}
-		}
-    	for (int i = 0; i < 100; i++) {
-			System.out.println("executin personal size:" + executingPersonal.size() + " required " +requiredPersonal);
 		}
     	return executingPersonal;
     }
